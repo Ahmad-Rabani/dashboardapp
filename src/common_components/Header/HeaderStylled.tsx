@@ -181,16 +181,6 @@ export const ColorsDiv = styled.div`
   background-color: white;
 `;
 
-export const ButtonText = styled.button<ButtonTextType>`
-  cursor: pointer;
-  padding: 15px;
-  width: 50px;
-  height: 50px;
-  border-radius: 10px;
-  border: none;
-  background-color: ${(props) => props.$allColors};
-`;
-
 export const BackgroundColorsDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -211,6 +201,17 @@ export const BackgroundColor = styled.button<BackgroundColorButtonType>`
   width: 50px;
   height: 30px;
   border-radius: 10px;
-  border: none;
+
   background-color: ${(props) => props.$backgroundColor};
+`;
+
+export const ButtonText = styled.button<ButtonTextType>`
+  cursor: pointer;
+  padding: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  
+  background-color: ${(props) => props.$allColors};
 `;

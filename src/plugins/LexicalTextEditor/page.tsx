@@ -30,6 +30,7 @@ export default function LexicalTextEditor() {
   return (
     <Fdiv>
     <TextEditor>
+      <div>
       <DragButton draggable>
         <Image src={dragIcon} width={15} height={15} alt=""/>
       </DragButton>
@@ -65,6 +66,7 @@ export default function LexicalTextEditor() {
           </div>
         </div>
       </LexicalComposer>
+      </div>
     </TextEditor>
     </Fdiv>
   );

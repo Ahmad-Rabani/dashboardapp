@@ -36,6 +36,7 @@ const Header = () => {
   const [textColor, setTextColor] = useState<string>("black");
   const [isBackroundButton, setBackgroundButton] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("white");
+  const [hideColors, setHideColors] = useState(false);
 
   useEffect(() => {
     let colorArray: any = [
@@ -115,11 +116,15 @@ const Header = () => {
     setIsColor(!isColor);
   }
 
-  function selectedColor(e:React.MouseEvent<HTMLButtonElement, MouseEvent> | any) {
+  function selectedColor(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | any
+  ) {
     setTextColor(e.target.textContent);
   }
 
-  function selectBackgroundColor(e:React.MouseEvent<HTMLButtonElement, MouseEvent> | any) {
+  function selectBackgroundColor(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | any
+  ) {
     setBackgroundColor(e.target.textContent);
   }
 
@@ -128,8 +133,20 @@ const Header = () => {
     setBackgroundButton(!isBackroundButton);
   }
 
+  function colorsDivClicked() {
+    setHideColors(true);
+  }
+
+  function handleColors() {
+    if (hideColors) {
+      setBackgroundButton(false);
+      setIsColor(false);
+      setHideColors(false);
+    }
+  }
+
   return (
-    <MainDiv>
+    <MainDiv onClick={handleColors}>
       <HeaderDiv
         $HeaderBackgroundColor={backgroundColor}
         onClick={handleHeader}
@@ -157,14 +174,14 @@ const Header = () => {
             <div></div>
           </SidebarHeading>
 
-          <hr style={{width: "100%"}}/>
+          <hr style={{ width: "100%" }} />
 
           <StoreBranding>
             <h3>Store Branding</h3>
             <input placeholder="Header" type="text" onChange={handleInput} />
           </StoreBranding>
 
-          <hr style={{width: "100%"}}/>
+          <hr style={{ width: "100%" }} />
 
           <Alignment>
             <h3>Alignment</h3>
@@ -197,9 +214,9 @@ const Header = () => {
             </TextRangeDiv>
           </TextSize>
 
-          <hr style={{width: "100%"}}/>
+          <hr style={{ width: "100%" }} />
 
-          <TextAndBackgroundDiv>
+          <TextAndBackgroundDiv onClick={colorsDivClicked}>
             <div>
               <TextColor
                 onClick={selectColor}
@@ -207,8 +224,12 @@ const Header = () => {
               ></TextColor>
               {isColor && (
                 <ColorsDiv>
-                  {colors.map((item) => (
-                    <ButtonText onClick={selectedColor} $allColors={item}>
+                  {colors.map((item, i) => (
+                    <ButtonText
+                      onClick={selectedColor}
+                      key={i}
+                      $allColors={item}
+                    >
                       <p style={{ display: "none" }}>{item}</p>
                     </ButtonText>
                   ))}
@@ -224,8 +245,9 @@ const Header = () => {
               ></BackgroundColor>
               {isBackroundButton && (
                 <BackgroundColorsDiv>
-                  {colors.map((item) => (
+                  {colors.map((item, i) => (
                     <ButtonText
+                      key={i}
                       onClick={selectBackgroundColor}
                       $allColors={item}
                     >

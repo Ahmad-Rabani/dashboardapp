@@ -19,7 +19,7 @@ export const HeaderDiv = styled.div`
 `;
 
 export const PreviewButton = styled.button`
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,7 +39,7 @@ export const PreviewButton = styled.button`
 `;
 
 export const AddSection = styled.button`
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
