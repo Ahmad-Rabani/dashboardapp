@@ -7,16 +7,12 @@ export const MainDiv = styled.div`
   flex-direction: column;
 `;
 
-export const HeaderDiv = styled.div`
-  width: 50%;
-  border: 2px solid black;
-  cursor: text;
-  background-color: white;
-
-  h1 {
-    text-align: center;
-  }
-`;
+export const ComponentsDIv = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+`
 
 export const PreviewButton = styled.button`
   position: fixed;

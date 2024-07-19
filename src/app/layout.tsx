@@ -5,21 +5,19 @@ import Header from "@/common_components/Header/Header";
 import Footer from "@/common_components/Footer/Footer";
 
 export const MyContext = createContext<any>(null);
+const componentsArray: [] = [];
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [index , setIndex] = useState<string>("Bunny");
-  const [Hammer , setHammer] = useState<string>("thor");
-
   return (
     <html>
       <body style={{ backgroundColor: "#e6e6e6" }}>
         <StyledComponentsRegistry>
           <Header />
-          <MyContext.Provider value={{settingIndex:[index,setIndex], settingHammer: [Hammer,setHammer]}}>
+          <MyContext.Provider value={componentsArray}>
             {children}
             </MyContext.Provider>
           <Footer />

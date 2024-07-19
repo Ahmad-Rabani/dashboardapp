@@ -1,5 +1,12 @@
 import styled from "styled-components";
 
+interface ButtonTextType {
+  $allColors: string;
+}
+interface BackgroundColorButtonType {
+  $backgroundColor: string;
+}
+
 export const CopyButton = styled.button`
   position: absolute;
   right: -40px;
@@ -35,6 +42,7 @@ export const DragButton = styled.button`
 export const MainDiv = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
 
   &:hover ${CopyButton} {
@@ -50,7 +58,7 @@ export const MainDiv = styled.div`
   }
 `;
 
-export const InnerDiv = styled.div`
+export const InnerDiv = styled.div<BackgroundColorButtonType>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,7 +66,7 @@ export const InnerDiv = styled.div`
   width: 50%;
   border: 2px dotted blue;
   position: relative;
-  background-color: #ececff;
+  background-color: ${(props) => props.$backgroundColor};
 `;
 
 export const NewSectionDiv = styled.div`
@@ -97,13 +105,12 @@ export const TextAndImageDiv = styled.div`
     input {
       z-index: 2;
     }
-
+   
     label{
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 17px;
-    left: 50px;
+    top: -2px;
     cursor: pointer;
     }
 
@@ -121,3 +128,45 @@ export const TextAndImageDiv = styled.div`
 export const ImageInput = styled.input`
   z-index: 1;
 `;
+
+
+export const BackgroundColor = styled.button<BackgroundColorButtonType>`
+  cursor: pointer;
+  padding: 10px;
+  width: 50px;
+  height: 30px;
+  border-radius: 10px;
+
+  background-color: ${(props) => props.$backgroundColor};
+`;
+
+export const BackgroundColorsDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: scroll;
+  width: 80px;
+  max-height: 300px;
+  position: absolute;
+  top: 60px;
+  padding-top: 5px;
+  background-color: white;
+`;
+
+export const ButtonText = styled.button<ButtonTextType>`
+  cursor: pointer;
+  padding: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  
+  background-color: ${(props) => props.$allColors};
+`;
+
+export const SidebarDiv = styled.div`
+display: flex;
+align-items: center;
+padding: 10px;
+column-gap: 5px; 
+`

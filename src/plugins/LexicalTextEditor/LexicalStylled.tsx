@@ -54,7 +54,7 @@ visibility: visible;
 export const TextEditor = styled.div`
 border: none;
 border: 1px solid orange;
-width: 50%;
+width: 589px;
 background-color: white;
 position: relative;
 `
