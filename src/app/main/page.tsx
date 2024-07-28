@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef } from "react";
 import {
   MainDiv,
-  ComponentsDIv,
   AddSection,
   PreviewButton,
 } from "./MainStylled";
@@ -13,40 +12,69 @@ import Image from "next/image";
 import NewSection from "@/common_components/Add New Section/NewSection";
 import Sidebar from "@/common_components/sidebar/Sidebar";
 import { MyContext } from "../layout";
+import { ComponentType } from "../../../types";
+import { closestCenter, closestCorners, DndContext } from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import SortableComponents from "@/common_components/ShowComponents/SortableComponents";
 
 const MainComponent = () => {
-  const [isCreateNewSection, setCreateNewSection] = useState(false);
+  const [componentsArray, setComponentsArray, isNewSection, setNewSection, , , , , isPreview,setIsPreview] =
+    useContext(MyContext);
 
-  const componentsArray: [] = useContext(MyContext);
+  const createNewSection = () => {
+    setNewSection(!isNewSection);
+  };
 
-  function createNewSection() {
-    setCreateNewSection(!isCreateNewSection);
+  // Drag End
+  function handleDragEnd(event) {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      setComponentsArray((prevItems:ComponentType) => {
+        const activeIndex = prevItems.findIndex(
+          (item:ComponentType) => item.key === active.id
+        );
+        const overIndex = prevItems.findIndex((item) => item.key === over.id);
+        return arrayMove(prevItems, activeIndex, overIndex);
+      });
+    }
   }
 
-  console.log(componentsArray);
+  function handlePreviewButton() {
+    setIsPreview(!isPreview)
+  }
+
+  console.log(componentsArray)
 
   return (
     <MainDiv>
-      <PreviewButton>
+      <PreviewButton onClick={handlePreviewButton}>
         <Image width={15} height={15} src={eyeIcon} alt="" />
         preview
       </PreviewButton>
 
-      {componentsArray.map((item, i: number) => {
-        return (
-          <ComponentsDIv style={{ width: "100%" }} key={i}>
-            {item}
-          </ComponentsDIv>
-        );
-      })}
+      <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
+        <SortableContext items={componentsArray} strategy={closestCenter}>
+          {componentsArray.map((item:ComponentType) => (
+            <SortableComponents
+              key={item.key}
+              id={item.key}
+              passingComponents={item.component}
+              passingImage={item.img}
+              copyText={item.innerText}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
 
-      {isCreateNewSection && componentsArray.push(<NewSection />)}
+      {isNewSection && <NewSection />}
+
       <AddSection onClick={createNewSection}>
         <Image width={15} height={15} src={add} alt="" />
         Add Section
       </AddSection>
-
-      <Sidebar />
     </MainDiv>
   );
 };

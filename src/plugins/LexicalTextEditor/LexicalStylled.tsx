@@ -36,7 +36,7 @@ visibility: hidden;
 export const Fdiv = styled.div`
 display: flex;
 justify-content: center;
-width: 100%;
+width: 50%;
 
 &:hover ${CopyButton}{
 visibility: visible;
@@ -54,7 +54,7 @@ visibility: visible;
 export const TextEditor = styled.div`
 border: none;
 border: 1px solid orange;
-width: 589px;
+width: 100%;
 background-color: white;
 position: relative;
 `

@@ -7,58 +7,14 @@ interface BackgroundColorButtonType {
   $backgroundColor: string;
 }
 
-export const CopyButton = styled.button`
-  position: absolute;
-  right: -40px;
-  cursor: pointer;
-  background-color: white;
-  padding: 5px 7px;
-  border-radius: 50%;
-  border: none;
-  visibility: hidden;
-`;
-export const DeleteButton = styled.button`
-  position: absolute;
-  right: -75px;
-  cursor: pointer;
-  background-color: white;
-  padding: 5px 7px;
-  border-radius: 50%;
-  border: none;
-  visibility: hidden;
-`;
-
-export const DragButton = styled.button`
-  position: absolute;
-  left: -40px;
-  cursor: pointer;
-  background-color: white;
-  padding: 5px 7px;
-  border-radius: 50%;
-  border: none;
-  visibility: hidden;
-`;
-
 export const MainDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-
-  &:hover ${CopyButton} {
-    visibility: visible;
-  }
-
-  &:hover ${DeleteButton} {
-    visibility: visible;
-  }
-
-  &:hover ${DragButton} {
-    visibility: visible;
-  }
 `;
 
-export const InnerDiv = styled.div<BackgroundColorButtonType>`
+export const InnerDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,7 +22,7 @@ export const InnerDiv = styled.div<BackgroundColorButtonType>`
   width: 50%;
   border: 2px dotted blue;
   position: relative;
-  background-color: ${(props) => props.$backgroundColor};
+  background-color: #ececff;
 `;
 
 export const NewSectionDiv = styled.div`
@@ -107,10 +63,13 @@ export const TextAndImageDiv = styled.div`
     }
    
     label{
-    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    column-gap: 5px;
     width: 100%;
     height: 100%;
-    top: -2px;
     cursor: pointer;
     }
 

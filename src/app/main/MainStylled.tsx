@@ -1,5 +1,37 @@
 import styled from "styled-components";
 
+export const CopyButton = styled.button`
+  position: absolute;
+  right: 240px;
+  cursor: pointer;
+  background-color: white;
+  padding: 5px 7px;
+  border-radius: 50%;
+  border: none;
+  visibility: hidden;
+`;
+export const DeleteButton = styled.button`
+  position: absolute;
+  right: 205px;
+  cursor: pointer;
+  background-color: white;
+  padding: 5px 7px;
+  border-radius: 50%;
+  border: none;
+  visibility: hidden;
+`;
+
+export const DragButton = styled.button`
+  position: absolute;
+  left: 240px;
+  cursor: pointer;
+  background-color: white;
+  padding: 5px 7px;
+  border-radius: 50%;
+  border: none;
+  visibility: hidden;
+`;
+
 export const MainDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -7,12 +39,24 @@ export const MainDiv = styled.div`
   flex-direction: column;
 `;
 
-export const ComponentsDIv = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-width: 100%;
-`
+// export const ComponentsDIv = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 100%;
+
+//   &:hover ${CopyButton} {
+//     visibility: visible;
+//   }
+
+//   &:hover ${DeleteButton} {
+//     visibility: visible;
+//   }
+
+//   &:hover ${DragButton} {
+//     visibility: visible;
+//   }
+// `;
 
 export const PreviewButton = styled.button`
   position: fixed;

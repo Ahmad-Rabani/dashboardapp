@@ -162,7 +162,7 @@ export const TextColor = styled.button<TextColorType>`
   height: 30px;
   border-radius: 10px;
   cursor: pointer;
-  border: none;
+  border: 1px solid black;
 
   background-color: ${(props) => props.$TextColor};
 `;
@@ -201,6 +201,7 @@ export const BackgroundColor = styled.button<BackgroundColorButtonType>`
   width: 50px;
   height: 30px;
   border-radius: 10px;
+  border: 1px solid black;
 
   background-color: ${(props) => props.$backgroundColor};
 `;

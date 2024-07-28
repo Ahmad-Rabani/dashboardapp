@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useRef} from "react";
 import { Body } from "./SidebarStylled";
 
 const Sidebar: any = ({ children }: { children: React.ReactNode }) => {

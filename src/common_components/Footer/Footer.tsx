@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import {
   MainDiv,
   FooterDiv,
@@ -39,6 +39,7 @@ const Footer = () => {
   const [isLinkButton, setLinkButton] = useState<boolean>(false);
   const [linkColor, setLinkColor] = useState<string>("blue");
   const [hideColors, setHideColors] = useState(false);
+  const refFooter = useRef();
 
   useEffect(() => {
     let colorArray: any = [
@@ -96,7 +97,7 @@ const Footer = () => {
 
     setColor(colorArray);
   }, []);
-
+  
   function handleFooter() {
     setFooter(!isFooter);
   }
@@ -183,8 +184,8 @@ const Footer = () => {
   }
 
   return (
-    <MainDiv onClick={handleColors}>
-      <FooterDiv $backgroundColor={backgroundColor} onClick={handleFooter}>
+    <MainDiv onClick={handleColors} >
+      <FooterDiv $backgroundColor={backgroundColor} onClick={handleFooter} ref={refFooter}>
         <FooterTextColor $color={textColor}>{name}</FooterTextColor>
         {addressCheckbox && (
           <FooterTextColor $color={textColor}>{address}</FooterTextColor>
