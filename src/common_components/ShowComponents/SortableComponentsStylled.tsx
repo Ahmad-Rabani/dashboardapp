@@ -10,7 +10,12 @@ export const CopyButton = styled.button`
   border-radius: 50%;
   border: none;
   visibility: hidden;
+
+  @media (max-width: 768px) {
+    right: 20px;
+  }
 `;
+
 export const DeleteButton = styled.button`
   position: absolute;
   right: 205px;
@@ -21,6 +26,10 @@ export const DeleteButton = styled.button`
   border-radius: 50%;
   border: none;
   visibility: hidden;
+
+  @media (max-width: 768px) {
+    right: 60px;
+  }
 `;
 
 export const DragButton = styled.button`
@@ -33,12 +42,19 @@ export const DragButton = styled.button`
   border-radius: 50%;
   border: none;
   visibility: hidden;
+
+  @media (max-width: 768px) {
+    left: 20px;
+  }
 `;
 
-
 export const Line = styled.hr`
-width: 50%;
-margin: 0 auto;
+  width: 50%;
+  margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    width: 80%;
+  }
 `;
 
 export const AddButton = styled.button`
@@ -48,25 +64,25 @@ export const AddButton = styled.button`
   cursor: pointer;
   background-color: #0f0f6c;
   border: none;
-  bottom: -10px; // Adjust to position the button correctly
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
   color: white;
   visibility: hidden;
   font-size: 24px;
-  `;
+`;
   
-  export const Container = styled.div`
-    position: relative;
-    width: 100%;
-    text-align: center;
-    margin: 0px;
+export const Container = styled.div`
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin: 0px;
   
-    &:hover ${AddButton} {
-      visibility: visible;
-    }
-  `;
+  &:hover ${AddButton} {
+    visibility: visible;
+  }
+`;
 
 export const MainDiv = styled.div`
   width: 100%;
@@ -76,14 +92,8 @@ export const MainDiv = styled.div`
   align-items: center;
   position: relative;
 
-  &:hover ${CopyButton} {
-    visibility: visible;
-  }
-
-  &:hover ${DeleteButton} {
-    visibility: visible;
-  }
-
+  &:hover ${CopyButton},
+  &:hover ${DeleteButton},
   &:hover ${DragButton} {
     visibility: visible;
   }
@@ -93,9 +103,16 @@ export const ComponentsDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  // width: 50%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const ImageDiv = styled.div`
   width: 50%;
+
+  @media (max-width: 768px) {
+    width: 80%;
+  }
 `;

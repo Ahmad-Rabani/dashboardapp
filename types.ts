@@ -86,9 +86,12 @@ export interface DndContextTypesafeProps
 }
 
 // Lexical editor types
-// export interface NodeMAp {
-//   _readOnly: boolean;
-// }
+export interface NodeMAp {
+  _readOnly: boolean;
+  clear: void;
+  delete: void;
+  set: void;
+}
 
 export interface Anchor {
   key: string;
@@ -110,8 +113,47 @@ export interface Selection {
   _cachedNodes: null;
 }
 export interface StateTypes {
+  _nodeMap: NodeMAp;
   toJSON(): unknown;
   _flushSync: boolean;
   _readOnly: boolean;
   _selection: Selection;
 }
+
+// ////////////
+
+export type ChildItemType = {
+  detail: number;
+  format: number;
+  mode: string;
+  style: string;
+  text: string;
+  type: string;
+  version: number;
+};
+
+export type EditorStateType = {
+  root: {
+    children: {
+      children: {
+        detail: number;
+        format: number;
+        mode: string;
+        style: string;
+        text: string;
+        type: string;
+        version: number;
+      }[];
+      direction: string;
+      format: string;
+      indent: number;
+      type: string;
+      version: number;
+    }[];
+    direction: string;
+    format: string;
+    indent: number;
+    type: string;
+    version: number;
+  };
+};

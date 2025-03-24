@@ -57,6 +57,8 @@ const MainComponent = () => {
     setAddNewSection(false);
   }
 
+  console.log(componentsArray)
+
   return (
     <MainDiv>
       <PreviewButton onClick={handlePreviewButton}>

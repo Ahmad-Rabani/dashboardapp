@@ -6,12 +6,12 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { Fdiv, TextEditor } from "./LexicalStylled";
 import { useState, useContext, useEffect } from "react";
-
 import ExampleTheme from "@/ExampleTheme";
 import ToolbarPlugin from "@/plugins/ToolbarPlugin";
 import { MyContext } from "@/app/layout";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { StateTypes } from "../../../types";
+import { StateTypes,EditorStateType,ChildItemType } from "../../../types";
+import { EditorState } from "lexical";
 
 const placeholder = "Enter some rich text...";
 
@@ -70,19 +70,32 @@ export default function LexicalTextEditor({ innerText }: { innerText: string }) 
     setIsPreview,
   ] = useContext(MyContext);
 
-  const OnChangePlugin = ({ onChange }:any) => {
+  type OnChangeProps = {
+    onChange: any;
+  };
+
+  const OnChangePlugin: React.FC<OnChangeProps> = ({ onChange }) => {
     const [editor] = useLexicalComposerContext();
+  
     useEffect(() => {
-      return editor.registerUpdateListener(({ editorState }) => {
+      const unregister = editor.registerUpdateListener(({ editorState }) => {
         onChange(editorState);
       });
+  
+      return () => unregister();
     }, [editor, onChange]);
+  
+    return null;
   };
 
   const onChange = (state: StateTypes) => {
-    console.log(state)
-    const editorStateJSON = state.toJSON();
-    setEditorState(editorStateJSON);
+    try {
+      // Assuming state.toJSON() returns a JSON-compatible structure for EditorStateType
+      const editorStateJSON = state.toJSON() as EditorStateType;
+      setEditorState(editorStateJSON);
+    } catch (error) {
+      console.error('Error processing editor state:', error);
+    }
   };
 
   useEffect(() => {
@@ -95,7 +108,7 @@ export default function LexicalTextEditor({ innerText }: { innerText: string }) 
         <div>
           {isPreview ? (
             <div style={{ padding: "20px",backgroundColor: "#fdc386"}}>
-              {editorText.root.children[0].children.map((item, index:number) => (
+              {editorText.root.children[0].children.map((item:ChildItemType, index:number) => (
                 <p key={index}>{item.text}</p>
               ))}
             </div>

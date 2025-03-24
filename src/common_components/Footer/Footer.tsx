@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect,useRef,useContext } from "react";
+import React, { useState, useEffect,useRef,useContext, RefObject } from "react";
 import {
   MainDiv,
   FooterDiv,
@@ -40,17 +40,17 @@ const Footer = () => {
   const [isLinkButton, setLinkButton] = useState<boolean>(false);
   const [linkColor, setLinkColor] = useState<string>("blue");
   const [hideColors, setHideColors] = useState(false);
-  const refFooter = useRef<RefObject>();
+  const refFooter = useRef<HTMLInputElement>(null);
 
   const [
-    componentsArray,
-    setComponentsArray,
-    isNewSection,
-    setNewSection,
-    editorText,
-    setEditorText,
-    addNewSection,
-    setAddNewSection,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
     isPreview,
   ] = useContext(MyContext);
 
