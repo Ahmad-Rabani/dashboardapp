@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useContext, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
@@ -36,8 +38,8 @@ const SortableComponents = ({
   const [index, setIndex] = useState<number>(0);
 
   const style = {
-    transition,
     transform: CSS.Transform.toString(transform),
+    transition,
   };
 
   const [
@@ -49,6 +51,7 @@ const SortableComponents = ({
     setEditorText,
     addNewSection,
     setAddNewSection,
+    isPreview,
   ] = useContext(MyContext);
 
   function deleteSection(id: string) {
@@ -69,7 +72,7 @@ const SortableComponents = ({
             component: item.component,
             img: item.img,
             innerText: editorText.root.children[0].children.map(
-              (item) => item.text
+              (item:any) => item.text
             ),
           },
         ]);
@@ -89,6 +92,14 @@ const SortableComponents = ({
 
   return (
     <MainDiv style={style} ref={setNodeRef}>
+        {passingComponents ? (
+          <LexicalTextEditor innerText={copyText ? copyText[0] : ""} />
+        ) : (
+          <ImageDiv>
+            <ImageComponent passTheImage={passingImage} />
+          </ImageDiv>
+        )}
+      {!isPreview && <>
       <ComponentsDiv
         ref={setNodeRef}
         {...attributes}
@@ -107,22 +118,13 @@ const SortableComponents = ({
       <DeleteButton onClick={() => deleteSection(id)}>
         <Image src={deleteIcon} width={15} height={15} alt="" />
       </DeleteButton>
-
-      {passingComponents ? (
-        <LexicalTextEditor innerText={copyText ? copyText[0] : ""} />
-      ) : (
-        <ImageDiv>
-          <ImageComponent passTheImage={passingImage} />
-        </ImageDiv>
-      )}
-
-
       <Container>
         <Line />
         <AddButton onClick={() => handleNewSection(id)}>
           +
         </AddButton>
       </Container>
+      </>}
 
       {addNewSection && <NewSection currentIndex={index} />}
     </MainDiv>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import {
   MainDiv,
   AddSection,
@@ -9,10 +9,10 @@ import {
 import eyeIcon from "../../../img/eye.png";
 import add from "../../../img/add.png";
 import Image from "next/image";
+import noEdit from "../../../img/delete (1).png"
 import NewSection from "@/common_components/Add New Section/NewSection";
-import Sidebar from "@/common_components/sidebar/Sidebar";
 import { MyContext } from "../layout";
-import { ComponentType } from "../../../types";
+import { ComponentType, DragEvent } from "../../../types";
 import { closestCenter, closestCorners, DndContext } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -21,7 +21,16 @@ import {
 import SortableComponents from "@/common_components/ShowComponents/SortableComponents";
 
 const MainComponent = () => {
-  const [componentsArray, setComponentsArray, isNewSection, setNewSection, , , , , isPreview,setIsPreview] =
+  const [componentsArray,
+    setComponentsArray,
+    isNewSection,
+    setNewSection,
+    editorText,
+    setEditorText,
+    addNewSection,
+    setAddNewSection,
+    isPreview,
+    setIsPreview] =
     useContext(MyContext);
 
   const createNewSection = () => {
@@ -29,14 +38,14 @@ const MainComponent = () => {
   };
 
   // Drag End
-  function handleDragEnd(event) {
+  function handleDragEnd(event:DragEvent) {
     const { active, over } = event;
     if (active.id !== over.id) {
-      setComponentsArray((prevItems:ComponentType) => {
+      setComponentsArray((prevItems:ComponentType | any) => {
         const activeIndex = prevItems.findIndex(
           (item:ComponentType) => item.key === active.id
         );
-        const overIndex = prevItems.findIndex((item) => item.key === over.id);
+        const overIndex = prevItems.findIndex((item: ComponentType) => item.key === over.id);
         return arrayMove(prevItems, activeIndex, overIndex);
       });
     }
@@ -44,15 +53,15 @@ const MainComponent = () => {
 
   function handlePreviewButton() {
     setIsPreview(!isPreview)
+    setNewSection(false);
+    setAddNewSection(false);
   }
-
-  console.log(componentsArray)
 
   return (
     <MainDiv>
       <PreviewButton onClick={handlePreviewButton}>
-        <Image width={15} height={15} src={eyeIcon} alt="" />
-        preview
+       {isPreview ? <Image width={15} height={15} src={noEdit} alt="" />: <Image width={15} height={15} src={eyeIcon} alt="" />}
+       {isPreview ? "Edit Mode" : "Preview" }
       </PreviewButton>
 
       <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
@@ -69,7 +78,7 @@ const MainComponent = () => {
         </SortableContext>
       </DndContext>
 
-      {isNewSection && <NewSection />}
+      {isNewSection && <NewSection currentIndex={0} />}
 
       <AddSection onClick={createNewSection}>
         <Image width={15} height={15} src={add} alt="" />

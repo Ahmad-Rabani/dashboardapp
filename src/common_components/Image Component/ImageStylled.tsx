@@ -5,6 +5,7 @@ interface ButtonTextType {
 }
 interface BackgroundColorButtonType {
   $backgroundColor: string;
+  $preview : boolean;
 }
 
 export const MainDivOfImage = styled.div<BackgroundColorButtonType>`
@@ -12,7 +13,8 @@ display: flex;
 justify-content: center;
 align-items: center;
 width: 100%;
-border: 1px solid orange;
+padding: 20px 0px;
+border: ${(props) => props.$preview ? "none" : "1px solid orange" };
 background-color: ${(props) => props.$backgroundColor}
 `
 

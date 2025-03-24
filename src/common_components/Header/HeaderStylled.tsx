@@ -16,6 +16,7 @@ interface ButtonTextType {
 
 interface HeaderDivType {
   $HeaderBackgroundColor: string;
+  $preview: boolean;
 }
 
 interface BackgroundColorButtonType {
@@ -30,7 +31,7 @@ export const MainDiv = styled.div`
 
 export const HeaderDiv = styled.div<HeaderDivType>`
   width: 50%;
-  border: 2px solid black;
+  border: ${(props) => props.$preview ? "none" : "2px solid black"};
   cursor: text;
   background-color: white;
   background-color: ${(props) => props.$HeaderBackgroundColor};

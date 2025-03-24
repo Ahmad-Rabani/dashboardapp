@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   MainDiv,
   HeaderDiv,
@@ -25,6 +25,7 @@ import center from "../../../img/format.png";
 import arrow from "../../../img/left-arrow.png";
 import Image from "next/image";
 import Sidebar from "../sidebar/Sidebar";
+import { MyContext } from "@/app/layout";
 
 const Header = () => {
   const [isHeader, setHeader] = useState(false);
@@ -37,6 +38,18 @@ const Header = () => {
   const [isBackroundButton, setBackgroundButton] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("white");
   const [hideColors, setHideColors] = useState(false);
+
+  const [
+    componentsArray,
+    setComponentsArray,
+    isNewSection,
+    setNewSection,
+    editorText,
+    setEditorText,
+    addNewSection,
+    setAddNewSection,
+    isPreview,
+  ] = useContext(MyContext);
 
   useEffect(() => {
     let colorArray: any = [
@@ -147,119 +160,142 @@ const Header = () => {
 
   return (
     <MainDiv onClick={handleColors}>
-      <HeaderDiv
-        $HeaderBackgroundColor={backgroundColor}
-        onClick={handleHeader}
-      >
-        <HeaderText
-          $textColor={textColor}
-          $Aligment={alignment}
-          $TextSize={textSize}
+      {isPreview ? (
+        <HeaderDiv
+          $preview={isPreview}
+          $HeaderBackgroundColor={backgroundColor}
+          onClick={handleHeader}
         >
-          {headerText}
-        </HeaderText>
-      </HeaderDiv>
+          <HeaderText
+            $textColor={textColor}
+            $Aligment={alignment}
+            $TextSize={textSize}
+          >
+            {headerText}
+          </HeaderText>
+        </HeaderDiv>
+      ) : (
+        <>
+          <HeaderDiv
+            $preview={false}
+            $HeaderBackgroundColor={backgroundColor}
+            onClick={handleHeader}
+          >
+            <HeaderText
+              $textColor={textColor}
+              $Aligment={alignment}
+              $TextSize={textSize}
+            >
+              {headerText}
+            </HeaderText>
+          </HeaderDiv>
 
-      {isHeader && (
-        <Sidebar>
-          <SidebarHeading>
-            <Image
-              onClick={closeBar}
-              width={20}
-              height={20}
-              src={arrow}
-              alt=""
-            />
-            <h3>Header</h3>
-            <div></div>
-          </SidebarHeading>
+          {isHeader && (
+            <Sidebar>
+              <SidebarHeading>
+                <Image
+                  onClick={closeBar}
+                  width={20}
+                  height={20}
+                  src={arrow}
+                  alt=""
+                />
+                <h3>Header</h3>
+                <div></div>
+              </SidebarHeading>
 
-          <hr style={{ width: "100%" }} />
+              <hr style={{ width: "100%" }} />
 
-          <StoreBranding>
-            <h3>Store Branding</h3>
-            <input placeholder="Header" type="text" onChange={handleInput} />
-          </StoreBranding>
+              <StoreBranding>
+                <h3>Store Branding</h3>
+                <input
+                  placeholder="Header"
+                  type="text"
+                  onChange={handleInput}
+                />
+              </StoreBranding>
 
-          <hr style={{ width: "100%" }} />
+              <hr style={{ width: "100%" }} />
 
-          <Alignment>
-            <h3>Alignment</h3>
+              <Alignment>
+                <h3>Alignment</h3>
 
-            <AllignmentInnerDiv>
-              <button onClick={() => setAlignment("start")}>
-                <Image width={20} height={20} src={left} alt="" />
-              </button>
-              <button onClick={() => setAlignment("center")}>
-                <Image width={20} height={20} src={center} alt="" />
-              </button>
-              <button onClick={() => setAlignment("end")}>
-                <Image width={20} height={20} src={right} alt="" />
-              </button>
-            </AllignmentInnerDiv>
-          </Alignment>
+                <AllignmentInnerDiv>
+                  <button onClick={() => setAlignment("start")}>
+                    <Image width={20} height={20} src={left} alt="" />
+                  </button>
+                  <button onClick={() => setAlignment("center")}>
+                    <Image width={20} height={20} src={center} alt="" />
+                  </button>
+                  <button onClick={() => setAlignment("end")}>
+                    <Image width={20} height={20} src={right} alt="" />
+                  </button>
+                </AllignmentInnerDiv>
+              </Alignment>
 
-          <TextSize>
-            <h3>Text size</h3>
-            <TextRangeDiv>
-              <input
-                onChange={setRange}
-                type="range"
-                id="vol"
-                name="vol"
-                min="0"
-                max="50"
-              />
-              <p>{textSize}px</p>
-            </TextRangeDiv>
-          </TextSize>
+              <TextSize>
+                <h3>Text size</h3>
+                <TextRangeDiv>
+                  <input
+                    onChange={setRange}
+                    type="range"
+                    id="vol"
+                    name="vol"
+                    min="0"
+                    max="50"
+                  />
+                  <p>{textSize}px</p>
+                </TextRangeDiv>
+              </TextSize>
 
-          <hr style={{ width: "100%" }} />
+              <hr style={{ width: "100%" }} />
 
-          <TextAndBackgroundDiv onClick={colorsDivClicked}>
-            <div>
-              <TextColor
-                onClick={selectColor}
-                $TextColor={textColor}
-              ></TextColor>
-              {isColor && (
-                <ColorsDiv>
-                  {colors.map((item, i) => (
-                    <ButtonText
-                      onClick={selectedColor}
-                      key={i}
-                      $allColors={item}
-                    >
-                      <p style={{ display: "none" }}>{item}</p>
-                    </ButtonText>
-                  ))}
-                </ColorsDiv>
-              )}
-              <h2>Text Color</h2>
-            </div>
+              <TextAndBackgroundDiv onClick={colorsDivClicked}>
+                <div>
+                  <TextColor
+                    onClick={selectColor}
+                    $TextColor={textColor}
+                  ></TextColor>
+                  {isColor && (
+                    <ColorsDiv>
+                      {colors.map((item, i) => (
+                        <ButtonText
+                          onClick={selectedColor}
+                          key={i}
+                          $allColors={item}
+                        >
+                          <p style={{ display: "none" }}>{item}</p>
+                        </ButtonText>
+                      ))}
+                    </ColorsDiv>
+                  )}
+                  <h2>Text Color</h2>
+                </div>
 
-            <div>
-              <BackgroundColor
-                onClick={selectBackgroundButtonColor}
-                $backgroundColor={backgroundColor}
-              ></BackgroundColor>
-              {isBackroundButton && (
-                <BackgroundColorsDiv>
-                  {colors.map((item, i) => (
-                    <ButtonText
-                      key={i}
-                      onClick={selectBackgroundColor}
-                      $allColors={item}
-                    >
-                      <p style={{ display: "none" }}>{item}</p>
-                    </ButtonText>
-                  ))}
-                </BackgroundColorsDiv>
-              )}
-              <h2>Background</h2>
-            </div>
-          </TextAndBackgroundDiv>
-        </Sidebar>
+                <div>
+                  <BackgroundColor
+                    onClick={selectBackgroundButtonColor}
+                    $backgroundColor={backgroundColor}
+                  ></BackgroundColor>
+                  {isBackroundButton && (
+                    <BackgroundColorsDiv>
+                      {colors.map((item, i) => (
+                        <ButtonText
+                          key={i}
+                          onClick={selectBackgroundColor}
+                          $allColors={item}
+                        >
+                          <p style={{ display: "none" }}>{item}</p>
+                        </ButtonText>
+                      ))}
+                    </BackgroundColorsDiv>
+                  )}
+                  <h2>Background</h2>
+                </div>
+              </TextAndBackgroundDiv>
+            </Sidebar>
+          )}
+        </>
       )}
     </MainDiv>
   );

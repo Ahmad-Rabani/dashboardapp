@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
-export const Body = styled.div`
-  display: flex;
+interface BodyTypes {
+  $outside: boolean;
+}
+
+export const Body = styled.div<BodyTypes>`
+  display: ${(props) => props.$outside ? "none" : "flex"};
   align-items: center;
   flex-direction: column;
   position: fixed;

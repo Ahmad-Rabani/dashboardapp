@@ -1,4 +1,4 @@
-import React,{useState,useRef,useEffect} from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Sidebar from "../sidebar/Sidebar";
 import {
   SidebarDiv,
@@ -7,13 +7,27 @@ import {
   ButtonText,
   MainDivOfImage,
 } from "./ImageStylled";
+import { MyContext } from "@/app/layout";
 
-const ImageComponent = ({passTheImage}:{passTheImage:string}) => {
-    const [backgroundColor, setBackgroundColor] = useState("#ececff");
-    const [isBackroundButton, setBackgroundButton] = useState(false);
-    const [isBackground, setBackground] = useState(false);
-    const [colors, setColor] = useState([]);
-    const imageRef = useRef(null);
+const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
+  const [backgroundColor, setBackgroundColor] = useState("#ececff");
+  const [isBackroundButton, setBackgroundButton] = useState(false);
+  const [isBackground, setBackground] = useState(false);
+  const [colors, setColor] = useState([]);
+  const imageRef = useRef(null);
+
+  const [
+    componentsArray,
+    setComponentsArray,
+    isNewSection,
+    setNewSection,
+    editorText,
+    setEditorText,
+    ,
+    ,
+    isPreview,
+    setIsPreview,
+  ] = useContext(MyContext);
 
   function selectBackgroundButtonColor() {
     setBackgroundButton(!isBackroundButton);
@@ -87,35 +101,44 @@ const ImageComponent = ({passTheImage}:{passTheImage:string}) => {
   }, []);
 
   return (
-    <MainDivOfImage $backgroundColor={backgroundColor}>
-      <div onClick={sectionMainDiv}>
-        <img ref={imageRef} src={passTheImage} alt="" />
-      </div>
-      {isBackground && (
-        <Sidebar>
-          <SidebarDiv>
-            <BackgroundColor
-              onClick={selectBackgroundButtonColor}
-              $backgroundColor={backgroundColor}
-            ></BackgroundColor>
-            {isBackroundButton && (
-              <BackgroundColorsDiv>
-                {colors.map((item, i) => (
-                  <ButtonText
-                    key={i}
-                    onClick={selectBackgroundColor}
-                    $allColors={item}
-                  >
-                    <p style={{ display: "none" }}>{item}</p>
-                  </ButtonText>
-                ))}
-              </BackgroundColorsDiv>
-            )}
-            <h2>Background</h2>
-          </SidebarDiv>
-        </Sidebar>
+    <div>
+      {isPreview ? (
+        <MainDivOfImage $backgroundColor={backgroundColor} $preview={isPreview}>
+          <img ref={imageRef} src={passTheImage} alt="" />
+        </MainDivOfImage>
+      ) : (
+        <MainDivOfImage $backgroundColor={backgroundColor} $preview={false}>
+          <div onClick={sectionMainDiv}>
+            <img ref={imageRef} src={passTheImage} alt="" />
+          </div>
+          {isBackground && (
+            <Sidebar>
+              <SidebarDiv>
+                <BackgroundColor
+                  onClick={selectBackgroundButtonColor}
+                  $backgroundColor={backgroundColor}
+                  $preview={false}
+                ></BackgroundColor>
+                {isBackroundButton && (
+                  <BackgroundColorsDiv>
+                    {colors.map((item, i) => (
+                      <ButtonText
+                        key={i}
+                        onClick={selectBackgroundColor}
+                        $allColors={item}
+                      >
+                        <p style={{ display: "none" }}>{item}</p>
+                      </ButtonText>
+                    ))}
+                  </BackgroundColorsDiv>
+                )}
+                <h2>Background</h2>
+              </SidebarDiv>
+            </Sidebar>
+          )}
+        </MainDivOfImage>
       )}
-    </MainDivOfImage>
+    </div>
   );
 };
 

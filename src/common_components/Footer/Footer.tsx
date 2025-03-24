@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect,useRef,useContext } from "react";
 import {
   MainDiv,
   FooterDiv,
@@ -20,6 +20,7 @@ import {
   FooterLinksColor,
 } from "./FooterStylled";
 import Sidebar from "../sidebar/Sidebar";
+import { MyContext } from "@/app/layout";
 
 const Footer = () => {
   const [isFooter, setFooter] = useState(false);
@@ -39,7 +40,19 @@ const Footer = () => {
   const [isLinkButton, setLinkButton] = useState<boolean>(false);
   const [linkColor, setLinkColor] = useState<string>("blue");
   const [hideColors, setHideColors] = useState(false);
-  const refFooter = useRef();
+  const refFooter = useRef<RefObject>();
+
+  const [
+    componentsArray,
+    setComponentsArray,
+    isNewSection,
+    setNewSection,
+    editorText,
+    setEditorText,
+    addNewSection,
+    setAddNewSection,
+    isPreview,
+  ] = useContext(MyContext);
 
   useEffect(() => {
     let colorArray: any = [
@@ -185,7 +198,21 @@ const Footer = () => {
 
   return (
     <MainDiv onClick={handleColors} >
-      <FooterDiv $backgroundColor={backgroundColor} onClick={handleFooter} ref={refFooter}>
+
+      {isPreview ? <FooterDiv $backgroundColor={backgroundColor} $preview={isPreview} onClick={handleFooter} ref={refFooter}>
+        <FooterTextColor $color={textColor}>{name}</FooterTextColor>
+        {addressCheckbox && (
+          <FooterTextColor $color={textColor}>{address}</FooterTextColor>
+        )}
+        {phoneNumberCheckbox && (
+          <FooterLinksColor $color={linkColor}>{phoneNumber}</FooterLinksColor>
+        )}
+        {emailCheckbox && (
+          <FooterLinksColor $color={linkColor}>{email}</FooterLinksColor>
+        )}
+      </FooterDiv> :
+      <>
+      <FooterDiv $preview={false} $backgroundColor={backgroundColor} onClick={handleFooter} ref={refFooter}>
         <FooterTextColor $color={textColor}>{name}</FooterTextColor>
         {addressCheckbox && (
           <FooterTextColor $color={textColor}>{address}</FooterTextColor>
@@ -267,6 +294,7 @@ const Footer = () => {
               <BackgroundColor
                 onClick={selectBackgroundButtonColor}
                 $backgroundColor={backgroundColor}
+                $preview
               ></BackgroundColor>
               {isBackroundButton && (
                 <BackgroundColorsDiv>
@@ -327,7 +355,7 @@ const Footer = () => {
             </div>
           </FooterStyle>
         </Sidebar>
-      )}
+      )}</>}
     </MainDiv>
   );
 };

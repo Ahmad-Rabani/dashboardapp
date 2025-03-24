@@ -4,7 +4,6 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { Fdiv, TextEditor } from "./LexicalStylled";
 import { useState, useContext, useEffect } from "react";
 
@@ -12,22 +11,20 @@ import ExampleTheme from "@/ExampleTheme";
 import ToolbarPlugin from "@/plugins/ToolbarPlugin";
 import { MyContext } from "@/app/layout";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { json } from "stream/consumers";
+import { StateTypes } from "../../../types";
 
 const placeholder = "Enter some rich text...";
 
 const editorConfig = {
   namespace: "React.js Demo",
   nodes: [],
-  // Handling of errors during update
   onError(error: Error) {
     throw error;
   },
-  // The editor theme
   theme: ExampleTheme,
 };
 
-export default function LexicalTextEditor({ innerText }: {innerText: string}) {
+export default function LexicalTextEditor({ innerText }: { innerText: string }) {
   const initial = {
     root: {
       children: [
@@ -58,7 +55,7 @@ export default function LexicalTextEditor({ innerText }: {innerText: string}) {
     },
   };
 
-  const [editorState, setEditorState] = useState(JSON.stringify(initial));
+  const [editorState, setEditorState] = useState(initial);
 
   const [
     componentsArray,
@@ -73,7 +70,7 @@ export default function LexicalTextEditor({ innerText }: {innerText: string}) {
     setIsPreview,
   ] = useContext(MyContext);
 
-  const OnChangePlugin = ({ onChange }) => {
+  const OnChangePlugin = ({ onChange }:any) => {
     const [editor] = useLexicalComposerContext();
     useEffect(() => {
       return editor.registerUpdateListener(({ editorState }) => {
@@ -82,7 +79,8 @@ export default function LexicalTextEditor({ innerText }: {innerText: string}) {
     }, [editor, onChange]);
   };
 
-  const onChange = (state) => {
+  const onChange = (state: StateTypes) => {
+    console.log(state)
     const editorStateJSON = state.toJSON();
     setEditorState(editorStateJSON);
   };
@@ -91,50 +89,50 @@ export default function LexicalTextEditor({ innerText }: {innerText: string}) {
     setEditorText(editorState);
   }, [editorState]);
 
-
   return (
     <Fdiv>
       <TextEditor>
         <div>
-          {isPreview ? 
-          <div style={{padding:"20px"}}> 
-          {editorText.root.children[0].children.map(
-              (item) => item.text
-            )}
-          </div>:
-          <LexicalComposer
-            initialConfig={{
-              ...editorConfig,
-              editorState: editorState,
-            }}
-          >
-            <div className="editor-container">
-              <ToolbarPlugin />
-              <div className="editor-inner">
-                <RichTextPlugin
-                  contentEditable={
-                    <ContentEditable
-                      defaultValue={editorState}
-                      className="editor-input"
-                      style={{
-                        border: "0.5px solid black",
-                        minHeight: "200px",
-                      }}
-                      aria-placeholder={placeholder}
-                      placeholder={
-                        <div className="editor-placeholder">{placeholder}</div>
-                      }
-                    />
-                  }
-                  ErrorBoundary={LexicalErrorBoundary}
-                  placeholder={null}
-                />
-                <HistoryPlugin />
-                <AutoFocusPlugin />
-                <OnChangePlugin onChange={onChange} />
-              </div>
+          {isPreview ? (
+            <div style={{ padding: "20px",backgroundColor: "#fdc386"}}>
+              {editorText.root.children[0].children.map((item, index:number) => (
+                <p key={index}>{item.text}</p>
+              ))}
             </div>
-          </LexicalComposer>}
+          ) : (
+            <LexicalComposer
+              initialConfig={{
+                ...editorConfig,
+                editorState: JSON.stringify(editorState),
+              }}
+            >
+              <div className="editor-container">
+                <ToolbarPlugin />
+                <div className="editor-inner">
+                  <RichTextPlugin
+                    contentEditable={
+                      <ContentEditable
+                        className="editor-input"
+                        style={{
+                          border: "0.5px solid black",
+                          minHeight: "200px",
+                        }}
+                        aria-placeholder={placeholder}
+                        placeholder={
+                          <div className="editor-placeholder">{placeholder}</div>
+                        }
+                      />
+                    }
+                    ErrorBoundary={LexicalErrorBoundary}
+                    placeholder={null}
+                  />
+                  <HistoryPlugin />
+                  <AutoFocusPlugin />
+                  <OnChangePlugin onChange={onChange} />
+                </div>
+              </div>
+            </LexicalComposer>
+          )}
         </div>
       </TextEditor>
     </Fdiv>

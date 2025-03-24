@@ -8,9 +8,7 @@ interface ButtonTextType {
 }
 interface BackgroundColorButtonType {
   $backgroundColor: string;
-}
-interface BackgroundColorButtonType {
-  $backgroundColor: string;
+  $preview: boolean;
 }
 
 interface TextColorType {
@@ -32,7 +30,7 @@ export const MainDiv = styled.div`
 
 export const FooterDiv = styled.footer<BackgroundColorButtonType>`
   width: 50%;
-  border: 2px solid black;
+  border: ${(props) => props.$preview ? "none" : "2px solid black"};
   cursor: text;
   background-color: ${(props) => props.$backgroundColor};
 
