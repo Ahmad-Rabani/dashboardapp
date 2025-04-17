@@ -10,7 +10,7 @@ import ExampleTheme from "@/ExampleTheme";
 import ToolbarPlugin from "@/plugins/ToolbarPlugin";
 import { MyContext } from "@/app/layout";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { StateTypes,EditorStateType,ChildItemType } from "../../../types";
+import { StateTypes, EditorStateType, ChildItemType } from "../../../types";
 import { EditorState } from "lexical";
 
 const placeholder = "Enter some rich text...";
@@ -24,7 +24,11 @@ const editorConfig = {
   theme: ExampleTheme,
 };
 
-export default function LexicalTextEditor({ innerText }: { innerText: string }) {
+export default function LexicalTextEditor({
+  innerText,
+}: {
+  innerText: string;
+}) {
   const initial = {
     root: {
       children: [
@@ -76,15 +80,15 @@ export default function LexicalTextEditor({ innerText }: { innerText: string }) 
 
   const OnChangePlugin: React.FC<OnChangeProps> = ({ onChange }) => {
     const [editor] = useLexicalComposerContext();
-  
+
     useEffect(() => {
       const unregister = editor.registerUpdateListener(({ editorState }) => {
         onChange(editorState);
       });
-  
+
       return () => unregister();
     }, [editor, onChange]);
-  
+
     return null;
   };
 
@@ -94,23 +98,25 @@ export default function LexicalTextEditor({ innerText }: { innerText: string }) 
       const editorStateJSON = state.toJSON() as EditorStateType;
       setEditorState(editorStateJSON);
     } catch (error) {
-      console.error('Error processing editor state:', error);
+      console.error("Error processing editor state:", error);
     }
   };
 
   useEffect(() => {
     setEditorText(editorState);
-  }, [editorState]);
+  }, [editorState, setEditorText]);
 
   return (
     <Fdiv>
       <TextEditor>
         <div>
           {isPreview ? (
-            <div style={{ padding: "20px",backgroundColor: "#fdc386"}}>
-              {editorText.root.children[0].children.map((item:ChildItemType, index:number) => (
-                <p key={index}>{item.text}</p>
-              ))}
+            <div style={{ padding: "20px", backgroundColor: "#fdc386" }}>
+              {editorText.root.children[0].children.map(
+                (item: ChildItemType, index: number) => (
+                  <p key={index}>{item.text}</p>
+                )
+              )}
             </div>
           ) : (
             <LexicalComposer
@@ -131,13 +137,12 @@ export default function LexicalTextEditor({ innerText }: { innerText: string }) 
                           minHeight: "200px",
                         }}
                         aria-placeholder={placeholder}
-                        placeholder={
-                          <div className="editor-placeholder">{placeholder}</div>
-                        }
                       />
                     }
                     ErrorBoundary={LexicalErrorBoundary}
-                    placeholder={null}
+                    placeholder={
+                      <div className="editor-placeholder">{placeholder}</div>
+                    }
                   />
                   <HistoryPlugin />
                   <AutoFocusPlugin />
