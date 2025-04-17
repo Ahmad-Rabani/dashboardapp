@@ -1,9 +1,9 @@
 import React,{useEffect,useState} from "react";
 
-export default function OutsideClick(ref) {
+export default function OutsideClick(ref: any) {
     const [isClicked, setIsClicked] = useState<boolean>();
     useEffect(() => {
-      function handleClickOutside(event) {
+      function handleClickOutside(event: { target: any; }) {
         if (ref.current && !ref.current.contains(event.target)) {
           setIsClicked(true);
         } else {
