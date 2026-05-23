@@ -38,7 +38,8 @@ export const MainDiv = styled.header<{ $preview?: boolean }>`
   padding: ${(props) => (props.$preview ? "0" : "clamp(8px, 2vw, 20px) 0")};
   box-sizing: border-box;
   overflow-x: hidden;
-  background-color: hsl(var(--app-shell-bg, 0 0% 90%));
+  background-color: ${(props) =>
+    props.$preview ? "#ffffff" : "hsl(var(--app-shell-bg, 0 0% 90%))"};
   flex-shrink: 0;
   transition: background-color 0.3s ease, padding 0.3s ease;
 `;

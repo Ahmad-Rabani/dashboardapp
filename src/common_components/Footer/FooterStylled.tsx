@@ -31,7 +31,8 @@ export const MainDiv = styled.div<{ $preview?: boolean }>`
   overflow-x: hidden;
   flex-shrink: 0;
   text-align: center;
-  background-color: hsl(var(--app-shell-bg, 0 0% 90%));
+  background-color: ${(props) =>
+    props.$preview ? "#ffffff" : "hsl(var(--app-shell-bg, 0 0% 90%))"};
   transition: background-color 0.3s ease, padding 0.3s ease;
 
   @media (min-width: 768px) {
