@@ -90,7 +90,6 @@ export const CardWrapper = styled.div<{ $isDragging?: boolean }>`
   min-width: 0;
   opacity: ${({ $isDragging }) => ($isDragging ? 0.4 : 1)};
 
-  /* FIXED: gap/margin/padding between cards → flush sections with hairline divider only */
   margin: 0 !important;
   gap: 0;
   padding: 0 !important;
