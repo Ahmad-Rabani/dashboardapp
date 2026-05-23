@@ -2,11 +2,12 @@
 
 import React, { useContext, useState } from "react";
 import Image from "next/image";
-import { Download } from "lucide-react";
+import { Download, LayoutTemplate } from "lucide-react";
 import { notify } from "@/utils/toast";
 import { downloadDashboardAsPdf } from "@/utils/downloadPdf";
 import { MyContext } from "@/context/MyContext";
 import { useDashboardContext } from "@/context/DashboardContext";
+import WorkspacePanel from "@/components/WorkspacePanel";
 import {
   AddSection,
   PreviewButton,
@@ -32,6 +33,7 @@ export default function EditorFloatingActions() {
   ] = useContext(MyContext);
   const { hydrated } = useDashboardContext();
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
+  const [workspaceOpen, setWorkspaceOpen] = useState(false);
 
   if (!hydrated) return null;
 
@@ -62,7 +64,20 @@ export default function EditorFloatingActions() {
 
   return (
     <>
+      <WorkspacePanel open={workspaceOpen} onOpenChange={setWorkspaceOpen} />
+
       <PreviewActions data-no-export>
+        {!isPreview && (
+          <PreviewButton
+            type="button"
+            onClick={() => setWorkspaceOpen(true)}
+            aria-label="Open templates and backup"
+          >
+            <LayoutTemplate size={15} aria-hidden />
+            Templates
+          </PreviewButton>
+        )}
+
         <PreviewButton onClick={handlePreviewButton}>
           {isPreview ? (
             <Image width={15} height={15} src={noEdit} alt="" />

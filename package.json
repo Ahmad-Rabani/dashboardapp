@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/start-dev.cjs",
+    "dev:stop": "node scripts/stop-dev.cjs",
     "clean": "node scripts/clean-next-cache.cjs",
-    "dev:clean": "npm run clean && next dev",
+    "dev:clean": "npm run dev:stop && npm run clean && node scripts/start-dev.cjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

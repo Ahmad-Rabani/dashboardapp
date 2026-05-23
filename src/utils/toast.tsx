@@ -10,6 +10,9 @@ import {
   faArrowsUpDown,
   faImage,
   faCircleExclamation,
+  faFileExport,
+  faFileImport,
+  faWandMagicSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import CustomToast, { ToastType } from "@/components/CustomToast";
 
@@ -144,5 +147,37 @@ export const notify = {
       msg ?? "Please try again",
       <FontAwesomeIcon icon={faCircleExclamation} />,
       "#ef4444"
+    ),
+
+  templateApplied: (name?: string) =>
+    showCustomToast(
+      `template:${name ?? "default"}`,
+      "success",
+      "Template applied",
+      name
+        ? `"${name}" layout is ready — customize text and images`
+        : "Your page layout has been updated",
+      <FontAwesomeIcon icon={faWandMagicSparkles} />,
+      "#8b5cf6"
+    ),
+
+  backupExported: () =>
+    showCustomToast(
+      "backupExported",
+      "success",
+      "Backup downloaded",
+      "Save the JSON file somewhere safe to restore later",
+      <FontAwesomeIcon icon={faFileExport} />,
+      "#0ea5e9"
+    ),
+
+  backupImported: () =>
+    showCustomToast(
+      "backupImported",
+      "success",
+      "Backup restored",
+      "Your page was loaded from the backup file",
+      <FontAwesomeIcon icon={faFileImport} />,
+      "#14b8a6"
     ),
 };

@@ -12,6 +12,7 @@ import {
   DashboardProvider,
   useDashboardContext,
 } from "@/context/DashboardContext";
+import { DashboardSnapshot } from "@/types/dashboard";
 import {
   clearDashboardStorage,
   fromStoredSections,
@@ -73,6 +74,20 @@ function DashboardPersistence({ children }: { children: React.ReactNode }) {
     clearDashboardStorage();
   }, [resetLayoutSettings]);
 
+  const applyDashboardSnapshot = useCallback(
+    (snapshot: DashboardSnapshot) => {
+      setComponentsArray(fromStoredSections(snapshot.sections));
+      setHeader(snapshot.header);
+      setFooter(snapshot.footer);
+      setNewSection(false);
+      setAddNewSection(false);
+      setIsPreview(false);
+      setInsertIndex(0);
+      saveDashboard(snapshot);
+    },
+    [setFooter, setHeader]
+  );
+
   return (
     <MyContext.Provider
       value={[
@@ -89,6 +104,7 @@ function DashboardPersistence({ children }: { children: React.ReactNode }) {
         insertIndex,
         setInsertIndex,
         resetDashboard,
+        applyDashboardSnapshot,
       ]}
     >
       <AppShell>{children}</AppShell>
