@@ -2,11 +2,12 @@
 
 import React, { useContext, useState } from "react";
 import Image from "next/image";
-import { Download, LayoutTemplate } from "lucide-react";
+import { Download, LayoutTemplate, Redo2, Undo2 } from "lucide-react";
 import { notify } from "@/utils/toast";
 import { downloadDashboardAsPdf } from "@/utils/downloadPdf";
 import { MyContext } from "@/context/MyContext";
 import { useDashboardContext } from "@/context/DashboardContext";
+import { useDashboardHistoryContext } from "@/context/DashboardHistoryContext";
 import WorkspacePanel from "@/components/WorkspacePanel";
 import { FloatingToolbarDock, ToolbarButton } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
@@ -27,6 +28,7 @@ export default function EditorFloatingActions() {
     setIsPreview,
   ] = useContext(MyContext);
   const { hydrated } = useDashboardContext();
+  const { canUndo, canRedo, undo, redo } = useDashboardHistoryContext();
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
 
@@ -64,6 +66,38 @@ export default function EditorFloatingActions() {
       <FloatingToolbarDock data-no-export role="toolbar" aria-label="Page editor actions">
         {!isPreview ? (
           <>
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                width: "100%",
+              }}
+            >
+              <ToolbarButton
+                type="button"
+                $variant="ghost"
+                onClick={undo}
+                disabled={!canUndo}
+                aria-label="Undo (Ctrl+Z)"
+                title="Undo (Ctrl+Z)"
+                style={{ flex: 1 }}
+              >
+                <Undo2 size={15} aria-hidden />
+                Undo
+              </ToolbarButton>
+              <ToolbarButton
+                type="button"
+                $variant="ghost"
+                onClick={redo}
+                disabled={!canRedo}
+                aria-label="Redo (Ctrl+Y)"
+                title="Redo (Ctrl+Y)"
+                style={{ flex: 1 }}
+              >
+                <Redo2 size={15} aria-hidden />
+                Redo
+              </ToolbarButton>
+            </div>
             <ToolbarButton
               type="button"
               $primary

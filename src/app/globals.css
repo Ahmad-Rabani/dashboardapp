@@ -28,7 +28,7 @@
     --sidebar-fg: 222.2 47.4% 11.2%;
     --header-height: 72px;
     --app-shell-bg: 0 0% 90%;
-    --floating-toolbar-height: 88px;
+    --floating-toolbar-height: 148px;
     --toolbar-dock-bg: rgba(255, 255, 255, 0.96);
     --toolbar-dock-border: rgba(15, 15, 108, 0.1);
   }
@@ -71,7 +71,7 @@
 
   @media (max-width: 640px) {
     :root {
-      --floating-toolbar-height: 132px;
+      --floating-toolbar-height: 200px;
     }
   }
 }

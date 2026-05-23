@@ -123,7 +123,10 @@ export const FloatingToolbarDock = styled.div`
   }
 `;
 
-export const ToolbarButton = styled.button<{ $primary?: boolean; $variant?: "default" | "ghost" }>`
+export const ToolbarButton = styled.button<{
+  $primary?: boolean;
+  $variant?: "default" | "ghost";
+}>`
   ${toolbarButtonBase}
   width: 100%;
   color: white;
