@@ -26,7 +26,7 @@ export const MainDiv = styled.div<{ $preview?: boolean }>`
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: ${(props) => (props.$preview ? "0" : "clamp(8px, 2vw, 20px) 0")};
+  padding: 0;
   box-sizing: border-box;
   overflow-x: hidden;
   flex-shrink: 0;

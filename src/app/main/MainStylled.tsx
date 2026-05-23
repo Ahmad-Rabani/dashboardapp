@@ -7,20 +7,18 @@ export const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0;
+  gap: var(--section-stack-gap, 8px);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   min-width: 0;
-  padding-bottom: 0;
 `;
 
-/* FIXED: gap between cards → absolute zero gap with hairline dividers only on cards */
 export const SortableList = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0 !important;
+  gap: var(--section-stack-gap, 8px) !important;
   margin: 0;
   padding: 0;
   min-width: 0;

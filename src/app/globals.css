@@ -29,6 +29,7 @@
     --header-height: 72px;
     --app-shell-bg: 0 0% 90%;
     --floating-toolbar-height: 148px;
+    --section-stack-gap: 8px;
     --toolbar-dock-bg: rgba(255, 255, 255, 0.96);
     --toolbar-dock-border: rgba(15, 15, 108, 0.1);
   }

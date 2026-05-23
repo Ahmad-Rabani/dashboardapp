@@ -35,7 +35,7 @@ export const MainDiv = styled.header<{ $preview?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: ${(props) => (props.$preview ? "0" : "clamp(8px, 2vw, 20px) 0")};
+  padding: 0;
   box-sizing: border-box;
   overflow-x: hidden;
   background-color: ${(props) =>

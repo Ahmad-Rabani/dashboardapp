@@ -56,26 +56,36 @@ export const AppRoot = styled.div`
   width: 100%;
   overflow-x: hidden;
   padding-right: var(--editor-sidebar-inset, 0px);
+  padding-bottom: calc(
+    var(--floating-toolbar-height, 88px) + env(safe-area-inset-bottom, 0px) + 16px
+  );
   background-color: hsl(var(--app-shell-bg, 0 0% 90%));
   color: hsl(var(--foreground));
   transition: background-color 0.3s ease, color 0.3s ease, padding-right 0.3s ease;
   box-sizing: border-box;
 `;
 
+/** Header, sections, and footer share one vertical rhythm */
+export const ExportRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--section-stack-gap, 8px);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: var(--section-stack-gap, 8px) 0;
+`;
+
 export const MainArea = styled.main`
-  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
   min-width: 0;
-  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   box-sizing: border-box;
-  padding-bottom: calc(
-    var(--floating-toolbar-height, 88px) + env(safe-area-inset-bottom, 0px) + 16px
-  );
 `;
 
 export const ContentWrapper = styled(AlignedContent)`
@@ -94,11 +104,12 @@ export const CenteredAlignedSlot = styled.div`
 
 /* ADDED: fills space between header and footer for empty state centering */
 export const EmptyStateWrapper = styled.div`
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
-  min-height: 0;
+  min-height: calc(
+    100dvh - var(--header-height, 72px) - 96px -
+      var(--floating-toolbar-height, 148px)
+  );
 `;

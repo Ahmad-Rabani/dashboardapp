@@ -6,7 +6,7 @@ import Footer from "@/common_components/Footer/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import UndoRedoShortcuts from "@/components/UndoRedoShortcuts";
 import EditorFloatingActions from "@/app/main/EditorFloatingActions";
-import { AppRoot, MainArea } from "@/styles/AppLayout";
+import { AppRoot, ExportRoot, MainArea } from "@/styles/AppLayout";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -14,11 +14,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <ThemeToggle data-no-export />
       <UndoRedoShortcuts />
       <EditorFloatingActions />
-      <div id="dashboard-export-root">
+      <ExportRoot id="dashboard-export-root">
         <Header />
         <MainArea>{children}</MainArea>
         <Footer />
-      </div>
+      </ExportRoot>
     </AppRoot>
   );
 }
