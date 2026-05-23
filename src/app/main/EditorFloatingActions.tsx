@@ -2,7 +2,7 @@
 
 import React, { useContext, useState } from "react";
 import Image from "next/image";
-import { Download, LayoutTemplate, Redo2, Search, Undo2 } from "lucide-react";
+import { Download, LayoutTemplate, Redo2, Search, Sparkles, Undo2 } from "lucide-react";
 import { notify } from "@/utils/toast";
 import { downloadDashboardAsPdf } from "@/utils/downloadPdf";
 import { MyContext } from "@/context/MyContext";
@@ -11,6 +11,7 @@ import { useDashboardHistoryContext } from "@/context/DashboardHistoryContext";
 import WorkspacePanel from "@/components/WorkspacePanel";
 import FindReplaceDialog from "@/components/FindReplaceDialog";
 import FindReplaceShortcuts from "@/components/FindReplaceShortcuts";
+import QuickFillDialog, { QuickFillShortcuts } from "@/components/QuickFillDialog";
 import { FloatingToolbarDock, ToolbarButton } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
 import add from "../../../img/add.png";
@@ -34,6 +35,7 @@ export default function EditorFloatingActions() {
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
+  const [quickFillOpen, setQuickFillOpen] = useState(false);
 
   if (!hydrated) return null;
 
@@ -65,7 +67,9 @@ export default function EditorFloatingActions() {
   return (
     <>
       <FindReplaceShortcuts onOpen={() => setFindReplaceOpen(true)} />
+      <QuickFillShortcuts onOpen={() => setQuickFillOpen(true)} />
       <FindReplaceDialog open={findReplaceOpen} onOpenChange={setFindReplaceOpen} />
+      <QuickFillDialog open={quickFillOpen} onOpenChange={setQuickFillOpen} />
       <WorkspacePanel open={workspaceOpen} onOpenChange={setWorkspaceOpen} />
 
       <FloatingToolbarDock data-no-export role="toolbar" aria-label="Page editor actions">
@@ -111,6 +115,17 @@ export default function EditorFloatingActions() {
             >
               <Image width={15} height={15} src={add} alt="" />
               Add Section
+            </ToolbarButton>
+            <ToolbarButton
+              type="button"
+              $variant="ghost"
+              onClick={() => setQuickFillOpen(true)}
+              disabled={isEmpty}
+              aria-label="Quick fill template placeholders (Ctrl+Shift+F)"
+              title="Quick Fill (Ctrl+Shift+F)"
+            >
+              <Sparkles size={15} aria-hidden />
+              Quick Fill
             </ToolbarButton>
             <ToolbarButton
               type="button"

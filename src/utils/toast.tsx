@@ -14,6 +14,7 @@ import {
   faFileImport,
   faWandMagicSparkles,
   faSearch,
+  faBolt,
 } from "@fortawesome/free-solid-svg-icons";
 import CustomToast, { ToastType } from "@/components/CustomToast";
 
@@ -190,5 +191,15 @@ export const notify = {
       `${count} occurrence${count === 1 ? "" : "s"} updated across your page`,
       <FontAwesomeIcon icon={faSearch} />,
       "#6366f1"
+    ),
+
+  quickFillComplete: (count: number, fields: number) =>
+    showCustomToast(
+      `quickFill:${count}:${fields}`,
+      "success",
+      "Quick Fill applied",
+      `${count} placeholder${count === 1 ? "" : "s"} updated across ${fields} field${fields === 1 ? "" : "s"}`,
+      <FontAwesomeIcon icon={faBolt} />,
+      "#7c3aed"
     ),
 };

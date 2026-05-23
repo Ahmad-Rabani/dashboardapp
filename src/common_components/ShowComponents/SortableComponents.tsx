@@ -189,7 +189,13 @@ const SortableComponents = ({
   };
 
   return (
-    <CardWrapper style={style} ref={setNodeRef} $isDragging={isDragging} $isPreview={isPreview}>
+    <CardWrapper
+      style={style}
+      ref={setNodeRef}
+      $isDragging={isDragging}
+      $isPreview={isPreview}
+      data-section-key={id}
+    >
       {!isPreview && (
         <SectionControlsBar>
           <DragHandle
