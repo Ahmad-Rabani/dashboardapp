@@ -64,9 +64,10 @@ export const MainArea = styled.main`
   overflow-x: hidden;
   width: 100%;
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   box-sizing: border-box;
 `;
 

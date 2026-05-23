@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import StyledComponentsRegistry from "../../registry";
 import { ComponentType } from "../../types";
 import GlobalStyle from "@/styles/GlobalStyle";
@@ -17,6 +18,24 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <StyledComponentsRegistry>
       <GlobalStyle />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            borderRadius: "10px",
+            fontSize: "14px",
+            padding: "12px 16px",
+            maxWidth: "360px",
+          },
+          success: {
+            iconTheme: { primary: "#22c55e", secondary: "#fff" },
+          },
+          error: {
+            iconTheme: { primary: "#ef4444", secondary: "#fff" },
+          },
+        }}
+      />
       <MyContext.Provider
         value={[
           componentsArray,

@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useContext, useEffect } from "react";
+import toast from "react-hot-toast";
 import {
   InnerDiv,
   MainDiv,
@@ -49,31 +50,14 @@ const NewSection = ({ currentIndex }: { currentIndex: number }) => {
   }
   const { result, uploader } = useDisplayImage();
 
-  // handling editor
   const handleEditor = () => {
-    setComponentsArray((prevComponents: ComponentType) => {
-      const newComponent = {
-        key: uuidv4(),
-        component: "Text",
-        index: currentIndex + 1,
-      };
-      const updatedComponents = [
-        ...prevComponents.slice(0, currentIndex + 1) ,
-        newComponent,
-        ...prevComponents.slice(currentIndex + 1),
-      ];
-      return updatedComponents;
-    });
-
-    setNewSection(false);
-    setAddNewSection(false);
-  };
-
-  // setting image and push it to an array
-  useEffect(() => {
-    if (result) {
+    try {
       setComponentsArray((prevComponents: ComponentType) => {
-        const newComponent = { key: uuidv4(), img: result, index: currentIndex + 1 };
+        const newComponent = {
+          key: uuidv4(),
+          component: "Text",
+          index: currentIndex + 1,
+        };
         const updatedComponents = [
           ...prevComponents.slice(0, currentIndex + 1),
           newComponent,
@@ -84,13 +68,49 @@ const NewSection = ({ currentIndex }: { currentIndex: number }) => {
 
       setNewSection(false);
       setAddNewSection(false);
+      toast.success("Section added successfully");
+    } catch {
+      toast.error("Something went wrong. Please try again.");
     }
-  }, [result, setComponentsArray]);
+  };
 
-  // handling image
+  useEffect(() => {
+    if (result) {
+      try {
+        setComponentsArray((prevComponents: ComponentType) => {
+          const newComponent = {
+            key: uuidv4(),
+            img: result,
+            index: currentIndex + 1,
+          };
+          const updatedComponents = [
+            ...prevComponents.slice(0, currentIndex + 1),
+            newComponent,
+            ...prevComponents.slice(currentIndex + 1),
+          ];
+          return updatedComponents;
+        });
+
+        setNewSection(false);
+        setAddNewSection(false);
+        toast.success("Section added successfully");
+      } catch {
+        toast.error("Something went wrong. Please try again.");
+      }
+    }
+  }, [result, setComponentsArray, currentIndex, setNewSection, setAddNewSection]);
+
   function handleImage(e: React.ChangeEvent<HTMLInputElement> | any) {
-    setImage(e.target.files[0]);
-    uploader(e);
+    try {
+      if (!e.target.files?.[0]) {
+        toast.error("Something went wrong. Please try again.");
+        return;
+      }
+      setImage(e.target.files[0]);
+      uploader(e);
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    }
   }
 
   function handleClose() {

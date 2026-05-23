@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
+import toast from "react-hot-toast";
 import Sidebar from "../sidebar/Sidebar";
 import {
   SidebarDiv,
@@ -41,7 +42,12 @@ const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
   function selectBackgroundColor(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | any
   ) {
-    setBackgroundColor(e.target.textContent);
+    try {
+      setBackgroundColor(e.target.textContent);
+      toast.success("Image updated");
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    }
   }
 
   useEffect(() => {
