@@ -7,6 +7,7 @@ import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 
 interface EmptyStateProps {
   onAddSection?: () => void;
+  previewMode?: boolean;
 }
 
 const Wrapper = styled.div`
@@ -44,39 +45,51 @@ const Subtitle = styled.p`
   font-family: "Inter", sans-serif;
 `;
 
-const CtaButton = styled.button`
+const CtaButton = styled.button<{ $disabled?: boolean }>`
   min-height: 44px;
   padding: clamp(10px, 2vw, 12px) clamp(20px, 4vw, 28px);
   border: none;
   border-radius: 10px;
-  background: linear-gradient(145deg, #0f0f6c, #191981);
-  color: #fff;
+  background: ${(props) =>
+    props.$disabled
+      ? "#e5e7eb"
+      : "linear-gradient(145deg, #0f0f6c, #191981)"};
+  color: ${(props) => (props.$disabled ? "#9ca3af" : "#fff")};
   font-size: clamp(14px, 1.5vw, 15px);
   font-weight: 600;
   font-family: "Inter", sans-serif;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(15, 15, 108, 0.25);
+  cursor: ${(props) => (props.$disabled ? "not-allowed" : "pointer")};
+  box-shadow: ${(props) =>
+    props.$disabled ? "none" : "0 4px 15px rgba(15, 15, 108, 0.25)"};
   transition: box-shadow 0.2s ease, transform 0.2s ease;
+  pointer-events: ${(props) => (props.$disabled ? "none" : "auto")};
 
   &:hover {
-    box-shadow: 0 6px 20px rgba(15, 15, 108, 0.35);
-    transform: translateY(-1px);
+    box-shadow: ${(props) =>
+      props.$disabled ? "none" : "0 6px 20px rgba(15, 15, 108, 0.35)"};
+    transform: ${(props) => (props.$disabled ? "none" : "translateY(-1px)")};
   }
 `;
 
-const EmptyState = ({ onAddSection }: EmptyStateProps) => {
+const EmptyState = ({ onAddSection, previewMode = false }: EmptyStateProps) => {
   return (
     <Wrapper>
       <IconWrap aria-hidden="true">
         <FontAwesomeIcon icon={faLayerGroup} />
       </IconWrap>
-      <Title>No sections yet</Title>
+      <Title>{previewMode ? "Nothing to preview" : "No sections yet"}</Title>
       <Subtitle>
-        Click the Add Section button to create your first section and start
-        building your page.
+        {previewMode
+          ? "Switch back to edit mode and add a section to build your page."
+          : "Click the Add Section button to create your first section and start building your page."}
       </Subtitle>
-      {onAddSection && (
+      {!previewMode && onAddSection && (
         <CtaButton type="button" onClick={onAddSection}>
+          Add Section
+        </CtaButton>
+      )}
+      {previewMode && (
+        <CtaButton type="button" $disabled aria-disabled="true">
           Add Section
         </CtaButton>
       )}

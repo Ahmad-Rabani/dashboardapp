@@ -74,6 +74,7 @@ const SortableComponents = ({
     addNewSection,
     setAddNewSection,
     isPreview,
+    ,
     insertIndex,
     setInsertIndex,
   ] = useContext(MyContext);

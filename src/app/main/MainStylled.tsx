@@ -42,7 +42,7 @@ export const PreviewButton = styled.button`
   padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
   min-width: clamp(72px, 18vw, 100px);
   max-width: calc(100vw - clamp(16px, 4vw, 32px));
-  right: clamp(12px, 3vw, 24px);
+  right: calc(clamp(12px, 3vw, 24px) + var(--editor-sidebar-inset, 0px));
   top: clamp(88px, 18vw, 108px);
   cursor: pointer;
   background: linear-gradient(145deg, #0f0f6c, #191981);
@@ -77,7 +77,7 @@ export const AddSection = styled.button`
   padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 24px);
   min-width: clamp(88px, 22vw, 120px);
   max-width: calc(100vw - clamp(16px, 4vw, 32px));
-  right: clamp(12px, 3vw, 24px);
+  right: calc(clamp(12px, 3vw, 24px) + var(--editor-sidebar-inset, 0px));
   bottom: clamp(12px, 3vw, 24px);
   cursor: pointer;
   background: linear-gradient(145deg, #0f0f6c, #191981);

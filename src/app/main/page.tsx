@@ -2,8 +2,9 @@
 
 import React, { Fragment, useContext, useState } from "react";
 import { notify } from "@/utils/toast";
-import { MainDiv, PreviewButton, SortableList } from "./MainStylled";
+import { MainDiv, AddSection, PreviewButton, SortableList } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
+import add from "../../../img/add.png";
 import noEdit from "../../../img/delete (1).png";
 import Image from "next/image";
 import NewSection from "@/common_components/Add New Section/NewSection";
@@ -86,7 +87,8 @@ const MainComponent = () => {
   }
 
   const isEmpty = componentsArray.length === 0;
-  const showEmptyState = isEmpty && !isNewSection && !addNewSection;
+  const showEmptyState = isEmpty && !isNewSection && !addNewSection && !isPreview;
+  const showPreviewEmpty = isEmpty && isPreview;
 
   return (
     <>
@@ -102,6 +104,10 @@ const MainComponent = () => {
       {showEmptyState ? (
         <EmptyStateWrapper>
           <EmptyState onAddSection={createNewSection} />
+        </EmptyStateWrapper>
+      ) : showPreviewEmpty ? (
+        <EmptyStateWrapper>
+          <EmptyState previewMode />
         </EmptyStateWrapper>
       ) : (
         <ContentWrapper>
@@ -153,6 +159,13 @@ const MainComponent = () => {
         <ContentWrapper>
           <NewSection currentIndex={Math.max(componentsArray.length - 1, 0)} />
         </ContentWrapper>
+      )}
+
+      {!isPreview && (
+        <AddSection onClick={createNewSection} type="button">
+          <Image width={15} height={15} src={add} alt="" />
+          Add Section
+        </AddSection>
       )}
     </>
   );
