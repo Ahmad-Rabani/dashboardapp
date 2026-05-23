@@ -44,40 +44,6 @@ export const Line = styled.hr`
   display: none;
 `;
 
-export const AddButton = styled.button`
-  min-width: clamp(32px, 8vw, 36px);
-  min-height: clamp(32px, 8vw, 36px);
-  padding: 0 clamp(6px, 1.5vw, 7px);
-  border-radius: 50%;
-  cursor: pointer;
-  background-color: #0f0f6c;
-  border: none;
-  color: white;
-  opacity: 0;
-  pointer-events: none;
-  font-size: clamp(18px, 4vw, 24px);
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(15, 15, 108, 0.35);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  transform: translateY(4px);
-`;
-
-export const SectionAddZone = styled.div`
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 6;
-`;
-
 export const Container = styled.div`
   display: contents;
 `;
@@ -100,12 +66,6 @@ export const CardWrapper = styled.div<{ $isDragging?: boolean; $isPreview?: bool
   padding: 0 !important;
   border-radius: 0;
   border-bottom: none;
-
-  &:hover ${AddButton} {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-  }
 
   @media (max-width: 1023px) {
     display: grid;

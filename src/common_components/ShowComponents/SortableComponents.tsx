@@ -10,8 +10,6 @@ import {
   CopyButton,
   DeleteButton,
   DragButton,
-  AddButton,
-  SectionAddZone,
   ImageDiv,
   ComponentsDiv,
   LeftControls,
@@ -78,16 +76,13 @@ const SortableComponents = ({
   const [
     componentsArray,
     setComponentsArray,
-    isNewSection,
-    setNewSection,
-    editorText,
-    setEditorText,
-    addNewSection,
-    setAddNewSection,
-    isPreview,
     ,
-    insertIndex,
-    setInsertIndex,
+    ,
+    editorText,
+    ,
+    ,
+    ,
+    isPreview,
   ] = useContext(MyContext);
 
   const sectionData = useMemo(
@@ -172,21 +167,6 @@ const SortableComponents = ({
     }
   };
 
-  const handleNewSection = (sectionId: string) => {
-    const findTheIndex = componentsArray
-      .map((item: ComponentType) => item.key)
-      .indexOf(sectionId);
-
-    if (addNewSection && insertIndex === findTheIndex) {
-      setAddNewSection(false);
-      return;
-    }
-
-    setInsertIndex(findTheIndex);
-    setAddNewSection(true);
-    setNewSection(false);
-  };
-
   return (
     <CardWrapper style={style} ref={setNodeRef} $isDragging={isDragging} $isPreview={isPreview}>
       {!isPreview && (
@@ -221,14 +201,6 @@ const SortableComponents = ({
             )}
           </ResizableSection>
         </AlignedContent>
-
-        {!isPreview && (
-          <SectionAddZone>
-            <AddButton type="button" onClick={() => handleNewSection(id)}>
-              +
-            </AddButton>
-          </SectionAddZone>
-        )}
       </CardBody>
 
       {!isPreview && (
