@@ -15,7 +15,8 @@ export const MainDivOfImage = styled.div<BackgroundColorButtonType>`
   align-items: center;
   width: 100%;
   min-width: 0;
-  padding: clamp(4px, 1vw, 8px) 0;
+  margin: 0;
+  padding: 0;
   border: ${(props) => (props.$preview ? "none" : "1px solid orange")};
   background-color: ${(props) => props.$backgroundColor};
   box-sizing: border-box;

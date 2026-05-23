@@ -72,31 +72,18 @@ export const MainArea = styled.main`
 `;
 
 export const ContentWrapper = styled(AlignedContent)`
-  padding-top: clamp(48px, 10vw, 56px);
-  padding-bottom: 12px;
+  /* FIXED: vertical padding created gaps between sections → zero top/bottom padding */
+  padding-top: 0;
+  padding-bottom: 0;
+`;
 
-  @media (min-width: 481px) {
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
-
-  @media (min-width: 1024px) {
-    padding-top: clamp(16px, 2vw, 32px);
-    padding-bottom: clamp(16px, 2vw, 32px);
-  }
-
-  @media (min-width: 1280px) {
-    padding-top: clamp(20px, 2.5vw, 40px);
-    padding-bottom: clamp(20px, 2.5vw, 40px);
-  }
-
-  @media (min-width: 1440px) {
-    padding-top: clamp(24px, 2vw, 48px);
-    padding-bottom: clamp(24px, 2vw, 48px);
-  }
-
-  @media (min-width: 1920px) {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
+/* ADDED: fills space between header and footer for empty state centering */
+export const EmptyStateWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
 `;

@@ -6,19 +6,29 @@ export const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: clamp(12px, 2vw, 24px);
+  gap: 0;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   min-width: 0;
   padding-bottom: clamp(72px, 12vw, 96px);
 `;
 
-/* FIXED: DnD list had no width constraint → 100% fluid column for sortable items */
+/* FIXED: gap between cards → absolute zero gap with hairline dividers only on cards */
 export const SortableList = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: clamp(4px, 1vw, 8px);
+  gap: 0 !important;
+  margin: 0;
+  padding: 0;
   min-width: 0;
+
+  & > * {
+    margin: 0 !important;
+    padding: 0;
+    display: block;
+  }
 `;
 
 export const PreviewButton = styled.button`

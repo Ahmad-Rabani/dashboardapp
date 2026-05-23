@@ -20,17 +20,12 @@ const iconButtonBase = `
     height: clamp(12px, 3vw, 15px);
     object-fit: contain;
   }
-`;
 
-/* FIXED: absolute px positioning caused overlap/off-screen buttons → flex action row */
-export const ActionButtonRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: clamp(4px, 1vw, 12px);
-  flex-wrap: nowrap;
-  width: 100%;
-  min-width: 0;
+  /* FIXED: buttons shrank on large screens → fixed 36px min on desktop */
+  @media (min-width: 1024px) {
+    min-width: 36px;
+    min-height: 36px;
+  }
 `;
 
 export const CopyButton = styled.button`
@@ -82,22 +77,38 @@ export const Container = styled.div`
   }
 `;
 
-/* FIXED: card had no overflow guard / gap layout → full-width card with hidden overflow */
-export const MainDiv = styled.div<{ $isDragging?: boolean }>`
+/* FIXED: card used column layout with centered action row → row layout with pinned left/right controls on ≥1024px */
+export const CardWrapper = styled.div<{ $isDragging?: boolean }>`
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(4px, 1vw, 6px);
-  justify-content: flex-start;
-  align-items: stretch;
   position: relative;
   overflow: hidden;
   min-width: 0;
-  padding: clamp(4px, 1vw, 8px) 0;
-  border-radius: clamp(6px, 1vw, 10px);
   opacity: ${({ $isDragging }) => ($isDragging ? 0.4 : 1)};
+
+  /* FIXED: gap/margin/padding between cards → flush sections with hairline divider only */
+  margin: 0 !important;
+  gap: 0;
+  padding: 0 !important;
+  border-radius: 0;
+  border-bottom: 1px solid #e5e7eb;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  /* FIXED: mobile keeps drag left + copy/delete right on one row via grid overlay */
+  @media (max-width: 1023px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "left-controls right-controls"
+      "body body";
+  }
 
   &:hover ${CopyButton},
   &:hover ${DeleteButton},
@@ -105,6 +116,9 @@ export const MainDiv = styled.div<{ $isDragging?: boolean }>`
     visibility: visible;
   }
 `;
+
+/* @deprecated alias — use CardWrapper */
+export const MainDiv = CardWrapper;
 
 export const DragOverlayWrapper = styled.div`
   width: 100%;
@@ -124,7 +138,53 @@ export const ComponentsDiv = styled.div`
   flex-shrink: 0;
 `;
 
-/* FIXED: image section used fixed 50% width → fluid 100% with min-width:0 */
+/* FIXED: left controls floated into card body → pinned left column, vertically centered on ≥1024px */
+export const LeftControls = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  flex-shrink: 0;
+
+  @media (max-width: 1023px) {
+    grid-area: left-controls;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 8px 12px 0;
+  }
+`;
+
+/* FIXED: copy/delete floated to center → pinned right column, vertically centered on ≥1024px */
+export const RightControls = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1vw, 8px);
+  padding: 8px;
+  flex-shrink: 0;
+
+  @media (max-width: 1023px) {
+    grid-area: right-controls;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 0 12px 8px;
+  }
+`;
+
+export const CardBody = styled.div`
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media (max-width: 1023px) {
+    grid-area: body;
+  }
+`;
+
 export const CardContent = styled.div`
   width: 100%;
   min-width: 0;

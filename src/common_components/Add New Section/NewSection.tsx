@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useContext, useEffect } from "react";
-import toast from "react-hot-toast";
+import { notify } from "@/utils/toast";
 import {
   InnerDiv,
   MainDiv,
@@ -68,9 +68,9 @@ const NewSection = ({ currentIndex }: { currentIndex: number }) => {
 
       setNewSection(false);
       setAddNewSection(false);
-      toast.success("Section added successfully");
+      notify.sectionAdded();
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      notify.error();
     }
   };
 
@@ -93,9 +93,9 @@ const NewSection = ({ currentIndex }: { currentIndex: number }) => {
 
         setNewSection(false);
         setAddNewSection(false);
-        toast.success("Section added successfully");
+        notify.sectionAdded();
       } catch {
-        toast.error("Something went wrong. Please try again.");
+        notify.error();
       }
     }
   }, [result, setComponentsArray, currentIndex, setNewSection, setAddNewSection]);
@@ -103,13 +103,13 @@ const NewSection = ({ currentIndex }: { currentIndex: number }) => {
   function handleImage(e: React.ChangeEvent<HTMLInputElement> | any) {
     try {
       if (!e.target.files?.[0]) {
-        toast.error("Something went wrong. Please try again.");
+        notify.error();
         return;
       }
       setImage(e.target.files[0]);
       uploader(e);
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      notify.error();
     }
   }
 

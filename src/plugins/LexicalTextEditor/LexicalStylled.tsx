@@ -9,17 +9,16 @@ export const Fdiv = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
   position: relative;
   box-sizing: border-box;
   min-width: 0;
 `;
 
-/* FIXED: editor lacked overflow/word-break rules for Lexical internals */
 export const TextEditor = styled.div`
   border: 2px solid #f5f5f5;
-  border-radius: clamp(6px, 1vw, 8px);
+  border-radius: 0;
   width: 100%;
   max-width: 100%;
   background-color: white;
@@ -29,6 +28,7 @@ export const TextEditor = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   min-width: 0;
+  margin: 0;
 
   &:focus-within {
     border-color: ${primaryColor};

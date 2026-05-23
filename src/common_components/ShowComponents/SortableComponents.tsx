@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useContext, useState } from "react";
-import toast from "react-hot-toast";
+import { notify } from "@/utils/toast";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 import ImageComponent from "../Image Component/Page";
 import {
-  MainDiv,
+  CardWrapper,
   CopyButton,
   DeleteButton,
   DragButton,
@@ -15,7 +15,9 @@ import {
   Line,
   Container,
   ComponentsDiv,
-  ActionButtonRow,
+  LeftControls,
+  RightControls,
+  CardBody,
   CardContent,
 } from "./SortableComponentsStylled";
 import Image from "next/image";
@@ -88,12 +90,12 @@ const SortableComponents = ({
   };
 
   const handleConfirmDelete = () => {
+    setShowDeleteModal(false);
     try {
       deleteSection(id);
-      toast.success("Section deleted");
-      setShowDeleteModal(false);
+      notify.sectionDeleted();
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      notify.error();
     }
   };
 
@@ -108,7 +110,7 @@ const SortableComponents = ({
       );
 
       if (!itemToCopy) {
-        toast.error("Something went wrong. Please try again.");
+        notify.error();
         return;
       }
 
@@ -124,9 +126,9 @@ const SortableComponents = ({
           ),
         },
       ]);
-      toast.success("Section copied");
+      notify.sectionCopied();
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      notify.error();
     }
   };
 
@@ -140,15 +142,38 @@ const SortableComponents = ({
   };
 
   return (
-    <MainDiv style={style} ref={setNodeRef} $isDragging={isDragging}>
+    <CardWrapper style={style} ref={setNodeRef} $isDragging={isDragging}>
       {!isPreview && (
-        <ActionButtonRow>
+        <LeftControls>
           <ComponentsDiv {...attributes} {...listeners}>
             <DragButton type="button" aria-label="Drag section">
               <Image src={dragIcon} width={15} height={15} alt="drag handle" />
             </DragButton>
           </ComponentsDiv>
+        </LeftControls>
+      )}
 
+      <CardBody>
+        <CardContent>
+          <SortableItemPreview
+            passingComponents={passingComponents}
+            passingImage={passingImage}
+            copyText={copyText}
+          />
+        </CardContent>
+
+        {!isPreview && (
+          <Container>
+            <Line />
+            <AddButton type="button" onClick={() => handleNewSection(id)}>
+              +
+            </AddButton>
+          </Container>
+        )}
+      </CardBody>
+
+      {!isPreview && (
+        <RightControls>
           <CopyButton
             type="button"
             onClick={() => handleCopy(id)}
@@ -164,24 +189,7 @@ const SortableComponents = ({
           >
             <Image src={deleteIcon} width={15} height={15} alt="delete" />
           </DeleteButton>
-        </ActionButtonRow>
-      )}
-
-      <CardContent>
-        <SortableItemPreview
-          passingComponents={passingComponents}
-          passingImage={passingImage}
-          copyText={copyText}
-        />
-      </CardContent>
-
-      {!isPreview && (
-        <Container>
-          <Line />
-          <AddButton type="button" onClick={() => handleNewSection(id)}>
-            +
-          </AddButton>
-        </Container>
+        </RightControls>
       )}
 
       {addNewSection && <NewSection currentIndex={index} />}
@@ -191,7 +199,7 @@ const SortableComponents = ({
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
-    </MainDiv>
+    </CardWrapper>
   );
 };
 

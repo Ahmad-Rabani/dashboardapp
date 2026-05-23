@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import toast from "react-hot-toast";
+import { notify } from "@/utils/toast";
+
 import Sidebar from "../sidebar/Sidebar";
 import {
   SidebarDiv,
@@ -44,10 +45,11 @@ const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
   ) {
     try {
       setBackgroundColor(e.target.textContent);
-      toast.success("Image updated");
+      notify.imageUpdated();
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      notify.error();
     }
+
   }
 
   useEffect(() => {

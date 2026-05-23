@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useState } from "react";
-import toast from "react-hot-toast";
+import { notify } from "@/utils/toast";
 import { MainDiv, AddSection, PreviewButton, SortableList } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
 import add from "../../../img/add.png";
@@ -23,7 +23,7 @@ import SortableComponents, {
 } from "@/common_components/ShowComponents/SortableComponents";
 import { verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { DragOverlayWrapper } from "@/common_components/ShowComponents/SortableComponentsStylled";
-import { ContentWrapper } from "@/styles/AppLayout";
+import { ContentWrapper, EmptyStateWrapper } from "@/styles/AppLayout";
 
 const MainComponent = () => {
   const [
@@ -75,11 +75,8 @@ const MainComponent = () => {
       return arrayMove(prevItems, activeIndex, overIndex);
     });
 
-    // ADDED: toast on successful reorder only
-    toast("Section reordered", {
-      icon: "↕️",
-      style: { background: "#f0f9ff", color: "#0369a1" },
-    });
+    // ADDED: toast on successful reorder only when position actually changes
+    notify.sectionReordered();
   }
 
   function handlePreviewButton() {
@@ -87,6 +84,8 @@ const MainComponent = () => {
     setNewSection(false);
     setAddNewSection(false);
   }
+
+  const isEmpty = componentsArray.length === 0;
 
   return (
     <>
@@ -99,8 +98,11 @@ const MainComponent = () => {
         {isPreview ? "Edit Mode" : "Preview"}
       </PreviewButton>
 
-      {componentsArray.length === 0 ? (
-        <EmptyState onAddSection={createNewSection} />
+      {/* FIXED: empty state lingered after first section → strict conditional unmount */}
+      {isEmpty ? (
+        <EmptyStateWrapper>
+          <EmptyState onAddSection={createNewSection} />
+        </EmptyStateWrapper>
       ) : (
         <ContentWrapper>
           <MainDiv>
