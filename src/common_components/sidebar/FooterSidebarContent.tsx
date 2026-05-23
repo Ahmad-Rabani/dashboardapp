@@ -9,15 +9,22 @@ import {
   faPalette,
   faPhone,
   faStore,
-  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ColorPicker from "@/components/Sidebar/ColorPicker";
 import SidebarSection from "./SidebarSection";
+import {
+  SidebarPanelBody,
+  SidebarPanelHeader,
+  SidebarShell,
+  sidebarFieldClass,
+  sidebarLabelClass,
+  sidebarMutedClass,
+} from "./SidebarLayout";
+import { cn } from "@/lib/utils";
 
 export interface FooterFieldConfig {
   label: string;
@@ -47,11 +54,14 @@ export interface FooterSidebarContentProps {
 
 function FooterFieldRow({ field }: { field: FooterFieldConfig }) {
   return (
-    <div className="space-y-2 rounded-lg border border-white/5 bg-white/[0.03] p-3">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <FontAwesomeIcon icon={field.icon} className="h-3.5 w-3.5 text-indigo-400" />
-          <Label className="text-xs text-slate-300">{field.label}</Label>
+    <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-800/50">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2">
+          <FontAwesomeIcon
+            icon={field.icon}
+            className="h-4 w-4 shrink-0 text-indigo-500"
+          />
+          <Label className={cn(sidebarLabelClass, "truncate")}>{field.label}</Label>
         </div>
         <Switch checked={field.enabled} onCheckedChange={field.onEnabledChange} />
       </div>
@@ -60,7 +70,7 @@ function FooterFieldRow({ field }: { field: FooterFieldConfig }) {
         onChange={(e) => field.onValueChange(e.target.value)}
         placeholder={field.placeholder}
         disabled={!field.enabled}
-        className="border-white/10 bg-white/5 text-sm text-slate-200 placeholder:text-slate-500 disabled:opacity-50"
+        className={cn(sidebarFieldClass, "disabled:opacity-50")}
       />
     </div>
   );
@@ -77,60 +87,45 @@ export default function FooterSidebarContent({
   onClose,
 }: FooterSidebarContentProps) {
   return (
-    <>
-      <div className="flex items-center justify-between border-b border-white/10 px-4 pb-4 pt-5">
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-indigo-500 to-violet-500">
-            <FontAwesomeIcon icon={faStore} className="h-4 w-4 text-white" />
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-[15px] font-bold text-slate-100">Footer</p>
-            <p className="truncate text-[11px] text-slate-400">
-              Customize your footer
-            </p>
-          </div>
-        </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="shrink-0 text-slate-400 hover:bg-white/5 hover:text-white"
-          aria-label="Close sidebar"
-        >
-          <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
-        </Button>
-      </div>
+    <SidebarShell>
+      <SidebarPanelHeader
+        title="Footer"
+        subtitle="Customize your footer"
+        icon={faStore}
+        onClose={onClose}
+      />
 
-      <div className="flex-1 py-3">
+      <SidebarPanelBody>
         <SidebarSection id="content" icon={faStore} title="Content">
-          <FooterFieldRow field={fields.name} />
-          <FooterFieldRow field={fields.address} />
-          <FooterFieldRow field={fields.phone} />
-          <FooterFieldRow field={fields.email} />
+          <div className="space-y-3">
+            <FooterFieldRow field={fields.name} />
+            <FooterFieldRow field={fields.address} />
+            <FooterFieldRow field={fields.phone} />
+            <FooterFieldRow field={fields.email} />
+          </div>
         </SidebarSection>
 
         <SidebarSection id="colors" icon={faPalette} title="Style">
           <Tabs defaultValue="background">
-            <TabsList className="grid w-full grid-cols-3 bg-white/5">
-              <TabsTrigger value="background" className="text-[10px]">
+            <TabsList className="grid h-auto w-full grid-cols-3 gap-1 bg-muted p-1">
+              <TabsTrigger value="background" className="px-1 text-[11px]">
                 Background
               </TabsTrigger>
-              <TabsTrigger value="text" className="text-[10px]">
+              <TabsTrigger value="text" className="px-1 text-[11px]">
                 Text
               </TabsTrigger>
-              <TabsTrigger value="links" className="text-[10px]">
+              <TabsTrigger value="links" className="px-1 text-[11px]">
                 Links
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="background" className="mt-3">
-              <div className="mb-2 flex items-center gap-2">
+            <TabsContent value="background" className="mt-4 space-y-3">
+              <div className="flex items-center gap-2">
                 <div
-                  className="h-6 w-6 shrink-0 rounded-md border border-white/10"
+                  className="h-7 w-7 shrink-0 rounded-md border border-border"
                   style={{ backgroundColor: backgroundColor }}
                 />
-                <span className="truncate text-xs text-slate-400">
+                <span className={cn(sidebarMutedClass, "truncate")}>
                   {backgroundColor}
                 </span>
               </div>
@@ -141,31 +136,31 @@ export default function FooterSidebarContent({
               />
             </TabsContent>
 
-            <TabsContent value="text" className="mt-3">
-              <div className="mb-2 flex items-center gap-2">
+            <TabsContent value="text" className="mt-4 space-y-3">
+              <div className="flex items-center gap-2">
                 <div
-                  className="h-6 w-6 shrink-0 rounded-md border border-white/10"
+                  className="h-7 w-7 shrink-0 rounded-md border border-border"
                   style={{ backgroundColor: textColor }}
                 />
-                <span className="truncate text-xs text-slate-400">{textColor}</span>
+                <span className={cn(sidebarMutedClass, "truncate")}>{textColor}</span>
               </div>
               <ColorPicker value={textColor} onChange={onTextColorChange} isMobile />
             </TabsContent>
 
-            <TabsContent value="links" className="mt-3">
-              <div className="mb-2 flex items-center gap-2">
-                <FontAwesomeIcon icon={faLink} className="h-3 w-3 text-indigo-400" />
+            <TabsContent value="links" className="mt-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faLink} className="h-3.5 w-3.5 text-indigo-500" />
                 <div
-                  className="h-6 w-6 shrink-0 rounded-md border border-white/10"
+                  className="h-7 w-7 shrink-0 rounded-md border border-border"
                   style={{ backgroundColor: linkColor }}
                 />
-                <span className="truncate text-xs text-slate-400">{linkColor}</span>
+                <span className={cn(sidebarMutedClass, "truncate")}>{linkColor}</span>
               </div>
               <ColorPicker value={linkColor} onChange={onLinkColorChange} isMobile />
             </TabsContent>
           </Tabs>
         </SidebarSection>
-      </div>
-    </>
+      </SidebarPanelBody>
+    </SidebarShell>
   );
 }

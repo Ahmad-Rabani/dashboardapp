@@ -10,7 +10,6 @@ import {
   faHeading,
   faPalette,
   faSliders,
-  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +18,14 @@ import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ColorPicker from "@/components/Sidebar/ColorPicker";
 import SidebarSection from "./SidebarSection";
+import {
+  SidebarPanelBody,
+  SidebarPanelHeader,
+  SidebarShell,
+  sidebarFieldClass,
+  sidebarLabelClass,
+  sidebarMutedClass,
+} from "./SidebarLayout";
 import { cn } from "@/lib/utils";
 
 export interface HeaderSidebarContentProps {
@@ -41,51 +48,36 @@ const alignOptions = [
   { value: "end" as const, icon: faAlignRight, label: "Right" },
 ];
 
-export default function HeaderSidebarContent({
-  headerText,
-  onHeaderTextChange,
-  alignment,
-  onAlignmentChange,
-  textSize,
-  onTextSizeChange,
-  textColor,
-  onTextColorChange,
-  backgroundColor,
-  onBackgroundColorChange,
-  onClose,
-}: HeaderSidebarContentProps) {
+export default function HeaderSidebarContent(props: HeaderSidebarContentProps) {
+  const {
+    headerText,
+    onHeaderTextChange,
+    alignment,
+    onAlignmentChange,
+    textSize,
+    onTextSizeChange,
+    textColor,
+    onTextColorChange,
+    backgroundColor,
+    onBackgroundColorChange,
+    onClose,
+  } = props;
+
   const textSizeNum = Number(textSize) || 25;
 
   return (
-    <>
-      <div className="flex items-center justify-between border-b border-white/10 px-4 pb-4 pt-5">
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-indigo-500 to-violet-500">
-            <FontAwesomeIcon icon={faHeading} className="h-4 w-4 text-white" />
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-[15px] font-bold text-slate-100">Header</p>
-            <p className="truncate text-[11px] text-slate-400">
-              Customize your header
-            </p>
-          </div>
-        </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="shrink-0 text-slate-400 hover:bg-white/5 hover:text-white"
-          aria-label="Close sidebar"
-        >
-          <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
-        </Button>
-      </div>
+    <SidebarShell>
+      <SidebarPanelHeader
+        title="Header"
+        subtitle="Customize your header"
+        icon={faHeading}
+        onClose={onClose}
+      />
 
-      <div className="flex-1 overflow-hidden py-3">
+      <SidebarPanelBody>
         <SidebarSection id="branding" icon={faHeading} title="Store Branding">
           <div className="space-y-2">
-            <Label htmlFor="header-text" className="text-xs text-slate-400">
+            <Label htmlFor="header-text" className={sidebarLabelClass}>
               Header text
             </Label>
             <Input
@@ -93,13 +85,13 @@ export default function HeaderSidebarContent({
               placeholder="Header"
               value={headerText}
               onChange={(e) => onHeaderTextChange(e.target.value)}
-              className="border-white/10 bg-white/5 text-sm text-slate-200 placeholder:text-slate-500"
+              className={sidebarFieldClass}
             />
           </div>
         </SidebarSection>
 
         <SidebarSection id="alignment" icon={faSliders} title="Alignment">
-          <div className="flex gap-1">
+          <div className="flex gap-2">
             {alignOptions.map(({ value, icon, label }) => (
               <Button
                 key={value}
@@ -108,23 +100,23 @@ export default function HeaderSidebarContent({
                 size="icon"
                 aria-label={label}
                 className={cn(
-                  "h-9 flex-1 border-white/10 bg-white/5 text-slate-400",
+                  "h-10 flex-1",
                   alignment === value &&
-                    "border-indigo-500/50 bg-indigo-500/20 text-indigo-300"
+                    "border-indigo-500 bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-300"
                 )}
                 onClick={() => onAlignmentChange(value)}
               >
-                <FontAwesomeIcon icon={icon} className="h-3.5 w-3.5" />
+                <FontAwesomeIcon icon={icon} className="h-4 w-4" />
               </Button>
             ))}
           </div>
         </SidebarSection>
 
         <SidebarSection id="typography" icon={faFont} title="Typography">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label className="text-xs text-slate-400">Text size</Label>
-              <span className="text-xs text-slate-500">{textSize}px</span>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <Label className={sidebarLabelClass}>Text size</Label>
+              <span className={sidebarMutedClass}>{textSize}px</span>
             </div>
             <Slider
               value={[textSizeNum]}
@@ -139,7 +131,7 @@ export default function HeaderSidebarContent({
 
         <SidebarSection id="colors" icon={faPalette} title="Colors">
           <Tabs defaultValue="text">
-            <TabsList className="grid w-full grid-cols-2 bg-white/5">
+            <TabsList className="grid h-auto w-full grid-cols-2 gap-1 bg-muted p-1">
               <TabsTrigger value="text" className="text-xs">
                 Text Color
               </TabsTrigger>
@@ -147,23 +139,23 @@ export default function HeaderSidebarContent({
                 Background
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="text" className="mt-3">
-              <div className="mb-2 flex items-center gap-2">
+            <TabsContent value="text" className="mt-4 space-y-3">
+              <div className="flex items-center gap-2">
                 <div
-                  className="h-6 w-6 shrink-0 rounded-md border border-white/10"
+                  className="h-7 w-7 shrink-0 rounded-md border border-border"
                   style={{ backgroundColor: textColor }}
                 />
-                <span className="truncate text-xs text-slate-400">{textColor}</span>
+                <span className={cn(sidebarMutedClass, "truncate")}>{textColor}</span>
               </div>
               <ColorPicker value={textColor} onChange={onTextColorChange} isMobile />
             </TabsContent>
-            <TabsContent value="background" className="mt-3">
-              <div className="mb-2 flex items-center gap-2">
+            <TabsContent value="background" className="mt-4 space-y-3">
+              <div className="flex items-center gap-2">
                 <div
-                  className="h-6 w-6 shrink-0 rounded-md border border-white/10"
+                  className="h-7 w-7 shrink-0 rounded-md border border-border"
                   style={{ backgroundColor: backgroundColor }}
                 />
-                <span className="truncate text-xs text-slate-400">
+                <span className={cn(sidebarMutedClass, "truncate")}>
                   {backgroundColor}
                 </span>
               </div>
@@ -175,7 +167,7 @@ export default function HeaderSidebarContent({
             </TabsContent>
           </Tabs>
         </SidebarSection>
-      </div>
-    </>
+      </SidebarPanelBody>
+    </SidebarShell>
   );
 }

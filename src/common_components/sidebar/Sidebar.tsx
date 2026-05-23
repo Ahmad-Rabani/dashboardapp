@@ -12,6 +12,9 @@ export interface SidebarProps {
   label?: string;
 }
 
+const SIDEBAR_PANEL_CLASS =
+  "fixed top-0 right-0 flex h-[100dvh] w-[min(380px,94vw)] flex-col overflow-hidden border-l border-slate-200 bg-white shadow-[-4px_0_32px_rgba(0,0,0,0.15)] dark:border-slate-700 dark:bg-slate-900";
+
 export default function Sidebar({
   children,
   open,
@@ -46,7 +49,7 @@ export default function Sidebar({
   return createPortal(
     <>
       <div
-        className="fixed inset-0 animate-in fade-in-0 duration-200 bg-black/65 backdrop-blur-[3px]"
+        className="fixed inset-0 animate-in fade-in-0 duration-200 bg-black/45 backdrop-blur-[2px]"
         style={{ zIndex: Z_INDEX.sidebarBackdrop }}
         onClick={onClose}
         aria-hidden="true"
@@ -57,19 +60,11 @@ export default function Sidebar({
         role="dialog"
         aria-modal="true"
         aria-label={label}
-        style={{ zIndex: Z_INDEX.sidebar }}
-        className={cn(
-          "fixed top-0 right-0 flex h-[100dvh] w-[min(340px,92vw)] flex-col",
-          "border-l border-white/15 bg-[hsl(var(--sidebar-bg,222_47%_11%))]",
-          "shadow-[-8px_0_40px_rgba(0,0,0,0.35)]",
-          "animate-in slide-in-from-right duration-300",
-          "isolate"
-        )}
+        style={{ zIndex: Z_INDEX.sidebar, backgroundColor: "#ffffff" }}
+        className={cn(SIDEBAR_PANEL_CLASS, "animate-in slide-in-from-right duration-300")}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden overscroll-contain">
-          {children}
-        </div>
+        {children}
       </aside>
     </>,
     document.body

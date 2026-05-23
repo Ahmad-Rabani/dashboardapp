@@ -24,41 +24,35 @@ export default function SidebarSection({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-white/5 px-1 py-2 last:border-b-0">
+    <div className="border-b border-slate-200 py-4 last:border-b-0 dark:border-slate-700">
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left transition-colors hover:bg-white/5"
+        className="flex w-full items-center gap-3 rounded-lg py-2 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
         aria-expanded={open}
         aria-controls={`sidebar-section-${id}`}
       >
         <FontAwesomeIcon
           icon={icon}
-          className="h-3.5 w-3.5 shrink-0 text-indigo-400"
+          className="h-4 w-4 shrink-0 text-indigo-500"
         />
-        <span className="min-w-0 flex-1 truncate text-xs font-semibold uppercase tracking-wide text-slate-300">
+        <span className="min-w-0 flex-1 text-sm font-semibold text-slate-800 dark:text-slate-100">
           {title}
         </span>
         <FontAwesomeIcon
           icon={faChevronDown}
           className={cn(
-            "h-3 w-3 shrink-0 text-slate-500 transition-transform duration-200",
+            "h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform duration-200",
             open && "rotate-180"
           )}
         />
       </button>
 
-      <div
-        id={`sidebar-section-${id}`}
-        className={cn(
-          "grid transition-all duration-200 ease-out",
-          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        )}
-      >
-        <div className="overflow-hidden">
-          <div className="space-y-3 px-2 pb-3 pt-1">{children}</div>
+      {open && (
+        <div id={`sidebar-section-${id}`} className="space-y-4 pb-1 pt-4">
+          {children}
         </div>
-      </div>
+      )}
     </div>
   );
 }

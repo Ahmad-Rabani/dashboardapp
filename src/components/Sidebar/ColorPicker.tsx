@@ -99,9 +99,9 @@ function MiniPresetGrid({
             type="button"
             onClick={() => onSelect(color)}
             className={cn(
-              "h-7 w-7 rounded-full border border-white/10 transition-transform hover:scale-110",
+              "h-7 w-7 rounded-full border border-border transition-transform hover:scale-110",
               selected.toLowerCase() === color.toLowerCase() &&
-                "ring-2 ring-indigo-500 ring-offset-1 ring-offset-slate-900"
+                "ring-2 ring-indigo-500 ring-offset-2 ring-offset-background"
             )}
             style={{ backgroundColor: color }}
             aria-label={`Select color ${color}`}
@@ -190,7 +190,7 @@ export default function ColorPicker({
 
   return (
     <Tabs defaultValue="presets" className="w-full">
-      <TabsList className="grid w-full grid-cols-3 bg-white/5">
+      <TabsList className="grid w-full grid-cols-3 bg-muted p-1">
         <TabsTrigger value="presets" className="text-xs">
           Presets
         </TabsTrigger>
@@ -213,17 +213,17 @@ export default function ColorPicker({
       <TabsContent value="custom" className="mt-3 space-y-4">
         <div className="flex items-center gap-2">
           <div
-            className="h-8 w-8 shrink-0 rounded-md border border-white/10"
+            className="h-8 w-8 shrink-0 rounded-md border border-border"
             style={{ backgroundColor: currentColor }}
           />
           <div className="relative flex-1">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
               #
             </span>
             <Input
               value={hexInput.replace("#", "")}
               onChange={(e) => handleHexChange(e.target.value)}
-              className="border-white/10 bg-white/5 pl-6 text-sm text-slate-200"
+              className="border-input bg-background pl-6 text-sm text-foreground"
               maxLength={6}
             />
           </div>
@@ -241,8 +241,8 @@ export default function ColorPicker({
           return (
             <div key={channel} className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-slate-400">{channel}</Label>
-                <span className="text-xs text-slate-500">
+                <Label className="text-xs font-medium text-foreground">{channel}</Label>
+                <span className="text-xs text-muted-foreground">
                   {channel}: {channelValue}
                 </span>
               </div>
@@ -270,8 +270,8 @@ export default function ColorPicker({
 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <Label className="text-xs text-slate-400">Opacity</Label>
-            <span className="text-xs text-slate-500">Opacity: {opacity}%</span>
+            <Label className="text-xs font-medium text-foreground">Opacity</Label>
+            <span className="text-xs text-muted-foreground">Opacity: {opacity}%</span>
           </div>
           <div
             className="rounded-full p-0.5"
@@ -295,16 +295,16 @@ export default function ColorPicker({
 
         <div className="space-y-2">
           <div
-            className="h-[60px] w-full rounded-xl border border-white/10"
+            className="h-[60px] w-full rounded-xl border border-border"
             style={{ backgroundColor: currentColor }}
           />
           <div className="flex items-center justify-between gap-2">
-            <code className="truncate text-xs text-slate-400">{currentColor}</code>
+            <code className="truncate text-xs text-muted-foreground">{currentColor}</code>
             <Button
               type="button"
               size="sm"
               variant="ghost"
-              className="shrink-0 text-slate-400 hover:text-white"
+              className="shrink-0 text-muted-foreground hover:text-foreground"
               onClick={() => copyToClipboard(currentColor)}
             >
               <FontAwesomeIcon icon={faCopy} className="mr-1 h-3 w-3" />
@@ -319,7 +319,7 @@ export default function ColorPicker({
           value={gradientType}
           onValueChange={(v) => setGradientType(v as "linear" | "radial")}
         >
-          <TabsList className="grid w-full grid-cols-2 bg-white/5">
+          <TabsList className="grid w-full grid-cols-2 bg-muted p-1">
             <TabsTrigger value="linear" className="text-xs">
               Linear
             </TabsTrigger>
@@ -330,7 +330,7 @@ export default function ColorPicker({
         </Tabs>
 
         <div className="space-y-2">
-          <Label className="text-xs text-slate-400">Color Stops</Label>
+          <Label className="text-xs font-medium text-foreground">Color Stops</Label>
           <div className="flex flex-wrap gap-2">
             {stops.map((stop) => (
               <div key={stop.id} className="relative">
@@ -343,12 +343,12 @@ export default function ColorPicker({
                     "h-9 w-9 rounded-full border-2 transition-transform hover:scale-110",
                     activeStopId === stop.id
                       ? "border-indigo-400"
-                      : "border-white/20"
+                      : "border-border"
                   )}
                   style={{ backgroundColor: stop.color }}
                 />
                 {activeStopId === stop.id && (
-                  <div className="absolute left-0 top-11 z-10 w-[200px] rounded-lg border border-white/10 bg-slate-900 p-2 shadow-xl">
+                  <div className="absolute left-0 top-11 z-10 w-[200px] rounded-lg border border-border bg-popover p-2 shadow-xl">
                     <MiniPresetGrid
                       selected={stop.color}
                       onSelect={(c) => {
@@ -369,7 +369,7 @@ export default function ColorPicker({
                 type="button"
                 size="icon"
                 variant="outline"
-                className="h-9 w-9 rounded-full border-white/20 bg-white/5 text-slate-300"
+                className="h-9 w-9 rounded-full border-border bg-muted text-foreground"
                 onClick={() =>
                   setStops((prev) => [
                     ...prev,
@@ -385,7 +385,7 @@ export default function ColorPicker({
                 type="button"
                 size="icon"
                 variant="outline"
-                className="h-9 w-9 rounded-full border-white/20 bg-white/5 text-slate-300"
+                className="h-9 w-9 rounded-full border-border bg-muted text-foreground"
                 onClick={() => setStops((prev) => prev.slice(0, -1))}
               >
                 −
@@ -397,18 +397,18 @@ export default function ColorPicker({
         {gradientType === "linear" && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label className="text-xs text-slate-400">Angle</Label>
-              <span className="text-xs text-slate-500">{gradientAngle}°</span>
+              <Label className="text-xs font-medium text-foreground">Angle</Label>
+              <span className="text-xs text-muted-foreground">{gradientAngle}°</span>
             </div>
             <div className="flex items-center gap-3">
               <div
-                className="relative h-12 w-12 shrink-0 rounded-full border border-white/20"
+                className="relative h-12 w-12 shrink-0 rounded-full border border-border"
                 style={{
                   background: `conic-gradient(from 0deg, #6366f1, #8b5cf6, #6366f1)`,
                 }}
               >
                 <div
-                  className="absolute inset-1 rounded-full bg-slate-900"
+                  className="absolute inset-1 rounded-full bg-muted"
                   style={{
                     transform: `rotate(${gradientAngle}deg)`,
                   }}
@@ -430,13 +430,13 @@ export default function ColorPicker({
 
         <div className="space-y-2">
           <div
-            className="h-[60px] w-full rounded-xl border border-white/10"
+            className="h-[60px] w-full rounded-xl border border-border"
             style={{ background: gradientCss }}
           />
           <div className="flex items-center justify-between gap-2">
             <Badge
               variant="outline"
-              className="max-w-full truncate border-white/10 bg-white/5 font-mono text-[10px] text-slate-400"
+              className="max-w-full truncate border-border bg-muted font-mono text-[10px] text-muted-foreground"
             >
               {gradientCss}
             </Badge>
@@ -444,7 +444,7 @@ export default function ColorPicker({
               type="button"
               size="sm"
               variant="ghost"
-              className="shrink-0 text-slate-400 hover:text-white"
+              className="shrink-0 text-muted-foreground hover:text-foreground"
               onClick={() => {
                 onChange(gradientCss);
                 copyToClipboard(gradientCss);
