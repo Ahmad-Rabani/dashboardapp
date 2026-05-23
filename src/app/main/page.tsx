@@ -2,11 +2,20 @@
 
 import React, { Fragment, useContext, useState } from "react";
 import { notify } from "@/utils/toast";
-import { MainDiv, AddSection, PreviewButton, SortableList } from "./MainStylled";
+import { downloadDashboardAsPdf } from "@/utils/downloadPdf";
+import {
+  MainDiv,
+  AddSection,
+  PreviewButton,
+  PreviewActions,
+  DownloadPdfButton,
+  SortableList,
+} from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
 import add from "../../../img/add.png";
 import noEdit from "../../../img/delete (1).png";
 import Image from "next/image";
+import { Download } from "lucide-react";
 import NewSection from "@/common_components/Add New Section/NewSection";
 import EmptyState from "@/components/EmptyState";
 import { MyContext } from "@/context/MyContext";
@@ -50,6 +59,7 @@ const MainComponent = () => {
   ] = useContext(MyContext);
 
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
 
   const createNewSection = () => {
     setNewSection(!isNewSection);
@@ -95,20 +105,47 @@ const MainComponent = () => {
     setAddNewSection(false);
   }
 
+  async function handleDownloadPdf() {
+    if (componentsArray.length === 0 || isDownloadingPdf) return;
+
+    setIsDownloadingPdf(true);
+    try {
+      await downloadDashboardAsPdf("dashboard.pdf");
+    } catch {
+      notify.error("Could not generate PDF. Please try again.");
+    } finally {
+      setIsDownloadingPdf(false);
+    }
+  }
+
   const isEmpty = componentsArray.length === 0;
   const showEmptyState = isEmpty && !isNewSection && !addNewSection && !isPreview;
   const showPreviewEmpty = isEmpty && isPreview;
 
   return (
     <>
-      <PreviewButton onClick={handlePreviewButton}>
-        {isPreview ? (
-          <Image width={15} height={15} src={noEdit} alt="" />
-        ) : (
-          <Image width={15} height={15} src={eyeIcon} alt="" />
+      <PreviewActions data-no-export>
+        <PreviewButton onClick={handlePreviewButton}>
+          {isPreview ? (
+            <Image width={15} height={15} src={noEdit} alt="" />
+          ) : (
+            <Image width={15} height={15} src={eyeIcon} alt="" />
+          )}
+          {isPreview ? "Edit Mode" : "Preview"}
+        </PreviewButton>
+
+        {isPreview && (
+          <DownloadPdfButton
+            type="button"
+            onClick={handleDownloadPdf}
+            disabled={isEmpty || isDownloadingPdf}
+            aria-busy={isDownloadingPdf}
+          >
+            <Download size={15} aria-hidden />
+            {isDownloadingPdf ? "Generating..." : "Download as PDF"}
+          </DownloadPdfButton>
         )}
-        {isPreview ? "Edit Mode" : "Preview"}
-      </PreviewButton>
+      </PreviewActions>
 
       {showEmptyState ? (
         <EmptyStateWrapper>

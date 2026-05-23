@@ -37,8 +37,7 @@ export const SortableList = styled.div`
   }
 `;
 
-export const PreviewButton = styled.button`
-  position: fixed;
+const floatingActionButtonStyles = `
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,8 +46,6 @@ export const PreviewButton = styled.button`
   padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
   min-width: clamp(72px, 18vw, 100px);
   max-width: calc(100vw - clamp(16px, 4vw, 32px));
-  right: calc(clamp(12px, 3vw, 24px) + var(--editor-sidebar-inset, 0px));
-  top: clamp(88px, 18vw, 108px);
   cursor: pointer;
   background: linear-gradient(145deg, #0f0f6c, #191981);
   color: white;
@@ -56,20 +53,44 @@ export const PreviewButton = styled.button`
   font-weight: 530;
   column-gap: clamp(4px, 1vw, 8px);
   font-family: "Inter", sans-serif;
-  z-index: ${Z_INDEX.floatingActions};
   transition: box-shadow 0.3s ease, background 0.3s ease;
   box-shadow: 0 4px 15px rgba(15, 15, 108, 0.3);
   box-sizing: border-box;
   flex-shrink: 0;
 
-  &:hover {
+  &:hover:not(:disabled) {
     box-shadow: 0 6px 20px rgba(15, 15, 108, 0.4);
     background: linear-gradient(145deg, #191981, #0f0f6c);
   }
 
-  img {
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+
+  img,
+  svg {
     flex-shrink: 0;
   }
+`;
+
+export const PreviewActions = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(8px, 1.5vw, 10px);
+  right: calc(clamp(12px, 3vw, 24px) + var(--editor-sidebar-inset, 0px));
+  top: clamp(88px, 18vw, 108px);
+  z-index: ${Z_INDEX.floatingActions};
+`;
+
+export const PreviewButton = styled.button`
+  ${floatingActionButtonStyles}
+`;
+
+export const DownloadPdfButton = styled.button`
+  ${floatingActionButtonStyles}
 `;
 
 export const AddSection = styled.button`
