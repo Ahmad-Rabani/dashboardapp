@@ -73,6 +73,9 @@ export const MainArea = styled.main`
   flex-direction: column;
   align-items: stretch;
   box-sizing: border-box;
+  padding-bottom: calc(
+    var(--floating-toolbar-height, 88px) + env(safe-area-inset-bottom, 0px) + 16px
+  );
 `;
 
 export const ContentWrapper = styled(AlignedContent)`

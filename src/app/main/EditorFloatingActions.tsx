@@ -8,12 +8,7 @@ import { downloadDashboardAsPdf } from "@/utils/downloadPdf";
 import { MyContext } from "@/context/MyContext";
 import { useDashboardContext } from "@/context/DashboardContext";
 import WorkspacePanel from "@/components/WorkspacePanel";
-import {
-  AddSection,
-  PreviewButton,
-  PreviewActions,
-  DownloadPdfButton,
-} from "./MainStylled";
+import { FloatingToolbarDock, ToolbarButton } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
 import add from "../../../img/add.png";
 import noEdit from "../../../img/delete (1).png";
@@ -66,46 +61,52 @@ export default function EditorFloatingActions() {
     <>
       <WorkspacePanel open={workspaceOpen} onOpenChange={setWorkspaceOpen} />
 
-      <PreviewActions data-no-export>
-        {!isPreview && (
-          <PreviewButton
-            type="button"
-            onClick={() => setWorkspaceOpen(true)}
-            aria-label="Open templates and backup"
-          >
-            <LayoutTemplate size={15} aria-hidden />
-            Templates
-          </PreviewButton>
+      <FloatingToolbarDock data-no-export role="toolbar" aria-label="Page editor actions">
+        {!isPreview ? (
+          <>
+            <ToolbarButton
+              type="button"
+              $primary
+              onClick={createNewSection}
+              aria-label="Add a new section"
+            >
+              <Image width={15} height={15} src={add} alt="" />
+              Add Section
+            </ToolbarButton>
+            <ToolbarButton
+              type="button"
+              $variant="ghost"
+              onClick={() => setWorkspaceOpen(true)}
+              aria-label="Open templates and backup"
+            >
+              <LayoutTemplate size={15} aria-hidden />
+              Templates
+            </ToolbarButton>
+            <ToolbarButton type="button" onClick={handlePreviewButton} aria-label="Preview page">
+              <Image width={15} height={15} src={eyeIcon} alt="" />
+              Preview
+            </ToolbarButton>
+          </>
+        ) : (
+          <>
+            <ToolbarButton
+              type="button"
+              $primary
+              onClick={handleDownloadPdf}
+              disabled={isEmpty || isDownloadingPdf}
+              aria-busy={isDownloadingPdf}
+              aria-label="Download page as PDF"
+            >
+              <Download size={15} aria-hidden />
+              {isDownloadingPdf ? "Generating..." : "Download PDF"}
+            </ToolbarButton>
+            <ToolbarButton type="button" onClick={handlePreviewButton} aria-label="Return to edit mode">
+              <Image width={15} height={15} src={noEdit} alt="" />
+              Edit Mode
+            </ToolbarButton>
+          </>
         )}
-
-        <PreviewButton onClick={handlePreviewButton}>
-          {isPreview ? (
-            <Image width={15} height={15} src={noEdit} alt="" />
-          ) : (
-            <Image width={15} height={15} src={eyeIcon} alt="" />
-          )}
-          {isPreview ? "Edit Mode" : "Preview"}
-        </PreviewButton>
-
-        {isPreview && (
-          <DownloadPdfButton
-            type="button"
-            onClick={handleDownloadPdf}
-            disabled={isEmpty || isDownloadingPdf}
-            aria-busy={isDownloadingPdf}
-          >
-            <Download size={15} aria-hidden />
-            {isDownloadingPdf ? "Generating..." : "Download as PDF"}
-          </DownloadPdfButton>
-        )}
-      </PreviewActions>
-
-      {!isPreview && (
-        <AddSection onClick={createNewSection} type="button">
-          <Image width={15} height={15} src={add} alt="" />
-          Add Section
-        </AddSection>
-      )}
+      </FloatingToolbarDock>
     </>
   );
 }

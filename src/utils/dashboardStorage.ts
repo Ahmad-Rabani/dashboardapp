@@ -6,6 +6,13 @@ import {
   StoredSection,
   extractInnerText,
 } from "@/types/dashboard";
+import { createPlaceholderImage, hasDisplayableImage } from "@/utils/placeholderImage";
+
+const DEFAULT_IMAGE_PLACEHOLDER = createPlaceholderImage({
+  title: "Your image here",
+  from: "#94a3b8",
+  to: "#475569",
+});
 
 const STORAGE_KEY = "dashboardapp-data";
 
@@ -36,7 +43,7 @@ export function fromStoredSections(stored: StoredSection[]): ComponentType[] {
 
     return {
       key: section.key,
-      img: section.img ?? "",
+      img: hasDisplayableImage(section.img) ? section.img! : DEFAULT_IMAGE_PLACEHOLDER,
       height: section.height,
       imageBackgroundColor: section.imageBackgroundColor,
     } as unknown as ComponentType;

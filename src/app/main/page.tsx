@@ -156,6 +156,7 @@ const MainComponent = () => {
                           : DEFAULT_IMAGE_SECTION_HEIGHT)
                       }
                       onImageBackgroundColorChange={() => {}}
+                      onImageChange={() => {}}
                     />
                   </AlignedContent>
                 </DragOverlayWrapper>

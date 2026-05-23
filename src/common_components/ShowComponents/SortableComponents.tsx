@@ -46,6 +46,7 @@ type SortableItemPreviewProps = {
   imageBackgroundColor?: string;
   height: number;
   onImageBackgroundColorChange: (color: string) => void;
+  onImageChange?: (dataUrl: string) => void;
 };
 
 export const SortableItemPreview = ({
@@ -57,6 +58,7 @@ export const SortableItemPreview = ({
   imageBackgroundColor,
   height,
   onImageBackgroundColorChange,
+  onImageChange,
 }: SortableItemPreviewProps) =>
   isTextSection ? (
     <LexicalTextEditor
@@ -72,6 +74,7 @@ export const SortableItemPreview = ({
         height={height}
         backgroundColor={imageBackgroundColor}
         onBackgroundColorChange={onImageBackgroundColorChange}
+        onImageChange={onImageChange}
       />
     </ImageDiv>
   );
@@ -123,6 +126,15 @@ const SortableComponents = ({
         prev.map((item) =>
           item.key === id ? { ...item, imageBackgroundColor: color } : item
         )
+      );
+    },
+    [id, setComponentsArray]
+  );
+
+  const updateSectionImage = useCallback(
+    (dataUrl: string) => {
+      setComponentsArray((prev: ComponentType[]) =>
+        prev.map((item) => (item.key === id ? { ...item, img: dataUrl } : item))
       );
     },
     [id, setComponentsArray]
@@ -213,6 +225,7 @@ const SortableComponents = ({
                 imageBackgroundColor={sectionData?.imageBackgroundColor}
                 height={sectionHeight}
                 onImageBackgroundColorChange={updateImageBackgroundColor}
+                onImageChange={updateSectionImage}
               />
             </CardContent>
 

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Z_INDEX } from "@/styles/zIndex";
 
 /* Inner stack for cards — width comes from ContentWrapper, not this div */
@@ -37,92 +37,135 @@ export const SortableList = styled.div`
   }
 `;
 
-const floatingActionButtonStyles = `
-  display: flex;
+const toolbarButtonBase = css`
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-radius: clamp(12px, 2vw, 20px);
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 12px;
   border: none;
-  padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
-  min-width: clamp(72px, 18vw, 100px);
-  max-width: calc(100vw - clamp(16px, 4vw, 32px));
   cursor: pointer;
-  background: linear-gradient(145deg, #0f0f6c, #191981);
-  color: white;
-  font-size: clamp(12px, 1.5vw, 14px);
-  font-weight: 530;
-  column-gap: clamp(4px, 1vw, 8px);
+  font-size: 14px;
+  font-weight: 500;
   font-family: "Inter", sans-serif;
-  transition: box-shadow 0.3s ease, background 0.3s ease;
-  box-shadow: 0 4px 15px rgba(15, 15, 108, 0.3);
+  white-space: nowrap;
   box-sizing: border-box;
   flex-shrink: 0;
-
-  &:hover:not(:disabled) {
-    box-shadow: 0 6px 20px rgba(15, 15, 108, 0.4);
-    background: linear-gradient(145deg, #191981, #0f0f6c);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.65;
-  }
+  transition:
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    transform 0.15s ease;
 
   img,
   svg {
     flex-shrink: 0;
   }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+  }
 `;
 
-export const PreviewActions = styled.div`
+/** Fixed dock — all editor actions stay on-screen (safe areas + sidebar inset). */
+export const FloatingToolbarDock = styled.div`
   position: fixed;
+  z-index: ${Z_INDEX.floatingActions};
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: stretch;
-  gap: clamp(8px, 1.5vw, 10px);
-  right: calc(clamp(12px, 3vw, 24px) + var(--editor-sidebar-inset, 0px));
-  top: clamp(88px, 18vw, 108px);
-  z-index: ${Z_INDEX.floatingActions};
-`;
-
-export const PreviewButton = styled.button`
-  ${floatingActionButtonStyles}
-`;
-
-export const DownloadPdfButton = styled.button`
-  ${floatingActionButtonStyles}
-`;
-
-export const AddSection = styled.button`
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: clamp(12px, 2vw, 20px);
-  border: none;
-  padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 24px);
-  min-width: clamp(88px, 22vw, 120px);
-  max-width: calc(100vw - clamp(16px, 4vw, 32px));
-  right: calc(clamp(12px, 3vw, 24px) + var(--editor-sidebar-inset, 0px));
-  bottom: clamp(12px, 3vw, 24px);
-  cursor: pointer;
-  background: linear-gradient(145deg, #0f0f6c, #191981);
-  color: white;
-  font-size: clamp(12px, 1.5vw, 14px);
-  column-gap: clamp(4px, 1vw, 8px);
-  font-family: "Inter", sans-serif;
-  z-index: ${Z_INDEX.floatingActions};
-  transition: box-shadow 0.3s ease, background 0.3s ease;
-  box-shadow: 0 4px 15px rgba(15, 15, 108, 0.3);
+  gap: 8px;
+  padding: 10px;
+  border-radius: 16px;
+  background: var(--toolbar-dock-bg, rgba(255, 255, 255, 0.96));
+  border: 1px solid var(--toolbar-dock-border, rgba(15, 15, 108, 0.1));
+  box-shadow:
+    0 4px 6px rgba(15, 15, 108, 0.06),
+    0 12px 40px rgba(15, 15, 108, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   box-sizing: border-box;
-  flex-shrink: 0;
+  pointer-events: auto;
 
-  &:hover {
-    box-shadow: 0 6px 20px rgba(15, 15, 108, 0.4);
+  right: calc(16px + var(--editor-sidebar-inset, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: min(220px, calc(100vw - 32px - var(--editor-sidebar-inset, 0px)));
+  max-height: calc(
+    100dvh - var(--header-height, 72px) - env(safe-area-inset-top, 0px) - 24px
+  );
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  @media (max-width: 640px) {
+    left: max(12px, env(safe-area-inset-left, 0px));
+    right: max(12px, env(safe-area-inset-right, 0px));
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-height: none;
+  }
+`;
+
+export const ToolbarButton = styled.button<{ $primary?: boolean; $variant?: "default" | "ghost" }>`
+  ${toolbarButtonBase}
+  width: 100%;
+  color: white;
+  background: linear-gradient(145deg, #0f0f6c, #191981);
+  box-shadow: 0 2px 10px rgba(15, 15, 108, 0.25);
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 4px 16px rgba(15, 15, 108, 0.35);
     background: linear-gradient(145deg, #191981, #0f0f6c);
   }
 
-  img {
-    flex-shrink: 0;
+  ${(props) =>
+    props.$primary &&
+    css`
+      font-weight: 600;
+      min-height: 48px;
+      padding: 12px 18px;
+    `}
+
+  ${(props) =>
+    props.$variant === "ghost" &&
+    css`
+      color: hsl(var(--foreground));
+      background: rgba(15, 15, 108, 0.06);
+      box-shadow: none;
+
+      &:hover:not(:disabled) {
+        background: rgba(15, 15, 108, 0.12);
+        box-shadow: none;
+      }
+    `}
+
+  @media (max-width: 640px) {
+    width: auto;
+    flex: 1 1 calc(50% - 4px);
+    min-width: 140px;
+    max-width: 100%;
   }
 `;
+
+/* @deprecated — use FloatingToolbarDock + ToolbarButton */
+export const PreviewActions = FloatingToolbarDock;
+export const PreviewButton = ToolbarButton;
+export const DownloadPdfButton = ToolbarButton;
+export const AddSection = ToolbarButton;

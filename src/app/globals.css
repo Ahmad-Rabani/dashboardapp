@@ -28,6 +28,9 @@
     --sidebar-fg: 222.2 47.4% 11.2%;
     --header-height: 72px;
     --app-shell-bg: 0 0% 90%;
+    --floating-toolbar-height: 88px;
+    --toolbar-dock-bg: rgba(255, 255, 255, 0.96);
+    --toolbar-dock-border: rgba(15, 15, 108, 0.1);
   }
 
   .dark {
@@ -53,6 +56,8 @@
     --sidebar-bg: 222 47% 11%;
     --sidebar-fg: 210 40% 98%;
     --app-shell-bg: 222 47% 8%;
+    --toolbar-dock-bg: rgba(30, 41, 59, 0.96);
+    --toolbar-dock-border: rgba(148, 163, 184, 0.2);
   }
 }
 
@@ -62,5 +67,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  @media (max-width: 640px) {
+    :root {
+      --floating-toolbar-height: 132px;
+    }
   }
 }

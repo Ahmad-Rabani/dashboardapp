@@ -10,6 +10,7 @@ import {
   DEFAULT_TEXT_SECTION_HEIGHT,
 } from "@/constants/sectionLayout";
 import { DEFAULT_FONT_FAMILY } from "@/constants/fontFamilies";
+import { createPlaceholderImage } from "@/utils/placeholderImage";
 
 export interface PageTemplate {
   id: string;
@@ -33,6 +34,7 @@ function textSection(key: string, text: string, height = DEFAULT_TEXT_SECTION_HE
 
 function imageSection(
   key: string,
+  placeholder: { title: string; subtitle?: string; from: string; to: string },
   background = "#eef2ff",
   height = DEFAULT_IMAGE_SECTION_HEIGHT
 ): StoredSection {
@@ -40,7 +42,7 @@ function imageSection(
     key,
     type: "image",
     height,
-    img: "",
+    img: createPlaceholderImage(placeholder),
     imageBackgroundColor: background,
   };
 }
@@ -77,7 +79,16 @@ export const PAGE_TEMPLATES: PageTemplate[] = [
         linkColor: "#93c5fd",
       },
       sections: [
-        imageSection("biz-hero", "#e0e7ff", 320),
+        imageSection(
+          "biz-hero",
+          {
+            title: "Your business photo",
+            from: "#4f46e5",
+            to: "#312e81",
+          },
+          "#e0e7ff",
+          320
+        ),
         textSection(
           "biz-welcome",
           "Welcome! Tell visitors what you do, who you serve, and why they should choose you. Keep it friendly and specific to your neighborhood.",
@@ -122,7 +133,16 @@ export const PAGE_TEMPLATES: PageTemplate[] = [
         linkColor: "#7c3aed",
       },
       sections: [
-        imageSection("port-photo", "#f5f3ff", 300),
+        imageSection(
+          "port-photo",
+          {
+            title: "Portfolio highlight",
+            from: "#7c3aed",
+            to: "#4c1d95",
+          },
+          "#f5f3ff",
+          300
+        ),
         textSection(
           "port-bio",
           "Hi, I'm Alex — a designer focused on brand identity and digital experiences. I help teams turn ideas into polished, memorable visuals.",
@@ -173,7 +193,16 @@ export const PAGE_TEMPLATES: PageTemplate[] = [
           "The all-new [Product Name] is here. One sentence on the main problem it solves and who it's for.",
           180
         ),
-        imageSection("launch-visual", "#d1fae5", 300),
+        imageSection(
+          "launch-visual",
+          {
+            title: "Product image",
+            from: "#059669",
+            to: "#064e3b",
+          },
+          "#d1fae5",
+          300
+        ),
         textSection(
           "launch-features",
           "Why customers love it\n\n✓ Key benefit one\n✓ Key benefit two\n✓ Key benefit three\n\nStarting at $XX — Order now or book a demo.",
@@ -219,7 +248,16 @@ export const PAGE_TEMPLATES: PageTemplate[] = [
           "Saturday, June 14 · 2:00 PM – 4:30 PM\n\nJoin us for a hands-on session. Describe the topic, who should attend, and what they'll take away.",
           200
         ),
-        imageSection("event-banner", "#ffedd5", 280),
+        imageSection(
+          "event-banner",
+          {
+            title: "Event banner",
+            from: "#ea580c",
+            to: "#9a3412",
+          },
+          "#ffedd5",
+          280
+        ),
         textSection(
           "event-details",
           "What to expect\n\n• Agenda item or speaker\n• Agenda item or activity\n• Q&A and networking\n\nRegister at the link in the footer. Walk-ins welcome if space allows.",

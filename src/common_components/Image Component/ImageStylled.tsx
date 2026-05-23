@@ -34,12 +34,49 @@ export const MainDivOfImage = styled.div<BackgroundColorButtonType>`
     max-width: 100%;
   }
 
-  > div {
+  > div,
+  .image-section-hitarea {
     width: 100%;
     height: 100%;
     min-width: 0;
     min-height: 0;
     overflow: hidden;
+  }
+`;
+
+export const ImagePlaceholder = styled.div<{ $backgroundColor: string }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  padding: 24px;
+  box-sizing: border-box;
+  text-align: center;
+  ${(props) => surfaceFillCss(props.$backgroundColor)}
+
+  svg {
+    width: clamp(48px, 12vw, 72px);
+    height: clamp(48px, 12vw, 72px);
+    opacity: 0.55;
+    color: #64748b;
+  }
+
+  p {
+    margin: 0;
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: clamp(14px, 2vw, 16px);
+    font-weight: 600;
+    color: #334155;
+  }
+
+  span {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: clamp(12px, 1.5vw, 14px);
+    color: #64748b;
   }
 `;
 
