@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-// Interfaces remain the same
 interface InputCheckBox {
   $checkbox: boolean;
 }
@@ -21,76 +20,90 @@ interface ColorType {
   $color: string;
 }
 
-// Main container
+/* FIXED: footer wrapper had no padding/overflow guard → matches header padding, prevents bleed */
 export const MainDiv = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: clamp(8px, 2vw, 20px) 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  flex-shrink: 0;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    text-align: left;
+  }
 `;
 
-// Footer container with modern borders, shadow, and spacing
 export const FooterDiv = styled.footer<BackgroundColorButtonType>`
-  width: clamp(50%, 100%, 600px);
+  width: 100%;
   border: ${(props) => (props.$preview ? "none" : "2px solid #e0e0e0")};
   cursor: text;
   background-color: ${(props) => props.$backgroundColor};
-  // margin: 20px auto;
-  border-radius: 8px;
+  border-radius: clamp(6px, 1vw, 8px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: 0;
 
   h3 {
-    font-size: clamp(14px, 2vw, 18px);
-    padding: 20px;
+    font-size: clamp(13px, 2vw, 18px);
+    padding: clamp(12px, 3vw, 20px);
     margin: 0;
     font-family: "Inter", sans-serif;
-    // color: #333;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 `;
 
-// Footer title styling
 export const FooterTitle = styled.h3`
-  padding: 12px 20px;
+  padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
   margin: 0;
   font-family: "Inter", sans-serif;
   color: #333;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px);
+  overflow-wrap: break-word;
+  word-break: break-word;
 `;
 
-// Container for footer inputs with refined spacing and font
 export const FooterInputsDiv = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 15px;
-  width: clamp(180px, 20vw, 220px);
+  gap: clamp(8px, 2vw, 12px);
+  padding: clamp(10px, 2vw, 15px);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 
   div {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: clamp(6px, 1.5vw, 8px);
+    flex-wrap: wrap;
+    min-width: 0;
 
     h3 {
       font-family: "Inter", sans-serif;
-      font-size: 14px;
+      font-size: clamp(13px, 1.5vw, 14px);
       font-weight: 500;
       margin: 0;
-      // color: #555;
+      flex: 1;
+      min-width: 0;
     }
   }
 `;
 
-// Attractive input field with smooth focus transition
 export const FooterInputs = styled.input<InputCheckBox>`
-  padding: 10px 12px;
+  width: 100%;
+  padding: clamp(8px, 2vw, 10px) clamp(10px, 2vw, 12px);
   font-family: "Inter", sans-serif;
-  font-size: 14px;
+  font-size: clamp(13px, 1.5vw, 14px);
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: ${(props) => (props.$checkbox ? "white" : "#f9f9f9")};
+  box-sizing: border-box;
   transition: all 0.3s ease;
 
   &:focus {
@@ -100,85 +113,85 @@ export const FooterInputs = styled.input<InputCheckBox>`
   }
 `;
 
-// General footer style container for inputs and buttons
 export const FooterStyle = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 90%;
-  gap: 12px;
+  width: 100%;
+  gap: clamp(8px, 2vw, 12px);
+  padding: clamp(8px, 2vw, 10px);
+  box-sizing: border-box;
+  min-width: 0;
 
   div {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: clamp(4px, 1vw, 6px);
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+    min-width: 0;
 
     button {
-      width: 50px;
-      height: 35px;
+      min-width: clamp(36px, 10vw, 50px);
+      min-height: clamp(28px, 6vh, 35px);
       border-radius: 8px;
       cursor: pointer;
       border: none;
-      // background-color: #007bff;
-      // color: #fff;
+      flex-shrink: 0;
       transition: background-color 0.3s ease;
-
-      // &:hover {
-      //   background-color: #0056b3;
-      // }
     }
 
     h2 {
-      font-size: 14px;
+      font-size: clamp(13px, 1.5vw, 14px);
       font-weight: 500;
       font-family: "Inter", sans-serif;
       color: #333;
+      margin: 0;
+      flex: 1;
+      min-width: 0;
     }
   }
 `;
 
-// Header style for titles
 export const HeadStyle = styled.h3`
   margin: 0;
   text-align: left;
   font-family: "Inter", sans-serif;
   color: #333;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px);
+  overflow-wrap: break-word;
+  word-break: break-word;
 `;
 
-// Container for background color options with border and rounded corners
 export const BackgroundColorsDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  width: 80px;
-  max-height: 300px;
+  width: clamp(64px, 18vw, 80px);
+  max-height: min(300px, 40vh);
   position: absolute;
-  top: clamp(500px, 50vh, 530px);
-  left: 10px;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
   padding: 8px 5px;
   background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
-
-  @media (max-width: 768px) {
-    width: 70px;
-    max-height: 200px;
-    top: clamp(400px, 45vh, 450px);
-  }
+  z-index: 30;
 `;
 
-// Individual background color button with a subtle hover scale effect
 export const BackgroundColor = styled.button<BackgroundColorButtonType>`
   cursor: pointer;
-  padding: 10px;
-  width: clamp(40px, 10vw, 50px);
-  height: clamp(25px, 6vh, 30px);
+  padding: clamp(6px, 1.5vw, 10px);
+  width: clamp(36px, 10vw, 50px);
+  height: clamp(28px, 6vh, 30px);
   border-radius: 8px;
   border: 1px solid #ccc;
   background-color: ${(props) => props.$backgroundColor};
+  flex-shrink: 0;
   transition: transform 0.2s ease;
 
   &:hover {
@@ -186,16 +199,16 @@ export const BackgroundColor = styled.button<BackgroundColorButtonType>`
   }
 `;
 
-// Button to display text with a hover opacity effect
 export const ButtonText = styled.button<ButtonTextType>`
   cursor: pointer;
-  padding: 15px;
-  width: clamp(40px, 10vw, 50px);
-  height: clamp(40px, 10vw, 50px);
+  padding: clamp(8px, 2vw, 15px);
+  width: clamp(36px, 10vw, 50px);
+  height: clamp(36px, 10vw, 50px);
   border-radius: 8px;
   border: none;
   background-color: ${(props) => props.$allColors};
   color: #fff;
+  flex-shrink: 0;
   transition: opacity 0.3s ease;
 
   &:hover {
@@ -203,37 +216,32 @@ export const ButtonText = styled.button<ButtonTextType>`
   }
 `;
 
-// Container for text color options with a clean white background and border
 export const ColorsDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  width: 80px;
-  max-height: 300px;
+  width: clamp(64px, 18vw, 80px);
+  max-height: min(300px, 40vh);
   position: absolute;
-  bottom: clamp(-80px, 10vh, -80px);
-  left: 8px;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
   padding: 8px 5px;
   background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
-
-  @media (max-width: 768px) {
-    width: 70px;
-    max-height: 200px;
-    bottom: clamp(-60px, 8vh, -60px);
-  }
+  z-index: 30;
 `;
 
-// Text color button with a hover scale effect
 export const TextColor = styled.button<TextColorType>`
-  width: clamp(40px, 10vw, 50px);
-  height: clamp(25px, 6vh, 30px);
+  width: clamp(36px, 10vw, 50px);
+  height: clamp(28px, 6vh, 30px);
   border-radius: 8px;
   cursor: pointer;
   border: 1px solid #ccc;
   background-color: ${(props) => props.$TextColor};
+  flex-shrink: 0;
   transition: transform 0.2s ease;
 
   &:hover {
@@ -241,44 +249,42 @@ export const TextColor = styled.button<TextColorType>`
   }
 `;
 
-// Footer text element displaying the chosen color
 export const FooterTextColor = styled.h3<ColorType>`
   color: ${(props) => props.$color};
   font-family: "Inter", sans-serif;
-  font-size: 16px;
+  font-size: clamp(13px, 1.5vw, 16px);
+  padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
+  margin: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 `;
 
-// Container for link color options with clean styling
 export const LinkColorsDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  width: 80px;
-  max-height: 300px;
+  width: clamp(64px, 18vw, 80px);
+  max-height: min(300px, 40vh);
   position: absolute;
-  bottom: clamp(-30px, 8vh, -30px);
-  left: 8px;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
   padding: 8px 5px;
   background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
-
-  @media (max-width: 768px) {
-    width: 70px;
-    max-height: 200px;
-    bottom: clamp(-20px, 6vh, -20px);
-  }
+  z-index: 30;
 `;
 
-// Link color button with a hover effect
 export const LinkColor = styled.button<LinkColorType>`
-  width: clamp(40px, 10vw, 50px);
-  height: clamp(25px, 6vh, 30px);
+  width: clamp(36px, 10vw, 50px);
+  height: clamp(28px, 6vh, 30px);
   border-radius: 8px;
   cursor: pointer;
   border: 1px solid #ccc;
   background-color: ${(props) => props.$linkColor};
+  flex-shrink: 0;
   transition: transform 0.2s ease;
 
   &:hover {
@@ -286,10 +292,13 @@ export const LinkColor = styled.button<LinkColorType>`
   }
 `;
 
-// Footer link text styled with underline for emphasis
 export const FooterLinksColor = styled.h3<ColorType>`
   color: ${(props) => props.$color};
   text-decoration: underline;
   font-family: "Inter", sans-serif;
-  font-size: 16px;
+  font-size: clamp(13px, 1.5vw, 16px);
+  padding: clamp(4px, 1vw, 8px) clamp(12px, 3vw, 20px);
+  margin: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 `;

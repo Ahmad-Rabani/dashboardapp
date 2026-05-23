@@ -12,7 +12,7 @@ import closeIcon from "../../../img/close.png";
 import Image from "next/image";
 import textIcon from "../../../img/text.png";
 import imageIcon from "../../../img/insert-picture-icon.png";
-import { MyContext } from "@/app/layout";
+import { MyContext } from "@/context/MyContext";
 import { v4 as uuidv4 } from "uuid";
 // import { ComponentsType } from "next/dist/build/webpack/loaders/next-app-loader";
 import { ComponentType } from "../../../types";

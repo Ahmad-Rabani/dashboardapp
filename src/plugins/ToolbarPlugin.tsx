@@ -21,7 +21,7 @@ import underline from "../../img/type-underline.svg";
 import right from "../../img/text-right.svg";
 import center from "../../img/text-center.svg";
 import left from "../../img/text-left.svg";
-import { UndoRedoDiv,TextStyle,TextAllignment } from "./ToolBarStylled";
+import { UndoRedoDiv, TextStyle, TextAllignment, ToolbarWrapper, ToolbarDivider } from "./ToolBarStylled";
 
 const LowPriority = 1;
 
@@ -85,15 +85,7 @@ export default function ToolbarPlugin() {
   }, [editor, $updateToolbar]);
 
   return (
-    <div
-      className="toolbar"
-      ref={toolbarRef}
-      style={{
-        display: "flex",
-        justifyContent: "start",
-        gap: "5px",
-      }}
-    >
+    <ToolbarWrapper className="toolbar" ref={toolbarRef}>
       <UndoRedoDiv>
         <button
           disabled={!canUndo}
@@ -118,7 +110,7 @@ export default function ToolbarPlugin() {
           <i className="format redo" />
         </button>
       </UndoRedoDiv>
-      <hr style={{margin: "0",}}/>
+      <ToolbarDivider />
       <Divider />
       <TextStyle>
       <button
@@ -162,7 +154,7 @@ export default function ToolbarPlugin() {
       </button> */}
       </TextStyle>
 
-      <hr  style={{margin: "0px",}}/>
+      <ToolbarDivider />
 
       <Divider />
       <TextAllignment>
@@ -206,8 +198,8 @@ export default function ToolbarPlugin() {
         <i className="format justify-align" />
       </button>{" "}
       </TextAllignment>
-      <hr  style={{margin: "0px",}}/>
-    </div>
+      <ToolbarDivider />
+    </ToolbarWrapper>
   );
 }
 

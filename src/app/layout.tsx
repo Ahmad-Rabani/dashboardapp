@@ -1,46 +1,20 @@
-"use client";
-import React, { createContext, useState, useRef } from "react";
-import StyledComponentsRegistry from "../../registry";
-import Header from "@/common_components/Header/Header";
-import Footer from "@/common_components/Footer/Footer";
-import { ComponentType } from "../../types";
+import type { Metadata } from "next";
+import Providers from "./providers";
 
-export const MyContext = createContext<any>(null);
+export const metadata: Metadata = {
+  title: "Dashboard App",
+  description: "Dashboard builder",
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [componentsArray, setComponentsArray] = useState<ComponentType[]>([]);
-  const [isNewSection, setNewSection] = useState(false);
-  const [editorText, setEditorText] = useState("");
-  const [addNewSection, setAddNewSection] = useState(false);
-  const [isPreview, setIsPreview] = useState(false);
-
   return (
-    <html>
-      <body style={{ backgroundColor: "#e6e6e6" }}>
-        <StyledComponentsRegistry>
-          <MyContext.Provider
-            value={[
-              componentsArray,
-              setComponentsArray,
-              isNewSection,
-              setNewSection,
-              editorText,
-              setEditorText,
-              addNewSection,
-              setAddNewSection,
-              isPreview,
-              setIsPreview,
-            ]}
-          >
-            <Header />
-            {children}
-            <Footer />
-          </MyContext.Provider>
-        </StyledComponentsRegistry>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

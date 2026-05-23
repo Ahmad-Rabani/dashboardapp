@@ -23,21 +23,34 @@ interface BackgroundColorButtonType {
   $backgroundColor: string;
 }
 
-export const MainDiv = styled.div`
-  display: flex;
-  justify-content: center;
+/* FIXED: header was not sticky and could overflow → sticky shell + fluid padding */
+export const MainDiv = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(8px, 2vw, 20px) 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background-color: #e6e6e6;
+  flex-shrink: 0;
 `;
 
 export const HeaderDiv = styled.div<HeaderDivType>`
-  width: clamp(50%, 100%, 600px);
+  width: 100%;
   border: ${(props) => (props.$preview ? "none" : "2px solid #333")};
   cursor: text;
   background-color: ${(props) => props.$HeaderBackgroundColor};
   margin: 0 auto;
-  border-radius: 10px;
+  border-radius: clamp(6px, 1vw, 10px);
   transition: background-color 0.3s ease, border-color 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: 0;
 
   &:hover {
     border-color: #555;
@@ -46,13 +59,17 @@ export const HeaderDiv = styled.div<HeaderDivType>`
 
 export const HeaderText = styled.h3<Types>`
   text-align: ${(props) => props.$Aligment};
-  font-size: clamp(10px, ${(props) => props.$TextSize + "px"}, 50px);
+  font-size: clamp(14px, ${(props) => props.$TextSize}px, 50px);
   color: ${(props) => props.$textColor};
   margin: 0;
-  padding: 20px;
+  padding: clamp(12px, 3vw, 20px);
   font-family: "Segoe UI", sans-serif;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   transition: color 0.3s ease, text-shadow 0.3s ease;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 export const SidebarHeading = styled.div`
@@ -60,14 +77,19 @@ export const SidebarHeading = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 10px;
+  padding: clamp(8px, 2vw, 10px);
   background: linear-gradient(45deg, #ff7e5f, #feb47b);
   border-radius: 10px 10px 0 0;
+  flex-wrap: wrap;
+  gap: clamp(4px, 1vw, 8px);
+  min-width: 0;
 
   img {
     padding: 3px;
     cursor: pointer;
     width: clamp(20px, 5vw, 40px);
+    height: auto;
+    flex-shrink: 0;
     transition: transform 0.2s ease;
 
     &:hover {
@@ -81,6 +103,11 @@ export const SidebarHeading = styled.div`
     font-family: "Segoe UI", sans-serif;
     font-size: clamp(12px, 2vw, 16px);
     color: white;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
@@ -88,12 +115,13 @@ export const StoreBranding = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   row-gap: 8px;
-  padding: 10px;
+  padding: clamp(8px, 2vw, 10px);
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  min-width: 0;
 
   h3 {
     margin: 0;
@@ -103,11 +131,13 @@ export const StoreBranding = styled.div`
   }
 
   input {
-    padding: 8px 12px;
+    width: 100%;
+    padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
     font-family: "Merriweather", serif;
     font-size: clamp(12px, 2vw, 14px);
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
     transition: border-color 0.3s ease;
 
     &:focus {
@@ -120,8 +150,9 @@ export const StoreBranding = styled.div`
 export const Alignment = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   row-gap: 8px;
+  min-width: 0;
 
   h3 {
     margin: 0;
@@ -134,15 +165,21 @@ export const Alignment = styled.div`
 export const AllignmentInnerDiv = styled.div`
   display: flex;
   justify-content: center;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: clamp(6px, 1.5vw, 10px);
+  width: 100%;
 
   button {
     cursor: pointer;
-    width: clamp(60px, 15vw, 80px);
-    height: clamp(20px, 5vh, 25px);
+    min-width: clamp(44px, 12vw, 60px);
+    min-height: clamp(32px, 8vw, 36px);
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     transition: background-color 0.3s ease, transform 0.2s ease;
 
     &:hover {
@@ -155,9 +192,10 @@ export const AllignmentInnerDiv = styled.div`
 export const TextSize = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   margin-top: 10px;
   row-gap: 8px;
+  min-width: 0;
 
   h3 {
     margin: 0;
@@ -171,9 +209,12 @@ export const TextRangeDiv = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
+  gap: clamp(4px, 1vw, 8px);
+  min-width: 0;
 
   input {
-    width: 90%;
+    flex: 1;
+    min-width: 0;
     cursor: pointer;
     transition: all 0.3s ease;
   }
@@ -182,37 +223,46 @@ export const TextRangeDiv = styled.div`
     font-size: clamp(12px, 2vw, 16px);
     margin: 0;
     color: #555;
+    flex-shrink: 0;
   }
 `;
 
 export const TextAndBackgroundDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   row-gap: 5px;
   position: relative;
+  min-width: 0;
 
   div {
     display: flex;
     align-items: center;
-    column-gap: 5px;
+    column-gap: clamp(4px, 1vw, 5px);
+    flex-wrap: wrap;
+    min-width: 0;
+    position: relative;
 
     h2 {
       font-family: "Merriweather", serif;
       font-weight: 400;
       font-size: clamp(12px, 2vw, 16px);
       color: #333;
+      margin: 0;
+      flex: 1;
+      min-width: 0;
     }
   }
 `;
 
 export const TextColor = styled.button<TextColorType>`
-  width: clamp(40px, 10vw, 50px);
-  height: clamp(25px, 6vh, 30px);
+  width: clamp(36px, 10vw, 50px);
+  height: clamp(28px, 6vh, 30px);
   border-radius: 10px;
   cursor: pointer;
   border: 1px solid #ccc;
   background-color: ${(props) => props.$TextColor};
+  flex-shrink: 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
@@ -226,21 +276,17 @@ export const ColorsDiv = styled.div`
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  width: 80px;
-  max-height: 300px;
+  width: clamp(64px, 18vw, 80px);
+  max-height: min(300px, 40vh);
   position: absolute;
   top: 32px;
-  left: -14px;
+  left: 0;
   padding-top: 5px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: 768px) {
-    width: 70px;
-    max-height: 200px;
-  }
+  z-index: 30;
 `;
 
 export const BackgroundColorsDiv = styled.div`
@@ -248,31 +294,28 @@ export const BackgroundColorsDiv = styled.div`
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  width: 80px;
-  max-height: 300px;
+  width: clamp(64px, 18vw, 80px);
+  max-height: min(300px, 40vh);
   position: absolute;
   top: 87px;
-  left: -10px;
+  left: 0;
   padding-top: 5px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: 768px) {
-    width: 70px;
-    max-height: 200px;
-  }
+  z-index: 30;
 `;
 
 export const BackgroundColor = styled.button<BackgroundColorButtonType>`
   cursor: pointer;
-  padding: 10px;
-  width: clamp(40px, 10vw, 50px);
-  height: clamp(25px, 6vh, 30px);
+  padding: clamp(6px, 1.5vw, 10px);
+  width: clamp(36px, 10vw, 50px);
+  height: clamp(28px, 6vh, 30px);
   border-radius: 10px;
   border: 1px solid #ccc;
   background-color: ${(props) => props.$backgroundColor};
+  flex-shrink: 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
@@ -283,12 +326,13 @@ export const BackgroundColor = styled.button<BackgroundColorButtonType>`
 
 export const ButtonText = styled.button<ButtonTextType>`
   cursor: pointer;
-  padding: 15px;
-  width: clamp(40px, 10vw, 50px);
-  height: clamp(40px, 10vw, 50px);
+  padding: clamp(8px, 2vw, 15px);
+  width: clamp(36px, 10vw, 50px);
+  height: clamp(36px, 10vw, 50px);
   border-radius: 10px;
   border: none;
   background-color: ${(props) => props.$allColors};
+  flex-shrink: 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {

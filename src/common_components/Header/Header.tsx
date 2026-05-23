@@ -25,7 +25,8 @@ import center from "../../../img/format.png";
 import arrow from "../../../img/left-arrow.png";
 import Image from "next/image";
 import Sidebar from "../sidebar/Sidebar";
-import { MyContext } from "@/app/layout";
+import { MyContext } from "@/context/MyContext";
+import { AlignedContent } from "@/styles/AppLayout";
 
 const Header = () => {
   const [isHeader, setHeader] = useState(false);
@@ -160,24 +161,10 @@ const Header = () => {
 
   return (
     <MainDiv onClick={handleColors}>
-      {isPreview ? (
-        <HeaderDiv
-          $preview={isPreview}
-          $HeaderBackgroundColor={backgroundColor}
-          onClick={handleHeader}
-        >
-          <HeaderText
-            $textColor={textColor}
-            $Aligment={alignment}
-            $TextSize={textSize}
-          >
-            {headerText}
-          </HeaderText>
-        </HeaderDiv>
-      ) : (
-        <>
+      <AlignedContent>
+        {isPreview ? (
           <HeaderDiv
-            $preview={false}
+            $preview={isPreview}
             $HeaderBackgroundColor={backgroundColor}
             onClick={handleHeader}
           >
@@ -189,9 +176,24 @@ const Header = () => {
               {headerText}
             </HeaderText>
           </HeaderDiv>
+        ) : (
+          <>
+            <HeaderDiv
+              $preview={false}
+              $HeaderBackgroundColor={backgroundColor}
+              onClick={handleHeader}
+            >
+              <HeaderText
+                $textColor={textColor}
+                $Aligment={alignment}
+                $TextSize={textSize}
+              >
+                {headerText}
+              </HeaderText>
+            </HeaderDiv>
 
-          {isHeader && (
-            <Sidebar>
+            {isHeader && (
+              <Sidebar>
               <SidebarHeading>
                 <Image
                   onClick={closeBar}
@@ -296,7 +298,8 @@ const Header = () => {
             </Sidebar>
           )}
         </>
-      )}
+        )}
+      </AlignedContent>
     </MainDiv>
   );
 };

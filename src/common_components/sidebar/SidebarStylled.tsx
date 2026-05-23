@@ -38,30 +38,33 @@ const gradientAnimation = keyframes`
   }
 `;
 
+/* FIXED: fixed 300px sidebar overflowed mobile → fluid width capped at viewport */
 export const Body = styled.div<BodyTypes>`
-  align-items: center;
+  display: flex;
+  align-items: stretch;
   flex-direction: column;
   position: fixed;
   top: 0;
-  right: 10px;
-  width: 300px;
+  right: clamp(0px, 2vw, 10px);
+  width: min(300px, calc(100vw - clamp(8px, 2vw, 16px)));
+  max-width: 100%;
   height: 100vh;
-  gap: 10px;
-  padding: 20px;
-  overflow: hidden;
-  z-index: 20;
+  height: 100dvh;
+  gap: clamp(6px, 1.5vw, 10px);
+  padding: clamp(12px, 3vw, 20px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 1100;
   border: none;
+  box-sizing: border-box;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
-  /* Gradient background with continuous animation */
   background: linear-gradient(270deg, #ff7e5f, #feb47b, #86a8e7);
   background-size: 600% 600%;
   animation: ${gradientAnimation} 15s ease infinite;
 
-  /* Conditional slide animation: open or close based on $outside */
-  animation: 
-    ${props => props.$outside 
-      ? css`${slideOut} 0.5s ease-out forwards` 
-      : css`${slideIn} 0.5s ease-out forwards`},
+  animation: ${(props) =>
+      props.$outside
+        ? css`${slideOut} 0.5s ease-out forwards`
+        : css`${slideIn} 0.5s ease-out forwards`},
     ${gradientAnimation} 15s ease infinite;
 `;

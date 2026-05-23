@@ -20,7 +20,8 @@ import {
   FooterLinksColor,
 } from "./FooterStylled";
 import Sidebar from "../sidebar/Sidebar";
-import { MyContext } from "@/app/layout";
+import { MyContext } from "@/context/MyContext";
+import { AlignedContent } from "@/styles/AppLayout";
 
 const Footer = () => {
   const [isFooter, setFooter] = useState(false);
@@ -197,8 +198,8 @@ const Footer = () => {
   }
 
   return (
-    <MainDiv onClick={handleColors} >
-
+    <MainDiv onClick={handleColors}>
+      <AlignedContent>
       {isPreview ? <FooterDiv $backgroundColor={backgroundColor} $preview={isPreview} onClick={handleFooter} ref={refFooter}>
         <FooterTextColor $color={textColor}>{name}</FooterTextColor>
         {addressCheckbox && (
@@ -356,6 +357,7 @@ const Footer = () => {
           </FooterStyle>
         </Sidebar>
       )}</>}
+      </AlignedContent>
     </MainDiv>
   );
 };

@@ -4,11 +4,11 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { Fdiv, TextEditor } from "./LexicalStylled";
+import { Fdiv, TextEditor, PreviewContent } from "./LexicalStylled";
 import { useState, useContext, useEffect } from "react";
 import ExampleTheme from "@/ExampleTheme";
 import ToolbarPlugin from "@/plugins/ToolbarPlugin";
-import { MyContext } from "@/app/layout";
+import { MyContext } from "@/context/MyContext";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { StateTypes, EditorStateType, ChildItemType } from "../../../types";
 import { EditorState } from "lexical";
@@ -111,13 +111,13 @@ export default function LexicalTextEditor({
       <TextEditor>
         <div>
           {isPreview ? (
-            <div style={{ padding: "20px", backgroundColor: "#fdc386" }}>
+            <PreviewContent>
               {editorText.root.children[0].children.map(
                 (item: ChildItemType, index: number) => (
                   <p key={index}>{item.text}</p>
                 )
               )}
-            </div>
+            </PreviewContent>
           ) : (
             <LexicalComposer
               initialConfig={{
@@ -132,10 +132,6 @@ export default function LexicalTextEditor({
                     contentEditable={
                       <ContentEditable
                         className="editor-input"
-                        style={{
-                          border: "0.5px solid black",
-                          minHeight: "200px",
-                        }}
                         aria-placeholder={placeholder}
                       />
                     }

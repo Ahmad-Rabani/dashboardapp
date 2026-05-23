@@ -6,8 +6,9 @@ import {
   BackgroundColorsDiv,
   ButtonText,
   MainDivOfImage,
+  ImageOuter,
 } from "./ImageStylled";
-import { MyContext } from "@/app/layout";
+import { MyContext } from "@/context/MyContext";
 
 const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
   const [backgroundColor, setBackgroundColor] = useState("#ececff");
@@ -101,7 +102,7 @@ const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
   }, []);
 
   return (
-    <div>
+    <ImageOuter>
       {isPreview ? (
         <MainDivOfImage $backgroundColor={backgroundColor} $preview={isPreview}>
           <img ref={imageRef} src={passTheImage} alt="" />
@@ -138,7 +139,7 @@ const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
           )}
         </MainDivOfImage>
       )}
-    </div>
+    </ImageOuter>
   );
 };
 

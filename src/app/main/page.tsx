@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useContext, useState } from "react";
-import { MainDiv, AddSection, PreviewButton } from "./MainStylled";
+import { MainDiv, AddSection, PreviewButton, SortableList } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
 import add from "../../../img/add.png";
 import Image from "next/image";
 import noEdit from "../../../img/delete (1).png";
 import NewSection from "@/common_components/Add New Section/NewSection";
-import { MyContext } from "../layout";
+import { MyContext } from "@/context/MyContext";
 import { ComponentType, DragEvent } from "../../../types";
 import {
   closestCorners,
@@ -103,15 +103,17 @@ const MainComponent = () => {
           items={componentsArray.map((item: ComponentType) => item.key)}
           strategy={verticalListSortingStrategy}
         >
-          {componentsArray.map((item: ComponentType) => (
-            <SortableComponents
-              key={item.key}
-              id={item.key}
-              passingComponents={item.component}
-              passingImage={item.img}
-              copyText={item.innerText}
-            />
-          ))}
+          <SortableList>
+            {componentsArray.map((item: ComponentType) => (
+              <SortableComponents
+                key={item.key}
+                id={item.key}
+                passingComponents={item.component}
+                passingImage={item.img}
+                copyText={item.innerText}
+              />
+            ))}
+          </SortableList>
         </SortableContext>
 
         <DragOverlay dropAnimation={{ duration: 250, easing: "ease" }}>

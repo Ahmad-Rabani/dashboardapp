@@ -14,12 +14,14 @@ import {
   Line,
   Container,
   ComponentsDiv,
+  ActionButtonRow,
+  CardContent,
 } from "./SortableComponentsStylled";
 import Image from "next/image";
 import copy from "../../../img/copy-link.png";
 import deleteIcon from "../../../img/delete.png";
 import dragIcon from "../../../img/drag.png";
-import { MyContext } from "@/app/layout";
+import { MyContext } from "@/context/MyContext";
 import { v4 as uuidv4 } from "uuid";
 import LexicalTextEditor from "@/plugins/LexicalTextEditor/page";
 import NewSection from "../Add New Section/NewSection";
@@ -113,32 +115,39 @@ const SortableComponents = ({
 
   return (
     <MainDiv style={style} ref={setNodeRef} $isDragging={isDragging}>
-      <SortableItemPreview
-        passingComponents={passingComponents}
-        passingImage={passingImage}
-        copyText={copyText}
-      />
-
       {!isPreview && (
-        <>
-          {/* Drag handle: apply attributes and listeners here */}
+        <ActionButtonRow>
           <ComponentsDiv {...attributes} {...listeners}>
-            <DragButton>
+            <DragButton type="button" aria-label="Drag section">
               <Image src={dragIcon} width={15} height={15} alt="drag handle" />
             </DragButton>
           </ComponentsDiv>
 
-          <CopyButton onClick={() => handleCopy(id)}>
+          <CopyButton type="button" onClick={() => handleCopy(id)} aria-label="Copy section">
             <Image src={copy} width={15} height={15} alt="copy" />
           </CopyButton>
 
-          <DeleteButton onClick={() => deleteSection(id)}>
+          <DeleteButton type="button" onClick={() => deleteSection(id)} aria-label="Delete section">
             <Image src={deleteIcon} width={15} height={15} alt="delete" />
           </DeleteButton>
+        </ActionButtonRow>
+      )}
 
+      <CardContent>
+        <SortableItemPreview
+          passingComponents={passingComponents}
+          passingImage={passingImage}
+          copyText={copyText}
+        />
+      </CardContent>
+
+      {!isPreview && (
+        <>
           <Container>
             <Line />
-            <AddButton onClick={() => handleNewSection(id)}>+</AddButton>
+            <AddButton type="button" onClick={() => handleNewSection(id)}>
+              +
+            </AddButton>
           </Container>
         </>
       )}
