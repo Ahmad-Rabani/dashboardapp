@@ -5,7 +5,7 @@ import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { Fdiv, TextEditor, PreviewContent } from "./LexicalStylled";
-import { useState, useContext, useEffect, useCallback } from "react";
+import { useState, useContext, useEffect, useCallback, useRef } from "react";
 import ExampleTheme from "@/ExampleTheme";
 import ToolbarPlugin from "@/plugins/ToolbarPlugin";
 import { MyContext } from "@/context/MyContext";
@@ -56,8 +56,23 @@ export default function LexicalTextEditor({
   const [editorState, setEditorState] = useState<EditorStateType>(() =>
     editorContent ?? createDefaultEditorContent(innerText ?? "")
   );
+  const [composerKey, setComposerKey] = useState(0);
+  const lastExternalContentRef = useRef<string>(
+    JSON.stringify(editorContent ?? createDefaultEditorContent(innerText ?? ""))
+  );
 
   const [, setComponentsArray, , , , , , , isPreview] = useContext(MyContext);
+
+  useEffect(() => {
+    if (!editorContent) return;
+
+    const serialized = JSON.stringify(editorContent);
+    if (serialized === lastExternalContentRef.current) return;
+
+    lastExternalContentRef.current = serialized;
+    setEditorState(editorContent);
+    setComposerKey((key) => key + 1);
+  }, [editorContent]);
 
   const persistSectionContent = useCallback(
     (nextState: EditorStateType) => {
@@ -83,6 +98,7 @@ export default function LexicalTextEditor({
       try {
         const editorStateJSON = state.toJSON() as EditorStateType;
         setEditorState(editorStateJSON);
+        lastExternalContentRef.current = JSON.stringify(editorStateJSON);
         persistSectionContent(editorStateJSON);
       } catch (error) {
         console.error("Error processing editor state:", error);
@@ -122,7 +138,7 @@ export default function LexicalTextEditor({
             </PreviewContent>
           ) : (
             <LexicalComposer
-              key={sectionKey}
+              key={`${sectionKey}-${composerKey}`}
               initialConfig={{
                 ...editorConfig,
                 editorState: JSON.stringify(editorState),

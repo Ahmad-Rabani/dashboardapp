@@ -2,13 +2,15 @@
 
 import React, { useContext, useState } from "react";
 import Image from "next/image";
-import { Download, LayoutTemplate, Redo2, Undo2 } from "lucide-react";
+import { Download, LayoutTemplate, Redo2, Search, Undo2 } from "lucide-react";
 import { notify } from "@/utils/toast";
 import { downloadDashboardAsPdf } from "@/utils/downloadPdf";
 import { MyContext } from "@/context/MyContext";
 import { useDashboardContext } from "@/context/DashboardContext";
 import { useDashboardHistoryContext } from "@/context/DashboardHistoryContext";
 import WorkspacePanel from "@/components/WorkspacePanel";
+import FindReplaceDialog from "@/components/FindReplaceDialog";
+import FindReplaceShortcuts from "@/components/FindReplaceShortcuts";
 import { FloatingToolbarDock, ToolbarButton } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
 import add from "../../../img/add.png";
@@ -31,6 +33,7 @@ export default function EditorFloatingActions() {
   const { canUndo, canRedo, undo, redo } = useDashboardHistoryContext();
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
+  const [findReplaceOpen, setFindReplaceOpen] = useState(false);
 
   if (!hydrated) return null;
 
@@ -61,6 +64,8 @@ export default function EditorFloatingActions() {
 
   return (
     <>
+      <FindReplaceShortcuts onOpen={() => setFindReplaceOpen(true)} />
+      <FindReplaceDialog open={findReplaceOpen} onOpenChange={setFindReplaceOpen} />
       <WorkspacePanel open={workspaceOpen} onOpenChange={setWorkspaceOpen} />
 
       <FloatingToolbarDock data-no-export role="toolbar" aria-label="Page editor actions">
@@ -106,6 +111,17 @@ export default function EditorFloatingActions() {
             >
               <Image width={15} height={15} src={add} alt="" />
               Add Section
+            </ToolbarButton>
+            <ToolbarButton
+              type="button"
+              $variant="ghost"
+              onClick={() => setFindReplaceOpen(true)}
+              disabled={isEmpty}
+              aria-label="Find and replace text (Ctrl+H)"
+              title="Find & Replace (Ctrl+H)"
+            >
+              <Search size={15} aria-hidden />
+              Find
             </ToolbarButton>
             <ToolbarButton
               type="button"

@@ -13,6 +13,7 @@ import {
   faFileExport,
   faFileImport,
   faWandMagicSparkles,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import CustomToast, { ToastType } from "@/components/CustomToast";
 
@@ -179,5 +180,15 @@ export const notify = {
       "Your page was loaded from the backup file",
       <FontAwesomeIcon icon={faFileImport} />,
       "#14b8a6"
+    ),
+
+  findReplaceComplete: (count: number) =>
+    showCustomToast(
+      `findReplace:${count}`,
+      "success",
+      "Text replaced",
+      `${count} occurrence${count === 1 ? "" : "s"} updated across your page`,
+      <FontAwesomeIcon icon={faSearch} />,
+      "#6366f1"
     ),
 };
