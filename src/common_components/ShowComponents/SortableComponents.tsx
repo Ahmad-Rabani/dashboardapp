@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { notify } from "@/utils/toast";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
@@ -18,6 +18,8 @@ import {
   RightControls,
   CardBody,
   CardContent,
+  ResizableSection,
+  SectionResizeHandle,
 } from "./SortableComponentsStylled";
 import Image from "next/image";
 import copy from "../../../img/copy-link.png";
@@ -28,22 +30,31 @@ import { v4 as uuidv4 } from "uuid";
 import LexicalTextEditor from "@/plugins/LexicalTextEditor/page";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import { PropsType, ComponentType } from "../../../types";
+import { AlignedContent } from "@/styles/AppLayout";
+import { useSectionResize } from "@/hooks/useSectionResize";
+import {
+  DEFAULT_IMAGE_SECTION_HEIGHT,
+  DEFAULT_TEXT_SECTION_HEIGHT,
+} from "@/constants/sectionLayout";
 
 type SortableItemPreviewProps = Pick<
   PropsType,
   "passingComponents" | "passingImage" | "copyText"
->;
+> & {
+  height: number;
+};
 
 export const SortableItemPreview = ({
   passingComponents,
   passingImage,
   copyText,
+  height,
 }: SortableItemPreviewProps) =>
   passingComponents ? (
-    <LexicalTextEditor innerText={copyText ? copyText[0] : ""} />
+    <LexicalTextEditor innerText={copyText ? copyText[0] : ""} height={height} />
   ) : (
     <ImageDiv>
-      <ImageComponent passTheImage={passingImage} />
+      <ImageComponent passTheImage={passingImage} height={height} />
     </ImageDiv>
   );
 
@@ -78,6 +89,34 @@ const SortableComponents = ({
     insertIndex,
     setInsertIndex,
   ] = useContext(MyContext);
+
+  const sectionData = useMemo(
+    () => componentsArray.find((item: ComponentType) => item.key === id),
+    [componentsArray, id]
+  );
+
+  const sectionHeight =
+    sectionData?.height ??
+    (passingComponents
+      ? DEFAULT_TEXT_SECTION_HEIGHT
+      : DEFAULT_IMAGE_SECTION_HEIGHT);
+
+  const updateSectionHeight = useCallback(
+    (nextHeight: number) => {
+      setComponentsArray((prev: ComponentType[]) =>
+        prev.map((item) =>
+          item.key === id ? { ...item, height: nextHeight } : item
+        )
+      );
+    },
+    [id, setComponentsArray]
+  );
+
+  const { onResizePointerDown } = useSectionResize({
+    height: sectionHeight,
+    onHeightChange: updateSectionHeight,
+    disabled: isPreview,
+  });
 
   const deleteSection = (sectionId: string) => {
     setComponentsArray(
@@ -121,6 +160,7 @@ const SortableComponents = ({
           key: uuidv4(),
           component: itemToCopy.component,
           img: itemToCopy.img,
+          height: itemToCopy.height,
           innerText: editorText.root.children[0].children.map(
             (child: any) => child.text
           ),
@@ -160,13 +200,27 @@ const SortableComponents = ({
       )}
 
       <CardBody>
-        <CardContent>
-          <SortableItemPreview
-            passingComponents={passingComponents}
-            passingImage={passingImage}
-            copyText={copyText}
-          />
-        </CardContent>
+        <AlignedContent>
+          <ResizableSection $height={sectionHeight}>
+            <CardContent $height={sectionHeight}>
+              <SortableItemPreview
+                passingComponents={passingComponents}
+                passingImage={passingImage}
+                copyText={copyText}
+                height={sectionHeight}
+              />
+            </CardContent>
+
+            {!isPreview && (
+              <SectionResizeHandle
+                role="separator"
+                aria-orientation="horizontal"
+                aria-label="Resize section height"
+                onPointerDown={onResizePointerDown}
+              />
+            )}
+          </ResizableSection>
+        </AlignedContent>
 
         {!isPreview && (
           <SectionAddZone>

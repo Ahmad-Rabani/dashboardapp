@@ -23,7 +23,11 @@ import SortableComponents, {
 } from "@/common_components/ShowComponents/SortableComponents";
 import { verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { DragOverlayWrapper } from "@/common_components/ShowComponents/SortableComponentsStylled";
-import { ContentWrapper, EmptyStateWrapper } from "@/styles/AppLayout";
+import { ContentWrapper, EmptyStateWrapper, AlignedContent } from "@/styles/AppLayout";
+import {
+  DEFAULT_IMAGE_SECTION_HEIGHT,
+  DEFAULT_TEXT_SECTION_HEIGHT,
+} from "@/constants/sectionLayout";
 
 const MainComponent = () => {
   const [
@@ -110,49 +114,57 @@ const MainComponent = () => {
           <EmptyState previewMode />
         </EmptyStateWrapper>
       ) : (
-        <ContentWrapper>
-          <MainDiv>
-            <DndContext
-              collisionDetection={closestCorners}
-              onDragStart={handleDragStart}
-              onDragCancel={handleDragCancel}
-              onDragEnd={handleDragEnd}
+        <MainDiv>
+          <DndContext
+            collisionDetection={closestCorners}
+            onDragStart={handleDragStart}
+            onDragCancel={handleDragCancel}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={componentsArray.map((item: ComponentType) => item.key)}
+              strategy={verticalListSortingStrategy}
             >
-              <SortableContext
-                items={componentsArray.map((item: ComponentType) => item.key)}
-                strategy={verticalListSortingStrategy}
-              >
-                <SortableList>
-                  {componentsArray.map((item: ComponentType, idx: number) => (
-                    <Fragment key={item.key}>
-                      <SortableComponents
-                        id={item.key}
-                        passingComponents={item.component}
-                        passingImage={item.img}
-                        copyText={item.innerText}
-                      />
-                      {!isPreview && addNewSection && insertIndex === idx && (
+              <SortableList>
+                {componentsArray.map((item: ComponentType, idx: number) => (
+                  <Fragment key={item.key}>
+                    <SortableComponents
+                      id={item.key}
+                      passingComponents={item.component}
+                      passingImage={item.img}
+                      copyText={item.innerText}
+                    />
+                    {!isPreview && addNewSection && insertIndex === idx && (
+                      <ContentWrapper>
                         <NewSection currentIndex={idx} />
-                      )}
-                    </Fragment>
-                  ))}
-                </SortableList>
-              </SortableContext>
+                      </ContentWrapper>
+                    )}
+                  </Fragment>
+                ))}
+              </SortableList>
+            </SortableContext>
 
-              <DragOverlay dropAnimation={{ duration: 250, easing: "ease" }}>
-                {activeItem ? (
-                  <DragOverlayWrapper>
+            <DragOverlay dropAnimation={{ duration: 250, easing: "ease" }}>
+              {activeItem ? (
+                <DragOverlayWrapper>
+                  <AlignedContent>
                     <SortableItemPreview
                       passingComponents={activeItem.component}
                       passingImage={activeItem.img}
                       copyText={activeItem.innerText}
+                      height={
+                        activeItem.height ??
+                        (activeItem.component
+                          ? DEFAULT_TEXT_SECTION_HEIGHT
+                          : DEFAULT_IMAGE_SECTION_HEIGHT)
+                      }
                     />
-                  </DragOverlayWrapper>
-                ) : null}
-              </DragOverlay>
-            </DndContext>
-          </MainDiv>
-        </ContentWrapper>
+                  </AlignedContent>
+                </DragOverlayWrapper>
+              ) : null}
+            </DragOverlay>
+          </DndContext>
+        </MainDiv>
       )}
 
       {!isPreview && isNewSection && (

@@ -26,8 +26,10 @@ const editorConfig = {
 
 export default function LexicalTextEditor({
   innerText,
+  height,
 }: {
   innerText: string;
+  height?: number;
 }) {
   const initial = {
     root: {
@@ -107,11 +109,11 @@ export default function LexicalTextEditor({
   }, [editorState, setEditorText]);
 
   return (
-    <Fdiv>
-      <TextEditor>
-        <div>
+    <Fdiv $height={height}>
+      <TextEditor $height={height}>
+        <div style={{ height: height ? "100%" : undefined, minHeight: 0 }}>
           {isPreview ? (
-            <PreviewContent>
+            <PreviewContent $height={height}>
               {editorText.root.children[0].children.map(
                 (item: ChildItemType, index: number) => (
                   <p key={index}>{item.text}</p>

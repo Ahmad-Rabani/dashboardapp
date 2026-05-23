@@ -82,7 +82,7 @@ export const Container = styled.div`
   display: contents;
 `;
 
-/* FIXED: card used column layout with centered action row → row layout with pinned left/right controls on ≥1024px */
+/* Card row — controls float outside the aligned content column on desktop */
 export const CardWrapper = styled.div<{ $isDragging?: boolean; $isPreview?: boolean }>`
   display: flex;
   flex-direction: row;
@@ -107,13 +107,16 @@ export const CardWrapper = styled.div<{ $isDragging?: boolean; $isPreview?: bool
     transform: translateY(0);
   }
 
-  /* FIXED: mobile keeps drag left + copy/delete right on one row via grid overlay */
   @media (max-width: 1023px) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "left-controls right-controls"
       "body body";
+  }
+
+  @media (min-width: 1024px) {
+    display: block;
   }
 
   &:hover ${CopyButton},
@@ -144,7 +147,6 @@ export const ComponentsDiv = styled.div`
   flex-shrink: 0;
 `;
 
-/* FIXED: left controls floated into card body → pinned left column, vertically centered on ≥1024px */
 export const LeftControls = styled.div`
   display: flex;
   flex-direction: column;
@@ -159,9 +161,17 @@ export const LeftControls = styled.div`
     justify-content: flex-start;
     padding: 8px 12px 0;
   }
+
+  @media (min-width: 1024px) {
+    position: absolute;
+    left: clamp(4px, 1vw, 16px);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    padding: 0;
+  }
 `;
 
-/* FIXED: copy/delete floated to center → pinned right column, vertically centered on ≥1024px */
 export const RightControls = styled.div`
   display: flex;
   flex-direction: column;
@@ -177,6 +187,15 @@ export const RightControls = styled.div`
     justify-content: flex-end;
     padding: 0 12px 8px;
   }
+
+  @media (min-width: 1024px) {
+    position: absolute;
+    right: clamp(4px, 1vw, 16px);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    padding: 0;
+  }
 `;
 
 export const CardBody = styled.div`
@@ -186,23 +205,65 @@ export const CardBody = styled.div`
   flex-direction: column;
   overflow: visible;
   position: relative;
+  width: 100%;
 
   @media (max-width: 1023px) {
     grid-area: body;
   }
 `;
 
-export const CardContent = styled.div`
+export const ResizableSection = styled.div<{ $height: number }>`
+  position: relative;
+  width: 100%;
+  height: ${({ $height }) => `${$height}px`};
+  min-height: 80px;
+  box-sizing: border-box;
+`;
+
+export const CardContent = styled.div<{ $height?: number }>`
   width: 100%;
   min-width: 0;
+  height: ${({ $height }) => ($height ? `${$height}px` : "auto")};
   overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 0;
+  box-sizing: border-box;
+`;
+
+export const SectionResizeHandle = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+  cursor: ns-resize;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+
+  &::before {
+    content: "";
+    width: clamp(48px, 16vw, 72px);
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(15, 15, 108, 0.35);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  &:hover::before,
+  &:active::before {
+    background: rgba(15, 15, 108, 0.65);
+    transform: scaleY(1.25);
+  }
 `;
 
 export const ImageDiv = styled.div`
   width: 100%;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
   overflow: hidden;
 `;

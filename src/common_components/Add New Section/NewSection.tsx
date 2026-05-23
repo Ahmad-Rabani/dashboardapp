@@ -16,6 +16,10 @@ import imageIcon from "../../../img/insert-picture-icon.png";
 import { MyContext } from "@/context/MyContext";
 import { v4 as uuidv4 } from "uuid";
 // import { ComponentsType } from "next/dist/build/webpack/loaders/next-app-loader";
+import {
+  DEFAULT_IMAGE_SECTION_HEIGHT,
+  DEFAULT_TEXT_SECTION_HEIGHT,
+} from "@/constants/sectionLayout";
 import { ComponentType } from "../../../types";
 
 const NewSection = ({ currentIndex }: { currentIndex: number }) => {
@@ -57,6 +61,7 @@ const NewSection = ({ currentIndex }: { currentIndex: number }) => {
           key: uuidv4(),
           component: "Text",
           index: currentIndex + 1,
+          height: DEFAULT_TEXT_SECTION_HEIGHT,
         };
         const updatedComponents = [
           ...prevComponents.slice(0, currentIndex + 1),
@@ -82,6 +87,7 @@ const NewSection = ({ currentIndex }: { currentIndex: number }) => {
             key: uuidv4(),
             img: result,
             index: currentIndex + 1,
+            height: DEFAULT_IMAGE_SECTION_HEIGHT,
           };
           const updatedComponents = [
             ...prevComponents.slice(0, currentIndex + 1),

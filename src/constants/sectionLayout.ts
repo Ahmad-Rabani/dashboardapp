@@ -1,0 +1,4 @@
+export const DEFAULT_TEXT_SECTION_HEIGHT = 200;
+export const DEFAULT_IMAGE_SECTION_HEIGHT = 280;
+export const MIN_SECTION_HEIGHT = 80;
+export const MAX_SECTION_HEIGHT = 900;

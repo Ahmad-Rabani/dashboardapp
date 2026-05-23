@@ -8,6 +8,7 @@ export interface ComponentType {
   innerText: string[];
   index: number;
   length: number;
+  height?: number;
   prevItems?: any;
 }
 

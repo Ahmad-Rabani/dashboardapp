@@ -4,43 +4,62 @@ const primaryColor = "#FF6B35";
 const hoverColor = "#FF5A1F";
 
 /* FIXED: editor wrapper had fixed max-width + px padding → fluid 100% width container */
-export const Fdiv = styled.div`
+export const Fdiv = styled.div<{ $height?: number }>`
   display: flex;
   justify-content: center;
   width: 100%;
+  height: ${(props) => (props.$height ? "100%" : "auto")};
   max-width: 100%;
   margin: 0;
   padding: 0;
   position: relative;
   box-sizing: border-box;
   min-width: 0;
+  min-height: 0;
 `;
 
-export const TextEditor = styled.div`
+export const TextEditor = styled.div<{ $height?: number }>`
   border: none;
   border-radius: 0;
   width: 100%;
   max-width: 100%;
+  height: ${(props) => (props.$height ? "100%" : "auto")};
   background-color: white;
   position: relative;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  min-height: clamp(80px, 20vw, 100px);
+  min-height: ${(props) =>
+    props.$height ? "0" : "clamp(80px, 20vw, 100px)"};
   box-sizing: border-box;
   overflow: hidden;
   min-width: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
 
   &:focus-within {
     border-color: ${primaryColor};
     box-shadow: 0 4px 6px rgba(255, 107, 53, 0.1);
   }
 
-  .editor-container,
+  .editor-container {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
   .editor-inner {
     width: 100%;
     max-width: 100%;
+    flex: 1;
+    min-height: 0;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: auto;
     min-width: 0;
   }
 
@@ -48,7 +67,9 @@ export const TextEditor = styled.div`
   [contenteditable="true"] {
     width: 100% !important;
     max-width: 100% !important;
-    min-height: clamp(80px, 20vw, 120px);
+    min-height: ${(props) =>
+      props.$height ? "100%" : "clamp(80px, 20vw, 120px)"} !important;
+    height: ${(props) => (props.$height ? "100%" : "auto")};
     overflow-wrap: break-word !important;
     word-break: break-word !important;
     white-space: pre-wrap !important;
@@ -90,10 +111,11 @@ export const TextEditor = styled.div`
   }
 `;
 
-export const PreviewContent = styled.div`
+export const PreviewContent = styled.div<{ $height?: number }>`
   width: 100%;
+  height: ${(props) => (props.$height ? "100%" : "auto")};
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-y: auto;
   padding: clamp(12px, 3vw, 20px);
   background-color: white;
   font-size: clamp(13px, 1.5vw, 16px);

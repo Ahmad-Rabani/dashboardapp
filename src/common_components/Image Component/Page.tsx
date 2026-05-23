@@ -7,7 +7,13 @@ import ImageSidebarContent from "../sidebar/ImageSidebarContent";
 import { MainDivOfImage, ImageOuter } from "./ImageStylled";
 import { MyContext } from "@/context/MyContext";
 
-const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
+const ImageComponent = ({
+  passTheImage,
+  height,
+}: {
+  passTheImage: string;
+  height?: number;
+}) => {
   const [backgroundColor, setBackgroundColor] = useState("#ececff");
   const [isBackground, setBackground] = useState(false);
   const imageRef = useRef(null);
@@ -38,7 +44,11 @@ const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
 
   return (
     <ImageOuter>
-      <MainDivOfImage $backgroundColor={backgroundColor} $preview={isPreview}>
+      <MainDivOfImage
+        $backgroundColor={backgroundColor}
+        $preview={isPreview}
+        $height={height}
+      >
         <div
           onClick={sectionMainDiv}
           style={{ cursor: isPreview ? "default" : "pointer" }}

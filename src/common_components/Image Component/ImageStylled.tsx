@@ -7,6 +7,7 @@ interface ButtonTextType {
 interface BackgroundColorButtonType {
   $backgroundColor: string;
   $preview: boolean;
+  $height?: number;
 }
 
 /* FIXED: image wrapper lacked min-width:0 → flex blowout on narrow screens */
@@ -16,6 +17,8 @@ export const MainDivOfImage = styled.div<BackgroundColorButtonType>`
   align-items: center;
   width: 100%;
   min-width: 0;
+  height: ${(props) => (props.$height ? `${props.$height}px` : "auto")};
+  min-height: ${(props) => (props.$height ? `${props.$height}px` : "120px")};
   margin: 0;
   padding: 0;
   border: ${(props) => (props.$preview ? "none" : "1px solid transparent")};
@@ -25,7 +28,7 @@ export const MainDivOfImage = styled.div<BackgroundColorButtonType>`
 
   img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     object-fit: cover;
     max-width: 100%;
@@ -33,14 +36,18 @@ export const MainDivOfImage = styled.div<BackgroundColorButtonType>`
 
   > div {
     width: 100%;
+    height: 100%;
     min-width: 0;
+    min-height: 0;
     overflow: hidden;
   }
 `;
 
 export const ImageOuter = styled.div`
   width: 100%;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
   overflow: hidden;
 `;
 
