@@ -55,7 +55,9 @@ export const AppRoot = styled.div`
   flex-direction: column;
   width: 100%;
   overflow-x: hidden;
-  background-color: #e6e6e6;
+  background-color: hsl(var(--app-shell-bg, 0 0% 90%));
+  color: hsl(var(--foreground));
+  transition: background-color 0.3s ease, color 0.3s ease;
 `;
 
 export const MainArea = styled.main`

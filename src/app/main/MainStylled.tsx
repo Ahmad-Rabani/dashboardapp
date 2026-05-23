@@ -50,7 +50,7 @@ export const PreviewButton = styled.button`
   font-weight: 530;
   column-gap: clamp(4px, 1vw, 8px);
   font-family: "Inter", sans-serif;
-  z-index: 1001;
+  z-index: 1200;
   transition: box-shadow 0.3s ease, background 0.3s ease;
   box-shadow: 0 4px 15px rgba(15, 15, 108, 0.3);
   box-sizing: border-box;

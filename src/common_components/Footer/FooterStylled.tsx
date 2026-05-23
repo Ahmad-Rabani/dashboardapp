@@ -30,6 +30,8 @@ export const MainDiv = styled.div`
   overflow-x: hidden;
   flex-shrink: 0;
   text-align: center;
+  background-color: hsl(var(--app-shell-bg, 0 0% 90%));
+  transition: background-color 0.3s ease;
 
   @media (min-width: 768px) {
     text-align: left;

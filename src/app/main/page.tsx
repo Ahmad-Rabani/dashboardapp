@@ -86,6 +86,7 @@ const MainComponent = () => {
   }
 
   const isEmpty = componentsArray.length === 0;
+  const showEmptyState = isEmpty && !isNewSection && !addNewSection;
 
   return (
     <>
@@ -98,8 +99,7 @@ const MainComponent = () => {
         {isPreview ? "Edit Mode" : "Preview"}
       </PreviewButton>
 
-      {/* FIXED: empty state lingered after first section → strict conditional unmount */}
-      {isEmpty ? (
+      {showEmptyState ? (
         <EmptyStateWrapper>
           <EmptyState onAddSection={createNewSection} />
         </EmptyStateWrapper>
@@ -147,10 +147,12 @@ const MainComponent = () => {
 
       {isNewSection && <NewSection currentIndex={0} />}
 
-      <AddSection onClick={createNewSection}>
-        <Image width={15} height={15} src={add} alt="" />
-        Add Section
-      </AddSection>
+      {!isPreview && (
+        <AddSection onClick={createNewSection}>
+          <Image width={15} height={15} src={add} alt="" />
+          Add Section
+        </AddSection>
+      )}
     </>
   );
 };

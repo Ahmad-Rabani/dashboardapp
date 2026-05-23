@@ -35,8 +35,9 @@ export const MainDiv = styled.header`
   padding: clamp(8px, 2vw, 20px) 0;
   box-sizing: border-box;
   overflow-x: hidden;
-  background-color: #e6e6e6;
+  background-color: hsl(var(--app-shell-bg, 0 0% 90%));
   flex-shrink: 0;
+  transition: background-color 0.3s ease;
 `;
 
 export const HeaderDiv = styled.div<HeaderDivType>`

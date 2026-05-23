@@ -10,33 +10,9 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { PRESET_COLORS } from "@/constants/presetColors";
 
-export const PRESET_COLORS = [
-  "#ffffff",
-  "#f8fafc",
-  "#f1f5f9",
-  "#e2e8f0",
-  "#6366f1",
-  "#8b5cf6",
-  "#ec4899",
-  "#ef4444",
-  "#f97316",
-  "#eab308",
-  "#22c55e",
-  "#14b8a6",
-  "#3b82f6",
-  "#06b6d4",
-  "#0ea5e9",
-  "#64748b",
-  "#1e293b",
-  "#0f172a",
-  "#18181b",
-  "#09090b",
-  "#fdf4ff",
-  "#fff7ed",
-  "#f0fdf4",
-  "#eff6ff",
-];
+export { PRESET_COLORS };
 
 export interface ColorPickerProps {
   value: string;
@@ -101,32 +77,38 @@ interface GradientStop {
 function MiniPresetGrid({
   selected,
   onSelect,
-  columns = 6,
+  columns = 8,
 }: {
   selected: string;
   onSelect: (color: string) => void;
   columns?: number;
 }) {
+  const colClass =
+    columns === 5
+      ? "grid-cols-5"
+      : columns === 6
+        ? "grid-cols-6"
+        : "grid-cols-8";
+
   return (
-    <div
-      className={cn(
-        "grid gap-2",
-        columns === 5 ? "grid-cols-5" : "grid-cols-6"
-      )}
-    >
-      {PRESET_COLORS.map((color) => (
-        <button
-          key={color}
-          type="button"
-          onClick={() => onSelect(color)}
-          className={cn(
-            "h-8 w-8 rounded-full transition-transform hover:scale-110",
-            selected === color && "ring-2 ring-indigo-500 ring-offset-2 ring-offset-slate-900"
-          )}
-          style={{ backgroundColor: color }}
-          aria-label={`Select color ${color}`}
-        />
-      ))}
+    <div className="max-h-[220px] overflow-y-auto overscroll-contain pr-1">
+      <div className={cn("grid gap-1.5", colClass)}>
+        {PRESET_COLORS.map((color) => (
+          <button
+            key={color}
+            type="button"
+            onClick={() => onSelect(color)}
+            className={cn(
+              "h-7 w-7 rounded-full border border-white/10 transition-transform hover:scale-110",
+              selected.toLowerCase() === color.toLowerCase() &&
+                "ring-2 ring-indigo-500 ring-offset-1 ring-offset-slate-900"
+            )}
+            style={{ backgroundColor: color }}
+            aria-label={`Select color ${color}`}
+            title={color}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -204,7 +186,7 @@ export default function ColorPicker({
     return `linear-gradient(${gradientAngle}deg, ${colorStops})`;
   }, [gradientType, gradientAngle, stops]);
 
-  const gridCols = isMobile ? 5 : 6;
+  const gridCols = isMobile ? 6 : 8;
 
   return (
     <Tabs defaultValue="presets" className="w-full">

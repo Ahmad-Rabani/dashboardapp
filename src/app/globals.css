@@ -26,6 +26,7 @@
     --radius: 0.5rem;
     --sidebar-bg: 222 47% 11%;
     --header-height: 72px;
+    --app-shell-bg: 0 0% 90%;
   }
 
   .dark {
@@ -49,6 +50,7 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     --sidebar-bg: 222 47% 11%;
+    --app-shell-bg: 222 47% 8%;
   }
 }
 

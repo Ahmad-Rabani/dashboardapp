@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MainDiv, HeaderDiv, HeaderText } from "./HeaderStylled";
 import Sidebar from "../sidebar/Sidebar";
 import HeaderSidebarContent from "../sidebar/HeaderSidebarContent";
@@ -17,7 +17,12 @@ const Header = () => {
 
   const [, , , , , , , , isPreview] = useContext(MyContext);
 
+  useEffect(() => {
+    if (isPreview) setHeader(false);
+  }, [isPreview]);
+
   function handleHeader() {
+    if (isPreview) return;
     setHeader(!isHeader);
   }
 
@@ -32,6 +37,7 @@ const Header = () => {
           $preview={isPreview}
           $HeaderBackgroundColor={backgroundColor}
           onClick={handleHeader}
+          style={{ cursor: isPreview ? "default" : "pointer" }}
         >
           <HeaderText
             $textColor={textColor}
@@ -43,7 +49,7 @@ const Header = () => {
         </HeaderDiv>
 
         {!isPreview && (
-          <Sidebar open={isHeader} onClose={closeBar}>
+          <Sidebar open={isHeader} onClose={closeBar} label="Header settings">
             <HeaderSidebarContent
               headerText={headerText}
               onHeaderTextChange={setHeaderText}

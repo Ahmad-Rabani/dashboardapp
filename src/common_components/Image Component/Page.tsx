@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { notify } from "@/utils/toast";
 import Sidebar from "../sidebar/Sidebar";
 import ImageSidebarContent from "../sidebar/ImageSidebarContent";
@@ -14,7 +14,12 @@ const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
 
   const [, , , , , , , , isPreview] = useContext(MyContext);
 
+  useEffect(() => {
+    if (isPreview) setBackground(false);
+  }, [isPreview]);
+
   function sectionMainDiv() {
+    if (isPreview) return;
     setBackground(!isBackground);
   }
 
@@ -34,12 +39,15 @@ const ImageComponent = ({ passTheImage }: { passTheImage: string }) => {
   return (
     <ImageOuter>
       <MainDivOfImage $backgroundColor={backgroundColor} $preview={isPreview}>
-        <div onClick={!isPreview ? sectionMainDiv : undefined}>
+        <div
+          onClick={sectionMainDiv}
+          style={{ cursor: isPreview ? "default" : "pointer" }}
+        >
           <img ref={imageRef} src={passTheImage} alt="" />
         </div>
 
         {!isPreview && (
-          <Sidebar open={isBackground} onClose={closeBar}>
+          <Sidebar open={isBackground} onClose={closeBar} label="Image settings">
             <ImageSidebarContent
               backgroundColor={backgroundColor}
               onBackgroundColorChange={handleBackgroundColorChange}

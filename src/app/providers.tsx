@@ -7,6 +7,7 @@ import { ComponentType } from "../../types";
 import GlobalStyle from "@/styles/GlobalStyle";
 import AppShell from "./AppShell";
 import { MyContext } from "@/context/MyContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [componentsArray, setComponentsArray] = useState<ComponentType[]>([]);
@@ -66,22 +67,24 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           },
         }}
       />
-      <MyContext.Provider
-        value={[
-          componentsArray,
-          setComponentsArray,
-          isNewSection,
-          setNewSection,
-          editorText,
-          setEditorText,
-          addNewSection,
-          setAddNewSection,
-          isPreview,
-          setIsPreview,
-        ]}
-      >
-        <AppShell>{children}</AppShell>
-      </MyContext.Provider>
+      <ThemeProvider>
+        <MyContext.Provider
+          value={[
+            componentsArray,
+            setComponentsArray,
+            isNewSection,
+            setNewSection,
+            editorText,
+            setEditorText,
+            addNewSection,
+            setAddNewSection,
+            isPreview,
+            setIsPreview,
+          ]}
+        >
+          <AppShell>{children}</AppShell>
+        </MyContext.Provider>
+      </ThemeProvider>
     </StyledComponentsRegistry>
   );
 }
