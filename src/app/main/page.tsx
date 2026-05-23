@@ -14,6 +14,7 @@ import {
   DragOverlay,
   DragStartEvent,
 } from "@dnd-kit/core";
+import { useDashboardDndSensors } from "@/hooks/useDashboardDndSensors";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import SortableComponents, {
   SortableItemPreview,
@@ -48,6 +49,7 @@ const MainComponent = () => {
   const { hydrated } = useDashboardContext();
 
   const [activeId, setActiveId] = useState<string | null>(null);
+  const sensors = useDashboardDndSensors();
 
   const createNewSection = () => {
     setNewSection(!isNewSection);
@@ -108,6 +110,7 @@ const MainComponent = () => {
       ) : (
         <MainDiv>
           <DndContext
+            sensors={sensors}
             collisionDetection={closestCorners}
             onDragStart={handleDragStart}
             onDragCancel={handleDragCancel}

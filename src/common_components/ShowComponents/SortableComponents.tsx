@@ -11,9 +11,9 @@ import {
   DeleteButton,
   DragButton,
   ImageDiv,
-  ComponentsDiv,
-  LeftControls,
-  RightControls,
+  DragHandle,
+  SectionControlsBar,
+  ActionButtons,
   CardBody,
   CardContent,
   ResizableSection,
@@ -85,7 +85,7 @@ const SortableComponents = ({
   passingImage,
   copyText,
 }: PropsType) => {
-  const { attributes, listeners, setNodeRef, transition, transform, isDragging } =
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transition, transform, isDragging } =
     useSortable({ id });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -203,13 +203,36 @@ const SortableComponents = ({
   return (
     <CardWrapper style={style} ref={setNodeRef} $isDragging={isDragging} $isPreview={isPreview}>
       {!isPreview && (
-        <LeftControls>
-          <ComponentsDiv {...attributes} {...listeners}>
-            <DragButton type="button" aria-label="Drag section">
-              <Image src={dragIcon} width={15} height={15} alt="drag handle" />
+        <SectionControlsBar>
+          <DragHandle
+            ref={setActivatorNodeRef}
+            {...attributes}
+            {...listeners}
+            aria-label="Drag to reorder section"
+          >
+            <DragButton type="button" tabIndex={-1} aria-hidden>
+              <Image src={dragIcon} width={16} height={16} alt="" aria-hidden />
             </DragButton>
-          </ComponentsDiv>
-        </LeftControls>
+          </DragHandle>
+
+          <ActionButtons>
+            <CopyButton
+              type="button"
+              onClick={() => handleCopy(id)}
+              aria-label="Copy section"
+            >
+              <Image src={copy} width={16} height={16} alt="" aria-hidden />
+            </CopyButton>
+
+            <DeleteButton
+              type="button"
+              onClick={handleDeleteClick}
+              aria-label="Delete section"
+            >
+              <Image src={deleteIcon} width={16} height={16} alt="" aria-hidden />
+            </DeleteButton>
+          </ActionButtons>
+        </SectionControlsBar>
       )}
 
       <CardBody>
@@ -240,26 +263,6 @@ const SortableComponents = ({
           </ResizableSection>
         </AlignedContent>
       </CardBody>
-
-      {!isPreview && (
-        <RightControls>
-          <CopyButton
-            type="button"
-            onClick={() => handleCopy(id)}
-            aria-label="Copy section"
-          >
-            <Image src={copy} width={15} height={15} alt="copy" />
-          </CopyButton>
-
-          <DeleteButton
-            type="button"
-            onClick={handleDeleteClick}
-            aria-label="Delete section"
-          >
-            <Image src={deleteIcon} width={15} height={15} alt="delete" />
-          </DeleteButton>
-        </RightControls>
-      )}
 
       <DeleteConfirmModal
         isOpen={showDeleteModal}

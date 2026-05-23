@@ -1,39 +1,60 @@
 import styled from "styled-components";
 
 const iconButtonBase = `
-  min-width: clamp(32px, 8vw, 36px);
-  min-height: clamp(32px, 8vw, 36px);
-  display: flex;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  cursor: pointer;
+  cursor: grab;
   background-color: white;
-  padding: clamp(4px, 1vw, 7px);
+  padding: 10px;
   border-radius: 50%;
   border: 1px solid #e0e0e0;
   box-sizing: border-box;
-  visibility: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 
   img {
-    width: clamp(12px, 3vw, 15px);
-    height: clamp(12px, 3vw, 15px);
+    width: 16px;
+    height: 16px;
     object-fit: contain;
+    pointer-events: none;
   }
 
-  /* FIXED: buttons shrank on large screens → fixed 36px min on desktop */
+  &:active {
+    cursor: grabbing;
+    transform: scale(0.96);
+  }
+
   @media (min-width: 1024px) {
     min-width: 36px;
     min-height: 36px;
+    padding: 7px;
+    visibility: hidden;
+    box-shadow: none;
+
+    img {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  @media (max-width: 1023px), (hover: none) {
+    visibility: visible;
   }
 `;
 
 export const CopyButton = styled.button`
   ${iconButtonBase}
+  cursor: pointer;
 `;
 
 export const DeleteButton = styled.button`
   ${iconButtonBase}
+  cursor: pointer;
 `;
 
 export const DragButton = styled.button`
@@ -48,10 +69,10 @@ export const Container = styled.div`
   display: contents;
 `;
 
-/* Card row — controls float outside the aligned content column on desktop */
+/* Card row — compact toolbar on mobile, floating controls on desktop */
 export const CardWrapper = styled.div<{ $isDragging?: boolean; $isPreview?: boolean }>`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: stretch;
   width: 100%;
   max-width: 100%;
@@ -67,22 +88,16 @@ export const CardWrapper = styled.div<{ $isDragging?: boolean; $isPreview?: bool
   border-radius: 0;
   border-bottom: none;
 
-  @media (max-width: 1023px) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "left-controls right-controls"
-      "body body";
-  }
-
   @media (min-width: 1024px) {
     display: block;
   }
 
-  &:hover ${CopyButton},
-  &:hover ${DeleteButton},
-  &:hover ${DragButton} {
-    visibility: visible;
+  @media (min-width: 1024px) and (hover: hover) {
+    &:hover ${CopyButton},
+    &:hover ${DeleteButton},
+    &:hover ${DragButton} {
+      visibility: visible;
+    }
   }
 `;
 
@@ -99,27 +114,37 @@ export const DragOverlayWrapper = styled.div`
   overflow: hidden;
 `;
 
-/* FIXED: drag handle wrapper — keeps DnD listeners on a tappable flex child */
-export const ComponentsDiv = styled.div`
+export const SectionControlsBar = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 8px 0;
+  box-sizing: border-box;
   flex-shrink: 0;
+
+  @media (min-width: 1024px) {
+    display: contents;
+  }
 `;
 
-export const LeftControls = styled.div`
+export const DragHandle = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8px;
   flex-shrink: 0;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  cursor: grab;
 
-  @media (max-width: 1023px) {
-    grid-area: left-controls;
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: 8px 12px 0;
+  ${DragButton} {
+    pointer-events: none;
+  }
+
+  &:active {
+    cursor: grabbing;
   }
 
   @media (min-width: 1024px) {
@@ -128,25 +153,15 @@ export const LeftControls = styled.div`
     top: 50%;
     transform: translateY(-50%);
     z-index: 5;
-    padding: 0;
   }
 `;
 
-export const RightControls = styled.div`
+export const ActionButtons = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: clamp(4px, 1vw, 8px);
-  padding: 8px;
+  justify-content: flex-end;
+  gap: 8px;
   flex-shrink: 0;
-
-  @media (max-width: 1023px) {
-    grid-area: right-controls;
-    flex-direction: row;
-    justify-content: flex-end;
-    padding: 0 12px 8px;
-  }
 
   @media (min-width: 1024px) {
     position: absolute;
@@ -154,9 +169,19 @@ export const RightControls = styled.div`
     top: 50%;
     transform: translateY(-50%);
     z-index: 5;
-    padding: 0;
+    flex-direction: column;
+    gap: clamp(4px, 1vw, 8px);
   }
 `;
+
+/* @deprecated — use DragHandle */
+export const ComponentsDiv = DragHandle;
+
+/* @deprecated — use SectionControlsBar */
+export const LeftControls = SectionControlsBar;
+
+/* @deprecated — use ActionButtons */
+export const RightControls = ActionButtons;
 
 export const CardBody = styled.div`
   flex: 1;
@@ -166,10 +191,6 @@ export const CardBody = styled.div`
   overflow: visible;
   position: relative;
   width: 100%;
-
-  @media (max-width: 1023px) {
-    grid-area: body;
-  }
 `;
 
 export const ResizableSection = styled.div<{ $height: number }>`
@@ -196,7 +217,7 @@ export const SectionResizeHandle = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  height: 10px;
+  height: 16px;
   cursor: ns-resize;
   z-index: 7;
   display: flex;
