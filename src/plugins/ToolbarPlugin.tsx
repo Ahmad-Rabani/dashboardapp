@@ -26,7 +26,7 @@ import underline from "../../img/type-underline.svg";
 import right from "../../img/text-right.svg";
 import center from "../../img/text-center.svg";
 import left from "../../img/text-left.svg";
-import ToolbarColorControl from "./ToolbarColorControl";
+import ToolbarColorControl, { preventEditorFocusLoss } from "./ToolbarColorControl";
 import {
   UndoRedoDiv,
   TextStyle,
@@ -110,6 +110,7 @@ export default function ToolbarPlugin() {
           $patchStyleText(selection, styles);
         }
       });
+      editor.focus();
     },
     [editor]
   );
@@ -119,6 +120,7 @@ export default function ToolbarPlugin() {
       <UndoRedoDiv>
         <button
           disabled={!canUndo}
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(UNDO_COMMAND, undefined);
           }}
@@ -129,6 +131,7 @@ export default function ToolbarPlugin() {
         </button>
         <button
           disabled={!canRedo}
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(REDO_COMMAND, undefined);
           }}
@@ -142,6 +145,7 @@ export default function ToolbarPlugin() {
       <Divider />
       <TextStyle>
         <button
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
           }}
@@ -151,6 +155,7 @@ export default function ToolbarPlugin() {
           <Image width={20} height={20} src={bold} alt="" />
         </button>
         <button
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
           }}
@@ -160,6 +165,7 @@ export default function ToolbarPlugin() {
           <Image width={20} height={20} src={italic} alt="" />
         </button>
         <button
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
           }}
@@ -169,6 +175,7 @@ export default function ToolbarPlugin() {
           <Image width={20} height={20} src={underline} alt="" />
         </button>
         <button
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
           }}
@@ -204,6 +211,7 @@ export default function ToolbarPlugin() {
       <Divider />
       <TextAllignment>
         <button
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
           }}
@@ -213,6 +221,7 @@ export default function ToolbarPlugin() {
           <Image width={20} height={20} src={left} alt="" />
         </button>
         <button
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
           }}
@@ -222,6 +231,7 @@ export default function ToolbarPlugin() {
           <Image width={20} height={20} src={center} alt="" />
         </button>
         <button
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
           }}
@@ -231,6 +241,7 @@ export default function ToolbarPlugin() {
           <Image width={20} height={20} src={right} alt="" />
         </button>
         <button
+          onMouseDown={preventEditorFocusLoss}
           onClick={() => {
             editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
           }}

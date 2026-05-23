@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { notify } from "@/utils/toast";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
@@ -26,7 +26,6 @@ import dragIcon from "../../../img/drag.png";
 import { MyContext } from "@/context/MyContext";
 import { v4 as uuidv4 } from "uuid";
 import LexicalTextEditor from "@/plugins/LexicalTextEditor/page";
-import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import { PropsType, ComponentType } from "../../../types";
 import { EditorStateType } from "../../../types";
 import { AlignedContent } from "@/styles/AppLayout";
@@ -87,8 +86,6 @@ const SortableComponents = ({
 }: PropsType) => {
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transition, transform, isDragging } =
     useSortable({ id });
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -153,21 +150,12 @@ const SortableComponents = ({
   };
 
   const handleDeleteClick = () => {
-    setShowDeleteModal(true);
-  };
-
-  const handleConfirmDelete = () => {
-    setShowDeleteModal(false);
     try {
       deleteSection(id);
       notify.sectionDeleted();
     } catch {
       notify.error();
     }
-  };
-
-  const handleCancelDelete = () => {
-    setShowDeleteModal(false);
   };
 
   const handleCopy = (sectionId: string) => {
@@ -263,12 +251,6 @@ const SortableComponents = ({
           </ResizableSection>
         </AlignedContent>
       </CardBody>
-
-      <DeleteConfirmModal
-        isOpen={showDeleteModal}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-      />
     </CardWrapper>
   );
 };

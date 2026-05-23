@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBriefcase,
@@ -8,6 +8,7 @@ import {
   faDownload,
   faFileImport,
   faLayerGroup,
+  faPenToSquare,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { LayoutTemplate, HardDriveDownload, HardDriveUpload } from "lucide-react";
@@ -46,10 +47,13 @@ import { toStoredSections } from "@/utils/dashboardStorage";
 import { cn } from "@/lib/utils";
 
 const CATEGORY_ICONS = {
+  custom: faPenToSquare,
   business: faBriefcase,
   personal: faUser,
   marketing: faBullhorn,
 } as const;
+
+const SIDEBAR_INSET = "min(380px, 94vw)";
 
 interface WorkspacePanelProps {
   open: boolean;
@@ -86,6 +90,15 @@ export default function WorkspacePanel({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pending, setPending] = useState<PendingAction | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    document.documentElement.style.setProperty("--editor-sidebar-inset", SIDEBAR_INSET);
+    return () => {
+      document.documentElement.style.removeProperty("--editor-sidebar-inset");
+    };
+  }, [open]);
 
   const hasContent = componentsArray.length > 0;
 
@@ -262,7 +275,9 @@ export default function WorkspacePanel({
                         {template.description}
                       </p>
                       <p className="mt-2 text-[10px] font-medium text-indigo-600">
-                        {template.snapshot.sections.length} sections · Use template
+                        {template.snapshot.sections.length === 0
+                          ? "Blank page · Build from scratch"
+                          : `${template.snapshot.sections.length} sections · Use template`}
                       </p>
                     </button>
                   </li>

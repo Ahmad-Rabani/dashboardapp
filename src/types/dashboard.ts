@@ -74,7 +74,7 @@ export function createDefaultEditorContent(text = ""): EditorStateType {
               detail: 0,
               format: 0,
               mode: "normal",
-              style: "color: black;",
+              style: "",
               text,
               type: "text",
               version: 1,

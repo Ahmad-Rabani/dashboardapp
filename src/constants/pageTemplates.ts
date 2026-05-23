@@ -16,7 +16,7 @@ export interface PageTemplate {
   id: string;
   name: string;
   description: string;
-  category: "business" | "personal" | "marketing";
+  category: "business" | "personal" | "marketing" | "custom";
   accent: string;
   snapshot: DashboardSnapshot;
 }
@@ -47,7 +47,22 @@ function imageSection(
   };
 }
 
+export const CUSTOM_BLANK_TEMPLATE: PageTemplate = {
+  id: "custom-blank",
+  name: "Custom Template",
+  description: "Start with a blank page and add your own sections manually.",
+  category: "custom",
+  accent: "#64748b",
+  snapshot: {
+    version: 1,
+    header: { ...DEFAULT_HEADER_SETTINGS },
+    footer: { ...DEFAULT_FOOTER_SETTINGS },
+    sections: [],
+  },
+};
+
 export const PAGE_TEMPLATES: PageTemplate[] = [
+  CUSTOM_BLANK_TEMPLATE,
   {
     id: "local-business",
     name: "Local Business",
@@ -272,6 +287,7 @@ export const TEMPLATE_CATEGORIES: Record<
   PageTemplate["category"],
   string
 > = {
+  custom: "Blank",
   business: "Business",
   personal: "Personal",
   marketing: "Marketing",
