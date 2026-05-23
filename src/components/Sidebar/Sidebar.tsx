@@ -285,6 +285,9 @@ export default function Sidebar({ className }: SidebarProps) {
     ,
     setAddNewSection,
     isPreview,
+    ,
+    ,
+    resetDashboard,
   ] = useContext(MyContext);
 
   const sectionCount = componentsArray.length;
@@ -326,7 +329,8 @@ export default function Sidebar({ className }: SidebarProps) {
 
   const handleReset = useCallback(() => {
     resetAll();
-  }, [resetAll]);
+    resetDashboard?.();
+  }, [resetAll, resetDashboard]);
 
   if (isPreview) return null;
 

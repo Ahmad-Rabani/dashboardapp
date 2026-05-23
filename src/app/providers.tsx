@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import StyledComponentsRegistry from "../../registry";
 import { ComponentType } from "../../types";
@@ -8,8 +8,19 @@ import GlobalStyle from "@/styles/GlobalStyle";
 import AppShell from "./AppShell";
 import { MyContext } from "@/context/MyContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import {
+  DashboardProvider,
+  useDashboardContext,
+} from "@/context/DashboardContext";
+import {
+  clearDashboardStorage,
+  fromStoredSections,
+  loadDashboard,
+  saveDashboard,
+  toStoredSections,
+} from "@/utils/dashboardStorage";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+function DashboardPersistence({ children }: { children: React.ReactNode }) {
   const [componentsArray, setComponentsArray] = useState<ComponentType[]>([]);
   const [isNewSection, setNewSection] = useState(false);
   const [editorText, setEditorText] = useState("");
@@ -17,10 +28,78 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [isPreview, setIsPreview] = useState(false);
   const [insertIndex, setInsertIndex] = useState(0);
 
+  const {
+    header,
+    footer,
+    hydrated,
+    setHydrated,
+    setHeader,
+    setFooter,
+    resetLayoutSettings,
+  } = useDashboardContext();
+
+  useEffect(() => {
+    const saved = loadDashboard();
+    if (saved) {
+      setComponentsArray(fromStoredSections(saved.sections));
+      setHeader(saved.header);
+      setFooter(saved.footer);
+    }
+    setHydrated(true);
+  }, [setFooter, setHeader, setHydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+
+    const timeout = window.setTimeout(() => {
+      saveDashboard({
+        version: 1,
+        sections: toStoredSections(componentsArray),
+        header,
+        footer,
+      });
+    }, 400);
+
+    return () => window.clearTimeout(timeout);
+  }, [componentsArray, header, footer, hydrated]);
+
+  const resetDashboard = useCallback(() => {
+    setComponentsArray([]);
+    setNewSection(false);
+    setAddNewSection(false);
+    setIsPreview(false);
+    setInsertIndex(0);
+    resetLayoutSettings();
+    clearDashboardStorage();
+  }, [resetLayoutSettings]);
+
+  return (
+    <MyContext.Provider
+      value={[
+        componentsArray,
+        setComponentsArray,
+        isNewSection,
+        setNewSection,
+        editorText,
+        setEditorText,
+        addNewSection,
+        setAddNewSection,
+        isPreview,
+        setIsPreview,
+        insertIndex,
+        setInsertIndex,
+        resetDashboard,
+      ]}
+    >
+      <AppShell>{children}</AppShell>
+    </MyContext.Provider>
+  );
+}
+
+export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <StyledComponentsRegistry>
       <GlobalStyle />
-      {/* FIXED: toast position bottom-right → top-center with advanced styling */}
       <Toaster
         position="top-center"
         gutter={12}
@@ -69,24 +148,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         }}
       />
       <ThemeProvider>
-        <MyContext.Provider
-          value={[
-            componentsArray,
-            setComponentsArray,
-            isNewSection,
-            setNewSection,
-            editorText,
-            setEditorText,
-            addNewSection,
-            setAddNewSection,
-            isPreview,
-            setIsPreview,
-            insertIndex,
-            setInsertIndex,
-          ]}
-        >
-          <AppShell>{children}</AppShell>
-        </MyContext.Provider>
+        <DashboardProvider>
+          <DashboardPersistence>{children}</DashboardPersistence>
+        </DashboardProvider>
       </ThemeProvider>
     </StyledComponentsRegistry>
   );

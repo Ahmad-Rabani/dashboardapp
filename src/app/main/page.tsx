@@ -2,23 +2,11 @@
 
 import React, { Fragment, useContext, useState } from "react";
 import { notify } from "@/utils/toast";
-import { downloadDashboardAsPdf } from "@/utils/downloadPdf";
-import {
-  MainDiv,
-  AddSection,
-  PreviewButton,
-  PreviewActions,
-  DownloadPdfButton,
-  SortableList,
-} from "./MainStylled";
-import eyeIcon from "../../../img/eye.png";
-import add from "../../../img/add.png";
-import noEdit from "../../../img/delete (1).png";
-import Image from "next/image";
-import { Download } from "lucide-react";
+import { MainDiv, SortableList } from "./MainStylled";
 import NewSection from "@/common_components/Add New Section/NewSection";
 import EmptyState from "@/components/EmptyState";
 import { MyContext } from "@/context/MyContext";
+import { useDashboardContext } from "@/context/DashboardContext";
 import { ComponentType, DragEvent } from "../../../types";
 import {
   closestCorners,
@@ -49,17 +37,17 @@ const MainComponent = () => {
     setComponentsArray,
     isNewSection,
     setNewSection,
-    editorText,
-    setEditorText,
+    ,
+    ,
     addNewSection,
-    setAddNewSection,
+    ,
     isPreview,
-    setIsPreview,
+    ,
     insertIndex,
   ] = useContext(MyContext);
+  const { hydrated } = useDashboardContext();
 
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
 
   const createNewSection = () => {
     setNewSection(!isNewSection);
@@ -95,58 +83,20 @@ const MainComponent = () => {
       return arrayMove(prevItems, activeIndex, overIndex);
     });
 
-    // ADDED: toast on successful reorder only when position actually changes
     notify.sectionReordered();
   }
 
-  function handlePreviewButton() {
-    setIsPreview(!isPreview);
-    setNewSection(false);
-    setAddNewSection(false);
-  }
-
-  async function handleDownloadPdf() {
-    if (componentsArray.length === 0 || isDownloadingPdf) return;
-
-    setIsDownloadingPdf(true);
-    try {
-      await downloadDashboardAsPdf("dashboard.pdf");
-    } catch {
-      notify.error("Could not generate PDF. Please try again.");
-    } finally {
-      setIsDownloadingPdf(false);
-    }
-  }
-
   const isEmpty = componentsArray.length === 0;
-  const showEmptyState = isEmpty && !isNewSection && !addNewSection && !isPreview;
-  const showPreviewEmpty = isEmpty && isPreview;
+  const showEmptyState =
+    hydrated && isEmpty && !isNewSection && !addNewSection && !isPreview;
+  const showPreviewEmpty = hydrated && isEmpty && isPreview;
+
+  if (!hydrated) {
+    return null;
+  }
 
   return (
     <>
-      <PreviewActions data-no-export>
-        <PreviewButton onClick={handlePreviewButton}>
-          {isPreview ? (
-            <Image width={15} height={15} src={noEdit} alt="" />
-          ) : (
-            <Image width={15} height={15} src={eyeIcon} alt="" />
-          )}
-          {isPreview ? "Edit Mode" : "Preview"}
-        </PreviewButton>
-
-        {isPreview && (
-          <DownloadPdfButton
-            type="button"
-            onClick={handleDownloadPdf}
-            disabled={isEmpty || isDownloadingPdf}
-            aria-busy={isDownloadingPdf}
-          >
-            <Download size={15} aria-hidden />
-            {isDownloadingPdf ? "Generating..." : "Download as PDF"}
-          </DownloadPdfButton>
-        )}
-      </PreviewActions>
-
       {showEmptyState ? (
         <EmptyStateWrapper>
           <EmptyState onAddSection={createNewSection} />
@@ -193,15 +143,19 @@ const MainComponent = () => {
                 <DragOverlayWrapper>
                   <AlignedContent>
                     <SortableItemPreview
-                      passingComponents={activeItem.component}
+                      sectionKey={activeItem.key}
+                      isTextSection={Boolean(activeItem.component)}
                       passingImage={activeItem.img}
                       copyText={activeItem.innerText}
+                      editorContent={activeItem.editorContent}
+                      imageBackgroundColor={activeItem.imageBackgroundColor}
                       height={
                         activeItem.height ??
                         (activeItem.component
                           ? DEFAULT_TEXT_SECTION_HEIGHT
                           : DEFAULT_IMAGE_SECTION_HEIGHT)
                       }
+                      onImageBackgroundColorChange={() => {}}
                     />
                   </AlignedContent>
                 </DragOverlayWrapper>
@@ -215,13 +169,6 @@ const MainComponent = () => {
         <ContentWrapper>
           <NewSection currentIndex={Math.max(componentsArray.length - 1, 0)} />
         </ContentWrapper>
-      )}
-
-      {!isPreview && (
-        <AddSection onClick={createNewSection} type="button">
-          <Image width={15} height={15} src={add} alt="" />
-          Add Section
-        </AddSection>
       )}
     </>
   );

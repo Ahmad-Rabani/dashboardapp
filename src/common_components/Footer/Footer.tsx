@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import {
   MainDiv,
   FooterDiv,
@@ -16,22 +16,26 @@ import {
   faStore,
 } from "@fortawesome/free-solid-svg-icons";
 import { MyContext } from "@/context/MyContext";
+import { useDashboardContext } from "@/context/DashboardContext";
 import { AlignedContent } from "@/styles/AppLayout";
 
 const Footer = () => {
-  const [isFooter, setFooter] = useState(false);
-  const [name, setName] = useState<string>("shop desription");
-  const [nameCheckbox, setNameCheckbox] = useState(false);
-  const [address, setAddress] = useState<string>("Address");
-  const [addressCheckbox, setAddressCheckbox] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState<string>("Phone Number");
-  const [phoneNumberCheckbox, setPhoneNumberCheckbox] = useState(false);
-  const [email, setEmail] = useState<string>("Email");
-  const [emailCheckbox, setEmailCheckbox] = useState(false);
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
-  const [textColor, setTextColor] = useState<string>("#000000");
-  const [linkColor, setLinkColor] = useState<string>("#2563eb");
+  const [isFooter, setFooter] = React.useState(false);
   const refFooter = useRef<HTMLInputElement>(null);
+  const { footer, updateFooter } = useDashboardContext();
+  const {
+    name,
+    nameCheckbox,
+    address,
+    addressCheckbox,
+    phoneNumber,
+    phoneNumberCheckbox,
+    email,
+    emailCheckbox,
+    backgroundColor,
+    textColor,
+    linkColor,
+  } = footer;
 
   const [, , , , , , , , isPreview] = useContext(MyContext);
 
@@ -85,8 +89,8 @@ const Footer = () => {
                 label: "Name",
                 value: name,
                 enabled: nameCheckbox,
-                onValueChange: setName,
-                onEnabledChange: setNameCheckbox,
+                onValueChange: (value) => updateFooter({ name: value }),
+                onEnabledChange: (value) => updateFooter({ nameCheckbox: value }),
                 placeholder: name,
                 icon: faStore,
               },
@@ -94,8 +98,9 @@ const Footer = () => {
                 label: "Address",
                 value: address,
                 enabled: addressCheckbox,
-                onValueChange: setAddress,
-                onEnabledChange: setAddressCheckbox,
+                onValueChange: (value) => updateFooter({ address: value }),
+                onEnabledChange: (value) =>
+                  updateFooter({ addressCheckbox: value }),
                 placeholder: address,
                 icon: faLocationDot,
               },
@@ -103,8 +108,9 @@ const Footer = () => {
                 label: "Phone Number",
                 value: phoneNumber,
                 enabled: phoneNumberCheckbox,
-                onValueChange: setPhoneNumber,
-                onEnabledChange: setPhoneNumberCheckbox,
+                onValueChange: (value) => updateFooter({ phoneNumber: value }),
+                onEnabledChange: (value) =>
+                  updateFooter({ phoneNumberCheckbox: value }),
                 placeholder: phoneNumber,
                 icon: faPhone,
               },
@@ -112,18 +118,20 @@ const Footer = () => {
                 label: "Email",
                 value: email,
                 enabled: emailCheckbox,
-                onValueChange: setEmail,
-                onEnabledChange: setEmailCheckbox,
+                onValueChange: (value) => updateFooter({ email: value }),
+                onEnabledChange: (value) => updateFooter({ emailCheckbox: value }),
                 placeholder: email,
                 icon: faEnvelope,
               },
             }}
             backgroundColor={backgroundColor}
-            onBackgroundColorChange={setBackgroundColor}
+            onBackgroundColorChange={(value) =>
+              updateFooter({ backgroundColor: value })
+            }
             textColor={textColor}
-            onTextColorChange={setTextColor}
+            onTextColorChange={(value) => updateFooter({ textColor: value })}
             linkColor={linkColor}
-            onLinkColorChange={setLinkColor}
+            onLinkColorChange={(value) => updateFooter({ linkColor: value })}
             onClose={closeBar}
           />
         </Sidebar>

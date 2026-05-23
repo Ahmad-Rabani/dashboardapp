@@ -1,22 +1,25 @@
 "use client";
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { MainDiv, HeaderDiv, HeaderText } from "./HeaderStylled";
 import Sidebar from "../sidebar/Sidebar";
 import HeaderSidebarContent from "../sidebar/HeaderSidebarContent";
 import { MyContext } from "@/context/MyContext";
-import { DEFAULT_FONT_FAMILY } from "@/constants/fontFamilies";
+import { useDashboardContext } from "@/context/DashboardContext";
 import { AlignedContent } from "@/styles/AppLayout";
 
 const Header = () => {
-  const [isHeader, setHeader] = useState(false);
-  const [headerText, setHeaderText] = useState("Header");
-  const [alignment, setAlignment] = useState<string>("center");
-  const [textSize, setTextSize] = useState<string>("25");
-  const [textColor, setTextColor] = useState<string>("#000000");
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
-  const [fontFamily, setFontFamily] = useState(DEFAULT_FONT_FAMILY);
+  const [isHeader, setHeader] = React.useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
+  const { header, updateHeader } = useDashboardContext();
+  const {
+    headerText,
+    alignment,
+    textSize,
+    textColor,
+    backgroundColor,
+    fontFamily,
+  } = header;
 
   const [, , , , , , , , isPreview] = useContext(MyContext);
 
@@ -63,17 +66,19 @@ const Header = () => {
           <Sidebar open={isHeader} onClose={closeBar} label="Header settings">
             <HeaderSidebarContent
               headerText={headerText}
-              onHeaderTextChange={setHeaderText}
+              onHeaderTextChange={(value) => updateHeader({ headerText: value })}
               alignment={alignment}
-              onAlignmentChange={setAlignment}
+              onAlignmentChange={(value) => updateHeader({ alignment: value })}
               textSize={textSize}
-              onTextSizeChange={setTextSize}
+              onTextSizeChange={(value) => updateHeader({ textSize: value })}
               fontFamily={fontFamily}
-              onFontFamilyChange={setFontFamily}
+              onFontFamilyChange={(value) => updateHeader({ fontFamily: value })}
               textColor={textColor}
-              onTextColorChange={setTextColor}
+              onTextColorChange={(value) => updateHeader({ textColor: value })}
               backgroundColor={backgroundColor}
-              onBackgroundColorChange={setBackgroundColor}
+              onBackgroundColorChange={(value) =>
+                updateHeader({ backgroundColor: value })
+              }
               onClose={closeBar}
             />
           </Sidebar>

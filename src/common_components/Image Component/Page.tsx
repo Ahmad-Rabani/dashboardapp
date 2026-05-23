@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { notify } from "@/utils/toast";
 import Sidebar from "../sidebar/Sidebar";
 import ImageSidebarContent from "../sidebar/ImageSidebarContent";
@@ -10,12 +10,15 @@ import { MyContext } from "@/context/MyContext";
 const ImageComponent = ({
   passTheImage,
   height,
+  backgroundColor = "#ececff",
+  onBackgroundColorChange,
 }: {
   passTheImage: string;
   height?: number;
+  backgroundColor?: string;
+  onBackgroundColorChange?: (value: string) => void;
 }) => {
-  const [backgroundColor, setBackgroundColor] = useState("#ececff");
-  const [isBackground, setBackground] = useState(false);
+  const [isBackground, setBackground] = React.useState(false);
   const imageRef = useRef(null);
 
   const [, , , , , , , , isPreview] = useContext(MyContext);
@@ -35,7 +38,7 @@ const ImageComponent = ({
 
   function handleBackgroundColorChange(value: string) {
     try {
-      setBackgroundColor(value);
+      onBackgroundColorChange?.(value);
       notify.imageUpdated();
     } catch {
       notify.error();

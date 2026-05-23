@@ -28,31 +28,51 @@ import { v4 as uuidv4 } from "uuid";
 import LexicalTextEditor from "@/plugins/LexicalTextEditor/page";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import { PropsType, ComponentType } from "../../../types";
+import { EditorStateType } from "../../../types";
 import { AlignedContent } from "@/styles/AppLayout";
 import { useSectionResize } from "@/hooks/useSectionResize";
 import {
   DEFAULT_IMAGE_SECTION_HEIGHT,
   DEFAULT_TEXT_SECTION_HEIGHT,
 } from "@/constants/sectionLayout";
+import { extractInnerText } from "@/types/dashboard";
 
-type SortableItemPreviewProps = Pick<
-  PropsType,
-  "passingComponents" | "passingImage" | "copyText"
-> & {
+type SortableItemPreviewProps = {
+  sectionKey: string;
+  isTextSection: boolean;
+  passingImage: string;
+  copyText?: string[];
+  editorContent?: EditorStateType;
+  imageBackgroundColor?: string;
   height: number;
+  onImageBackgroundColorChange: (color: string) => void;
 };
 
 export const SortableItemPreview = ({
-  passingComponents,
+  sectionKey,
+  isTextSection,
   passingImage,
   copyText,
+  editorContent,
+  imageBackgroundColor,
   height,
+  onImageBackgroundColorChange,
 }: SortableItemPreviewProps) =>
-  passingComponents ? (
-    <LexicalTextEditor innerText={copyText ? copyText[0] : ""} height={height} />
+  isTextSection ? (
+    <LexicalTextEditor
+      sectionKey={sectionKey}
+      innerText={copyText ? copyText[0] : ""}
+      editorContent={editorContent}
+      height={height}
+    />
   ) : (
     <ImageDiv>
-      <ImageComponent passTheImage={passingImage} height={height} />
+      <ImageComponent
+        passTheImage={passingImage}
+        height={height}
+        backgroundColor={imageBackgroundColor}
+        onBackgroundColorChange={onImageBackgroundColorChange}
+      />
     </ImageDiv>
   );
 
@@ -65,7 +85,6 @@ const SortableComponents = ({
   const { attributes, listeners, setNodeRef, transition, transform, isDragging } =
     useSortable({ id });
 
-  const [isCopy, setCopy] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const style: React.CSSProperties = {
@@ -73,17 +92,8 @@ const SortableComponents = ({
     transition,
   };
 
-  const [
-    componentsArray,
-    setComponentsArray,
-    ,
-    ,
-    editorText,
-    ,
-    ,
-    ,
-    isPreview,
-  ] = useContext(MyContext);
+  const [componentsArray, setComponentsArray, , , , , , , isPreview] =
+    useContext(MyContext);
 
   const sectionData = useMemo(
     () => componentsArray.find((item: ComponentType) => item.key === id),
@@ -101,6 +111,17 @@ const SortableComponents = ({
       setComponentsArray((prev: ComponentType[]) =>
         prev.map((item) =>
           item.key === id ? { ...item, height: nextHeight } : item
+        )
+      );
+    },
+    [id, setComponentsArray]
+  );
+
+  const updateImageBackgroundColor = useCallback(
+    (color: string) => {
+      setComponentsArray((prev: ComponentType[]) =>
+        prev.map((item) =>
+          item.key === id ? { ...item, imageBackgroundColor: color } : item
         )
       );
     },
@@ -148,7 +169,6 @@ const SortableComponents = ({
         return;
       }
 
-      setCopy(true);
       setComponentsArray([
         ...componentsArray,
         {
@@ -156,9 +176,10 @@ const SortableComponents = ({
           component: itemToCopy.component,
           img: itemToCopy.img,
           height: itemToCopy.height,
-          innerText: editorText.root.children[0].children.map(
-            (child: any) => child.text
-          ),
+          editorContent: itemToCopy.editorContent,
+          innerText:
+            itemToCopy.innerText ?? extractInnerText(itemToCopy.editorContent),
+          imageBackgroundColor: itemToCopy.imageBackgroundColor,
         },
       ]);
       notify.sectionCopied();
@@ -184,10 +205,14 @@ const SortableComponents = ({
           <ResizableSection $height={sectionHeight}>
             <CardContent $height={sectionHeight}>
               <SortableItemPreview
-                passingComponents={passingComponents}
+                sectionKey={id}
+                isTextSection={Boolean(passingComponents)}
                 passingImage={passingImage}
                 copyText={copyText}
+                editorContent={sectionData?.editorContent}
+                imageBackgroundColor={sectionData?.imageBackgroundColor}
                 height={sectionHeight}
+                onImageBackgroundColorChange={updateImageBackgroundColor}
               />
             </CardContent>
 

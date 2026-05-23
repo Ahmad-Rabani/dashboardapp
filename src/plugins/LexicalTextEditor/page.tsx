@@ -5,13 +5,13 @@ import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { Fdiv, TextEditor, PreviewContent } from "./LexicalStylled";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import ExampleTheme from "@/ExampleTheme";
 import ToolbarPlugin from "@/plugins/ToolbarPlugin";
 import { MyContext } from "@/context/MyContext";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { StateTypes, EditorStateType, ChildItemType } from "../../../types";
-import { EditorState } from "lexical";
+import { StateTypes, EditorStateType, ChildItemType, ComponentType } from "../../../types";
+import { createDefaultEditorContent, extractInnerText } from "@/types/dashboard";
 
 const placeholder = "Enter some rich text...";
 
@@ -24,89 +24,72 @@ const editorConfig = {
   theme: ExampleTheme,
 };
 
-export default function LexicalTextEditor({
-  innerText,
-  height,
-}: {
-  innerText: string;
-  height?: number;
-}) {
-  const initial = {
-    root: {
-      children: [
-        {
-          children: [
-            {
-              detail: 0,
-              format: 0,
-              mode: "normal",
-              style: "color: black;",
-              text: innerText ? innerText : "",
-              type: "text",
-              version: 1,
-            },
-          ],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "paragraph",
-          version: 1,
-        },
-      ],
-      direction: "ltr",
-      format: "",
-      indent: 0,
-      type: "root",
-      version: 1,
-    },
-  };
+type OnChangeProps = {
+  onChange: (state: StateTypes) => void;
+};
 
-  const [editorState, setEditorState] = useState(initial);
-
-  const [
-    componentsArray,
-    setComponentsArray,
-    isNewSection,
-    setNewSection,
-    editorText,
-    setEditorText,
-    ,
-    ,
-    isPreview,
-    setIsPreview,
-  ] = useContext(MyContext);
-
-  type OnChangeProps = {
-    onChange: any;
-  };
-
-  const OnChangePlugin: React.FC<OnChangeProps> = ({ onChange }) => {
-    const [editor] = useLexicalComposerContext();
-
-    useEffect(() => {
-      const unregister = editor.registerUpdateListener(({ editorState }) => {
-        onChange(editorState);
-      });
-
-      return () => unregister();
-    }, [editor, onChange]);
-
-    return null;
-  };
-
-  const onChange = (state: StateTypes) => {
-    try {
-      // Assuming state.toJSON() returns a JSON-compatible structure for EditorStateType
-      const editorStateJSON = state.toJSON() as EditorStateType;
-      setEditorState(editorStateJSON);
-    } catch (error) {
-      console.error("Error processing editor state:", error);
-    }
-  };
+const OnChangePlugin: React.FC<OnChangeProps> = ({ onChange }) => {
+  const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
-    setEditorText(editorState);
-  }, [editorState, setEditorText]);
+    const unregister = editor.registerUpdateListener(({ editorState }) => {
+      onChange(editorState as unknown as StateTypes);
+    });
+
+    return () => unregister();
+  }, [editor, onChange]);
+
+  return null;
+};
+
+export default function LexicalTextEditor({
+  sectionKey,
+  innerText,
+  editorContent,
+  height,
+}: {
+  sectionKey?: string;
+  innerText?: string;
+  editorContent?: EditorStateType;
+  height?: number;
+}) {
+  const [editorState, setEditorState] = useState<EditorStateType>(() =>
+    editorContent ?? createDefaultEditorContent(innerText ?? "")
+  );
+
+  const [, setComponentsArray, , , , , , , isPreview] = useContext(MyContext);
+
+  const persistSectionContent = useCallback(
+    (nextState: EditorStateType) => {
+      if (!sectionKey) return;
+
+      setComponentsArray((prev: ComponentType[]) =>
+        prev.map((item) =>
+          item.key === sectionKey
+            ? {
+                ...item,
+                editorContent: nextState,
+                innerText: extractInnerText(nextState),
+              }
+            : item
+        )
+      );
+    },
+    [sectionKey, setComponentsArray]
+  );
+
+  const onChange = useCallback(
+    (state: StateTypes) => {
+      try {
+        const editorStateJSON = state.toJSON() as EditorStateType;
+        setEditorState(editorStateJSON);
+        persistSectionContent(editorStateJSON);
+      } catch (error) {
+        console.error("Error processing editor state:", error);
+      }
+    },
+    [persistSectionContent]
+  );
 
   return (
     <Fdiv $height={height}>
@@ -114,7 +97,7 @@ export default function LexicalTextEditor({
         <div style={{ height: height ? "100%" : undefined, minHeight: 0 }}>
           {isPreview ? (
             <PreviewContent $height={height}>
-              {editorText.root.children[0].children.map(
+              {editorState.root.children[0]?.children?.map(
                 (item: ChildItemType, index: number) => (
                   <p key={index}>{item.text}</p>
                 )
@@ -122,6 +105,7 @@ export default function LexicalTextEditor({
             </PreviewContent>
           ) : (
             <LexicalComposer
+              key={sectionKey}
               initialConfig={{
                 ...editorConfig,
                 editorState: JSON.stringify(editorState),
