@@ -25,23 +25,39 @@ import LexicalTextEditor from "@/plugins/LexicalTextEditor/page";
 import NewSection from "../Add New Section/NewSection";
 import { PropsType, ComponentType } from "../../../types";
 
+type SortableItemPreviewProps = Pick<
+  PropsType,
+  "passingComponents" | "passingImage" | "copyText"
+>;
+
+export const SortableItemPreview = ({
+  passingComponents,
+  passingImage,
+  copyText,
+}: SortableItemPreviewProps) =>
+  passingComponents ? (
+    <LexicalTextEditor innerText={copyText ? copyText[0] : ""} />
+  ) : (
+    <ImageDiv>
+      <ImageComponent passTheImage={passingImage} />
+    </ImageDiv>
+  );
+
 const SortableComponents = ({
   id,
   passingComponents,
   passingImage,
   copyText,
 }: PropsType) => {
-  // Set up the sortable hook
-  const { attributes, listeners, setNodeRef, transition, transform } =
+  const { attributes, listeners, setNodeRef, transition, transform, isDragging } =
     useSortable({ id });
 
   const [isCopy, setCopy] = useState(false);
   const [index, setIndex] = useState<number>(0);
 
-  // Set the draggable style
-  const style = {
+  const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
-    transition: transition || "transform 200ms ease",
+    transition,
   };
 
   // Consume context
@@ -96,14 +112,12 @@ const SortableComponents = ({
   };
 
   return (
-    <MainDiv style={style} ref={setNodeRef}>
-      {passingComponents ? (
-        <LexicalTextEditor innerText={copyText ? copyText[0] : ""} />
-      ) : (
-        <ImageDiv>
-          <ImageComponent passTheImage={passingImage} />
-        </ImageDiv>
-      )}
+    <MainDiv style={style} ref={setNodeRef} $isDragging={isDragging}>
+      <SortableItemPreview
+        passingComponents={passingComponents}
+        passingImage={passingImage}
+        copyText={copyText}
+      />
 
       {!isPreview && (
         <>

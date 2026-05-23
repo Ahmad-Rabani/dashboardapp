@@ -84,19 +84,29 @@ export const Container = styled.div`
   }
 `;
 
-export const MainDiv = styled.div`
+export const MainDiv = styled.div<{ $isDragging?: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
+  /* Avoid overriding dnd-kit inline transform/transition from useSortable */
+  opacity: ${({ $isDragging }) => ($isDragging ? 0.4 : 1)};
 
   &:hover ${CopyButton},
   &:hover ${DeleteButton},
   &:hover ${DragButton} {
     visibility: visible;
   }
+`;
+
+export const DragOverlayWrapper = styled.div`
+  width: 100%;
+  cursor: grabbing;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  transform: scale(1.03);
+  transform-origin: center top;
 `;
 
 export const ComponentsDiv = styled.div`

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { MainDiv, AddSection, PreviewButton } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
 import add from "../../../img/add.png";
@@ -9,10 +9,18 @@ import noEdit from "../../../img/delete (1).png";
 import NewSection from "@/common_components/Add New Section/NewSection";
 import { MyContext } from "../layout";
 import { ComponentType, DragEvent } from "../../../types";
-import { closestCenter, closestCorners, DndContext } from "@dnd-kit/core";
+import {
+  closestCorners,
+  DndContext,
+  DragOverlay,
+  DragStartEvent,
+} from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import SortableComponents from "@/common_components/ShowComponents/SortableComponents";
+import SortableComponents, {
+  SortableItemPreview,
+} from "@/common_components/ShowComponents/SortableComponents";
 import { verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { DragOverlayWrapper } from "@/common_components/ShowComponents/SortableComponentsStylled";
 
 const MainComponent = () => {
   const [
@@ -28,15 +36,34 @@ const MainComponent = () => {
     setIsPreview,
   ] = useContext(MyContext);
 
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   const createNewSection = () => {
     setNewSection(!isNewSection);
   };
 
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(String(event.active.id));
+  }
+
+  function handleDragCancel() {
+    setActiveId(null);
+  }
+
+  const activeItem = componentsArray.find(
+    (item: ComponentType) => item.key === activeId
+  );
+
   // Drag End
   function handleDragEnd(event: DragEvent) {
     const { active, over } = event;
-    if (active.id !== over.id) {
-      setComponentsArray((prevItems: ComponentType | any) => {
+    setActiveId(null);
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    setComponentsArray((prevItems: ComponentType | any) => {
         const activeIndex = prevItems.findIndex(
           (item: ComponentType) => item.key === active.id
         );
@@ -45,7 +72,6 @@ const MainComponent = () => {
         );
         return arrayMove(prevItems, activeIndex, overIndex);
       });
-    }
   }
 
   function handlePreviewButton() {
@@ -67,9 +93,14 @@ const MainComponent = () => {
         {isPreview ? "Edit Mode" : "Preview"}
       </PreviewButton>
 
-      <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
+      <DndContext
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragCancel={handleDragCancel}
+        onDragEnd={handleDragEnd}
+      >
         <SortableContext
-          items={componentsArray}
+          items={componentsArray.map((item: ComponentType) => item.key)}
           strategy={verticalListSortingStrategy}
         >
           {componentsArray.map((item: ComponentType) => (
@@ -82,6 +113,18 @@ const MainComponent = () => {
             />
           ))}
         </SortableContext>
+
+        <DragOverlay dropAnimation={{ duration: 250, easing: "ease" }}>
+          {activeItem ? (
+            <DragOverlayWrapper>
+              <SortableItemPreview
+                passingComponents={activeItem.component}
+                passingImage={activeItem.img}
+                copyText={activeItem.innerText}
+              />
+            </DragOverlayWrapper>
+          ) : null}
+        </DragOverlay>
       </DndContext>
 
       {isNewSection && <NewSection currentIndex={0} />}
