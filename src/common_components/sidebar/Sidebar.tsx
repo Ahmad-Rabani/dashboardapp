@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { Z_INDEX } from "@/styles/zIndex";
 import { cn } from "@/lib/utils";
 
 export interface SidebarProps {
@@ -45,7 +46,8 @@ export default function Sidebar({
   return createPortal(
     <>
       <div
-        className="fixed inset-0 z-[1099] bg-black/50 backdrop-blur-sm animate-in fade-in-0 duration-200"
+        className="fixed inset-0 animate-in fade-in-0 duration-200 bg-black/65 backdrop-blur-[3px]"
+        style={{ zIndex: Z_INDEX.sidebarBackdrop }}
         onClick={onClose}
         aria-hidden="true"
       />
@@ -55,11 +57,13 @@ export default function Sidebar({
         role="dialog"
         aria-modal="true"
         aria-label={label}
+        style={{ zIndex: Z_INDEX.sidebar }}
         className={cn(
-          "fixed top-0 right-0 z-[1100] flex h-[100dvh] w-[min(320px,92vw)] flex-col",
-          "border-l border-white/10 bg-[hsl(var(--sidebar-bg,222_47%_11%))]",
-          "shadow-[-4px_0_24px_rgba(0,0,0,0.2)]",
-          "animate-in slide-in-from-right duration-300"
+          "fixed top-0 right-0 flex h-[100dvh] w-[min(340px,92vw)] flex-col",
+          "border-l border-white/15 bg-[hsl(var(--sidebar-bg,222_47%_11%))]",
+          "shadow-[-8px_0_40px_rgba(0,0,0,0.35)]",
+          "animate-in slide-in-from-right duration-300",
+          "isolate"
         )}
         onClick={(e) => e.stopPropagation()}
       >

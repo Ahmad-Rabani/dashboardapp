@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Z_INDEX } from "@/styles/zIndex";
 
 interface Types {
   $Aligment: string;
@@ -27,7 +28,7 @@ interface BackgroundColorButtonType {
 export const MainDiv = styled.header`
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: ${Z_INDEX.header};
   width: 100%;
   display: flex;
   align-items: center;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Z_INDEX } from "@/styles/zIndex";
 
 /* Inner stack for cards — width comes from ContentWrapper, not this div */
 export const MainDiv = styled.div`
@@ -50,7 +51,7 @@ export const PreviewButton = styled.button`
   font-weight: 530;
   column-gap: clamp(4px, 1vw, 8px);
   font-family: "Inter", sans-serif;
-  z-index: 1200;
+  z-index: ${Z_INDEX.floatingActions};
   transition: box-shadow 0.3s ease, background 0.3s ease;
   box-shadow: 0 4px 15px rgba(15, 15, 108, 0.3);
   box-sizing: border-box;
@@ -84,7 +85,7 @@ export const AddSection = styled.button`
   font-size: clamp(12px, 1.5vw, 14px);
   column-gap: clamp(4px, 1vw, 8px);
   font-family: "Inter", sans-serif;
-  z-index: 900;
+  z-index: ${Z_INDEX.floatingActions};
   transition: box-shadow 0.3s ease, background 0.3s ease;
   box-shadow: 0 4px 15px rgba(15, 15, 108, 0.3);
   box-sizing: border-box;
