@@ -27,6 +27,7 @@ import {
   sidebarLabelClass,
   sidebarMutedClass,
 } from "./SidebarLayout";
+import { FONT_FAMILIES } from "@/constants/fontFamilies";
 import { cn } from "@/lib/utils";
 
 export interface HeaderSidebarContentProps {
@@ -36,6 +37,8 @@ export interface HeaderSidebarContentProps {
   onAlignmentChange: (value: "start" | "center" | "end") => void;
   textSize: string;
   onTextSizeChange: (value: string) => void;
+  fontFamily: string;
+  onFontFamilyChange: (value: string) => void;
   textColor: string;
   onTextColorChange: (value: string) => void;
   backgroundColor: string;
@@ -57,6 +60,8 @@ export default function HeaderSidebarContent(props: HeaderSidebarContentProps) {
     onAlignmentChange,
     textSize,
     onTextSizeChange,
+    fontFamily,
+    onFontFamilyChange,
     textColor,
     onTextColorChange,
     backgroundColor,
@@ -114,19 +119,43 @@ export default function HeaderSidebarContent(props: HeaderSidebarContentProps) {
         </SidebarSection>
 
         <SidebarSection id="typography" icon={faFont} title="Typography">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between gap-2">
-              <Label className={sidebarLabelClass}>Text size</Label>
-              <span className={sidebarMutedClass}>{textSize}px</span>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label className={sidebarLabelClass}>Font style</Label>
+              <div className="grid grid-cols-1 gap-2">
+                {FONT_FAMILIES.map((font) => (
+                  <button
+                    key={font.id}
+                    type="button"
+                    onClick={() => onFontFamilyChange(font.value)}
+                    className={cn(
+                      "rounded-lg border px-3 py-2.5 text-left text-sm transition-colors",
+                      fontFamily === font.value
+                        ? "border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300"
+                        : "border-border bg-background text-foreground hover:bg-muted"
+                    )}
+                    style={{ fontFamily: font.value }}
+                  >
+                    {font.label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <Slider
-              value={[textSizeNum]}
-              min={0}
-              max={50}
-              step={1}
-              onValueChange={(vals) => onTextSizeChange(String(vals[0] ?? 25))}
-              className="[&_.bg-primary]:bg-indigo-500"
-            />
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <Label className={sidebarLabelClass}>Text size</Label>
+                <span className={sidebarMutedClass}>{textSize}px</span>
+              </div>
+              <Slider
+                value={[textSizeNum]}
+                min={0}
+                max={50}
+                step={1}
+                onValueChange={(vals) => onTextSizeChange(String(vals[0] ?? 25))}
+                className="[&_.bg-primary]:bg-indigo-500"
+              />
+            </div>
           </div>
         </SidebarSection>
 

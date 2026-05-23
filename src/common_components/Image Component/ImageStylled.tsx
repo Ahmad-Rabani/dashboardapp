@@ -18,7 +18,7 @@ export const MainDivOfImage = styled.div<BackgroundColorButtonType>`
   min-width: 0;
   margin: 0;
   padding: 0;
-  border: ${(props) => (props.$preview ? "none" : "1px solid orange")};
+  border: ${(props) => (props.$preview ? "none" : "1px solid transparent")};
   ${(props) => surfaceFillCss(props.$backgroundColor)}
   box-sizing: border-box;
   overflow: hidden;

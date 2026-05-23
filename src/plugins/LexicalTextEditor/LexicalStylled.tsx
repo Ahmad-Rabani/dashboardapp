@@ -17,7 +17,7 @@ export const Fdiv = styled.div`
 `;
 
 export const TextEditor = styled.div`
-  border: 2px solid #f5f5f5;
+  border: none;
   border-radius: 0;
   width: 100%;
   max-width: 100%;
@@ -95,12 +95,17 @@ export const PreviewContent = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   padding: clamp(12px, 3vw, 20px);
-  background-color: #fdc386;
+  background-color: white;
   font-size: clamp(13px, 1.5vw, 16px);
   overflow-wrap: break-word;
   word-break: break-word;
+  margin: 0;
 
   p {
     margin: 0 0 0.5em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 `;

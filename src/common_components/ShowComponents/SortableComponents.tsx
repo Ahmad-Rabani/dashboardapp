@@ -11,9 +11,8 @@ import {
   DeleteButton,
   DragButton,
   AddButton,
+  SectionAddZone,
   ImageDiv,
-  Line,
-  Container,
   ComponentsDiv,
   LeftControls,
   RightControls,
@@ -27,7 +26,6 @@ import dragIcon from "../../../img/drag.png";
 import { MyContext } from "@/context/MyContext";
 import { v4 as uuidv4 } from "uuid";
 import LexicalTextEditor from "@/plugins/LexicalTextEditor/page";
-import NewSection from "../Add New Section/NewSection";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import { PropsType, ComponentType } from "../../../types";
 
@@ -59,7 +57,6 @@ const SortableComponents = ({
     useSortable({ id });
 
   const [isCopy, setCopy] = useState(false);
-  const [index, setIndex] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const style: React.CSSProperties = {
@@ -77,6 +74,8 @@ const SortableComponents = ({
     addNewSection,
     setAddNewSection,
     isPreview,
+    insertIndex,
+    setInsertIndex,
   ] = useContext(MyContext);
 
   const deleteSection = (sectionId: string) => {
@@ -133,16 +132,22 @@ const SortableComponents = ({
   };
 
   const handleNewSection = (sectionId: string) => {
-    setAddNewSection(!addNewSection);
-    setNewSection(false);
     const findTheIndex = componentsArray
       .map((item: ComponentType) => item.key)
       .indexOf(sectionId);
-    setIndex(findTheIndex);
+
+    if (addNewSection && insertIndex === findTheIndex) {
+      setAddNewSection(false);
+      return;
+    }
+
+    setInsertIndex(findTheIndex);
+    setAddNewSection(true);
+    setNewSection(false);
   };
 
   return (
-    <CardWrapper style={style} ref={setNodeRef} $isDragging={isDragging}>
+    <CardWrapper style={style} ref={setNodeRef} $isDragging={isDragging} $isPreview={isPreview}>
       {!isPreview && (
         <LeftControls>
           <ComponentsDiv {...attributes} {...listeners}>
@@ -163,12 +168,11 @@ const SortableComponents = ({
         </CardContent>
 
         {!isPreview && (
-          <Container>
-            <Line />
+          <SectionAddZone>
             <AddButton type="button" onClick={() => handleNewSection(id)}>
               +
             </AddButton>
-          </Container>
+          </SectionAddZone>
         )}
       </CardBody>
 
@@ -191,8 +195,6 @@ const SortableComponents = ({
           </DeleteButton>
         </RightControls>
       )}
-
-      {addNewSection && <NewSection currentIndex={index} />}
 
       <DeleteConfirmModal
         isOpen={showDeleteModal}

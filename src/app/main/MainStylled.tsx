@@ -12,7 +12,7 @@ export const MainDiv = styled.div`
   padding: 0;
   box-sizing: border-box;
   min-width: 0;
-  padding-bottom: clamp(72px, 12vw, 96px);
+  padding-bottom: 0;
 `;
 
 /* FIXED: gap between cards → absolute zero gap with hairline dividers only on cards */

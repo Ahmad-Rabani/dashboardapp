@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faCopy, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { PRESET_COLORS } from "@/constants/presetColors";
-import { isGradient, parseGradient } from "@/utils/colorStyle";
+import { buildGradientCss, isGradient, parseGradient } from "@/utils/colorStyle";
 
 export { PRESET_COLORS };
 
@@ -136,8 +136,33 @@ export default function ColorPicker({
   const [colorTab, setColorTab] = useState(() =>
     isGradient(value) ? "gradient" : "presets"
   );
+  const lastEmittedRef = useRef("");
+
+  const emitGradient = useCallback(
+    (
+      type: "linear" | "radial",
+      angle: number,
+      stopList: GradientStop[]
+    ) => {
+      const css = buildGradientCss(
+        type,
+        angle,
+        stopList.map((stop) => stop.color)
+      );
+      if (css === value) return;
+      lastEmittedRef.current = css;
+      onChange(css);
+    },
+    [onChange, value]
+  );
 
   useEffect(() => {
+    if (!isGradient(value)) return;
+    if (value === lastEmittedRef.current) {
+      lastEmittedRef.current = "";
+      return;
+    }
+
     const parsedGrad = parseGradient(value);
     if (!parsedGrad) return;
 
@@ -200,24 +225,22 @@ export default function ColorPicker({
     }
   };
 
-  const gradientCss = useMemo(() => {
-    const colorStops = stops.map((s) => s.color).join(", ");
-    if (gradientType === "radial") {
-      return `radial-gradient(circle, ${colorStops})`;
-    }
-    return `linear-gradient(${gradientAngle}deg, ${colorStops})`;
-  }, [gradientType, gradientAngle, stops]);
+  const gradientCss = useMemo(
+    () => buildGradientCss(gradientType, gradientAngle, stops.map((s) => s.color)),
+    [gradientType, gradientAngle, stops]
+  );
 
-  useEffect(() => {
-    if (colorTab !== "gradient") return;
-    if (value === gradientCss) return;
-    onChange(gradientCss);
-  }, [colorTab, gradientCss, onChange, value]);
+  const handleColorTabChange = (tab: string) => {
+    setColorTab(tab);
+    if (tab === "gradient") {
+      emitGradient(gradientType, gradientAngle, stops);
+    }
+  };
 
   const gridCols = isMobile ? 6 : 8;
 
   return (
-    <Tabs value={colorTab} onValueChange={setColorTab} className="w-full">
+    <Tabs value={colorTab} onValueChange={handleColorTabChange} className="w-full">
       <TabsList className="grid w-full grid-cols-3 bg-muted p-1">
         <TabsTrigger value="presets" className="text-xs">
           Presets
@@ -345,7 +368,11 @@ export default function ColorPicker({
       <TabsContent value="gradient" className="mt-3 space-y-4">
         <Tabs
           value={gradientType}
-          onValueChange={(v) => setGradientType(v as "linear" | "radial")}
+          onValueChange={(v) => {
+            const nextType = v as "linear" | "radial";
+            setGradientType(nextType);
+            emitGradient(nextType, gradientAngle, stops);
+          }}
         >
           <TabsList className="grid w-full grid-cols-2 bg-muted p-1">
             <TabsTrigger value="linear" className="text-xs">
@@ -377,14 +404,29 @@ export default function ColorPicker({
                 />
                 {activeStopId === stop.id && (
                   <div className="absolute left-0 top-11 z-10 w-[200px] rounded-lg border border-border bg-popover p-2 shadow-xl">
+                    <div className="mb-2 flex items-center justify-between gap-2">
+                      <span className="text-xs font-medium text-foreground">
+                        Pick color
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setActiveStopId(null)}
+                        className="flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        aria-label="Close color picker"
+                      >
+                        <FontAwesomeIcon icon={faXmark} className="h-3 w-3" />
+                      </button>
+                    </div>
                     <MiniPresetGrid
                       selected={stop.color}
                       onSelect={(c) => {
-                        setStops((prev) =>
-                          prev.map((s) =>
+                        setStops((prev) => {
+                          const next = prev.map((s) =>
                             s.id === stop.id ? { ...s, color: c } : s
-                          )
-                        );
+                          );
+                          emitGradient(gradientType, gradientAngle, next);
+                          return next;
+                        });
                       }}
                       columns={5}
                     />
@@ -399,10 +441,14 @@ export default function ColorPicker({
                 variant="outline"
                 className="h-9 w-9 rounded-full border-border bg-muted text-foreground"
                 onClick={() =>
-                  setStops((prev) => [
-                    ...prev,
-                    { id: String(Date.now()), color: "#ec4899" },
-                  ])
+                  setStops((prev) => {
+                    const next = [
+                      ...prev,
+                      { id: String(Date.now()), color: "#ec4899" },
+                    ];
+                    emitGradient(gradientType, gradientAngle, next);
+                    return next;
+                  })
                 }
               >
                 +
@@ -414,7 +460,13 @@ export default function ColorPicker({
                 size="icon"
                 variant="outline"
                 className="h-9 w-9 rounded-full border-border bg-muted text-foreground"
-                onClick={() => setStops((prev) => prev.slice(0, -1))}
+                onClick={() =>
+                  setStops((prev) => {
+                    const next = prev.slice(0, -1);
+                    emitGradient(gradientType, gradientAngle, next);
+                    return next;
+                  })
+                }
               >
                 −
               </Button>
@@ -449,7 +501,11 @@ export default function ColorPicker({
                 min={0}
                 max={360}
                 step={1}
-                onValueChange={(vals) => setGradientAngle(vals[0] ?? 0)}
+                onValueChange={(vals) => {
+                  const nextAngle = vals[0] ?? 0;
+                  setGradientAngle(nextAngle);
+                  emitGradient(gradientType, nextAngle, stops);
+                }}
                 className="flex-1"
               />
             </div>

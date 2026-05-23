@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { notify } from "@/utils/toast";
-import { MainDiv, AddSection, PreviewButton, SortableList } from "./MainStylled";
+import { MainDiv, PreviewButton, SortableList } from "./MainStylled";
 import eyeIcon from "../../../img/eye.png";
-import add from "../../../img/add.png";
-import Image from "next/image";
 import noEdit from "../../../img/delete (1).png";
+import Image from "next/image";
 import NewSection from "@/common_components/Add New Section/NewSection";
 import EmptyState from "@/components/EmptyState";
 import { MyContext } from "@/context/MyContext";
@@ -37,6 +36,7 @@ const MainComponent = () => {
     setAddNewSection,
     isPreview,
     setIsPreview,
+    insertIndex,
   ] = useContext(MyContext);
 
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -117,14 +117,18 @@ const MainComponent = () => {
                 strategy={verticalListSortingStrategy}
               >
                 <SortableList>
-                  {componentsArray.map((item: ComponentType) => (
-                    <SortableComponents
-                      key={item.key}
-                      id={item.key}
-                      passingComponents={item.component}
-                      passingImage={item.img}
-                      copyText={item.innerText}
-                    />
+                  {componentsArray.map((item: ComponentType, idx: number) => (
+                    <Fragment key={item.key}>
+                      <SortableComponents
+                        id={item.key}
+                        passingComponents={item.component}
+                        passingImage={item.img}
+                        copyText={item.innerText}
+                      />
+                      {!isPreview && addNewSection && insertIndex === idx && (
+                        <NewSection currentIndex={idx} />
+                      )}
+                    </Fragment>
                   ))}
                 </SortableList>
               </SortableContext>
@@ -145,13 +149,10 @@ const MainComponent = () => {
         </ContentWrapper>
       )}
 
-      {isNewSection && <NewSection currentIndex={0} />}
-
-      {!isPreview && (
-        <AddSection onClick={createNewSection}>
-          <Image width={15} height={15} src={add} alt="" />
-          Add Section
-        </AddSection>
+      {!isPreview && isNewSection && (
+        <ContentWrapper>
+          <NewSection currentIndex={Math.max(componentsArray.length - 1, 0)} />
+        </ContentWrapper>
       )}
     </>
   );

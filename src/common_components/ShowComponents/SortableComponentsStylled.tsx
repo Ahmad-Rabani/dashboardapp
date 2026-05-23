@@ -41,10 +41,7 @@ export const DragButton = styled.button`
 `;
 
 export const Line = styled.hr`
-  width: min(50%, 100%);
-  margin: 0 auto;
-  border: none;
-  border-top: 1px solid #ddd;
+  display: none;
 `;
 
 export const AddButton = styled.button`
@@ -56,29 +53,37 @@ export const AddButton = styled.button`
   background-color: #0f0f6c;
   border: none;
   color: white;
-  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
   font-size: clamp(18px, 4vw, 24px);
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(15, 15, 108, 0.35);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(4px);
+`;
+
+export const SectionAddZone = styled.div`
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 6;
 `;
 
 export const Container = styled.div`
-  position: relative;
-  width: 100%;
-  text-align: center;
-  margin: 0;
-  padding-top: clamp(2px, 0.5vw, 4px);
-
-  &:hover ${AddButton} {
-    visibility: visible;
-  }
+  display: contents;
 `;
 
 /* FIXED: card used column layout with centered action row → row layout with pinned left/right controls on ≥1024px */
-export const CardWrapper = styled.div<{ $isDragging?: boolean }>`
+export const CardWrapper = styled.div<{ $isDragging?: boolean; $isPreview?: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -86,7 +91,7 @@ export const CardWrapper = styled.div<{ $isDragging?: boolean }>`
   max-width: 100%;
   box-sizing: border-box;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   min-width: 0;
   opacity: ${({ $isDragging }) => ($isDragging ? 0.4 : 1)};
 
@@ -94,10 +99,12 @@ export const CardWrapper = styled.div<{ $isDragging?: boolean }>`
   gap: 0;
   padding: 0 !important;
   border-radius: 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: none;
 
-  &:last-child {
-    border-bottom: none;
+  &:hover ${AddButton} {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   /* FIXED: mobile keeps drag left + copy/delete right on one row via grid overlay */
@@ -177,7 +184,8 @@ export const CardBody = styled.div`
   min-width: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
 
   @media (max-width: 1023px) {
     grid-area: body;

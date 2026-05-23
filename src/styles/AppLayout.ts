@@ -55,9 +55,11 @@ export const AppRoot = styled.div`
   flex-direction: column;
   width: 100%;
   overflow-x: hidden;
+  padding-right: var(--editor-sidebar-inset, 0px);
   background-color: hsl(var(--app-shell-bg, 0 0% 90%));
   color: hsl(var(--foreground));
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, padding-right 0.3s ease;
+  box-sizing: border-box;
 `;
 
 export const MainArea = styled.main`
@@ -74,7 +76,6 @@ export const MainArea = styled.main`
 `;
 
 export const ContentWrapper = styled(AlignedContent)`
-  /* FIXED: vertical padding created gaps between sections → zero top/bottom padding */
   padding-top: 0;
   padding-bottom: 0;
 `;

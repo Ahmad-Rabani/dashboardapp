@@ -6,6 +6,7 @@ interface Types {
   $Aligment: string;
   $TextSize: string;
   $textColor: string;
+  $fontFamily: string;
 }
 
 interface TextColorType {
@@ -26,7 +27,7 @@ interface BackgroundColorButtonType {
 }
 
 /* FIXED: header was not sticky and could overflow → sticky shell + fluid padding */
-export const MainDiv = styled.header`
+export const MainDiv = styled.header<{ $preview?: boolean }>`
   position: sticky;
   top: 0;
   z-index: ${Z_INDEX.header};
@@ -34,12 +35,12 @@ export const MainDiv = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(8px, 2vw, 20px) 0;
+  padding: ${(props) => (props.$preview ? "0" : "clamp(8px, 2vw, 20px) 0")};
   box-sizing: border-box;
   overflow-x: hidden;
   background-color: hsl(var(--app-shell-bg, 0 0% 90%));
   flex-shrink: 0;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, padding 0.3s ease;
 `;
 
 export const HeaderDiv = styled.div<HeaderDivType>`
@@ -48,9 +49,9 @@ export const HeaderDiv = styled.div<HeaderDivType>`
   cursor: text;
   ${(props) => surfaceFillCss(props.$HeaderBackgroundColor)}
   margin: 0 auto;
-  border-radius: clamp(6px, 1vw, 10px);
+  border-radius: ${(props) => (props.$preview ? "0" : "clamp(6px, 1vw, 10px)")};
   transition: background 0.3s ease, border-color 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: ${(props) => (props.$preview ? "none" : "0 4px 8px rgba(0, 0, 0, 0.1)")};
   box-sizing: border-box;
   overflow: hidden;
   min-width: 0;
@@ -66,7 +67,7 @@ export const HeaderText = styled.h3<Types>`
   ${(props) => textFillCss(props.$textColor)}
   margin: 0;
   padding: clamp(12px, 3vw, 20px);
-  font-family: "Segoe UI", sans-serif;
+  font-family: ${(props) => props.$fontFamily};
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   transition: color 0.3s ease, background 0.3s ease, text-shadow 0.3s ease;
   overflow-wrap: break-word;

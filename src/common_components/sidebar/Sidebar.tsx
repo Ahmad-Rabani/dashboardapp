@@ -15,6 +15,23 @@ export interface SidebarProps {
 const SIDEBAR_PANEL_CLASS =
   "fixed top-0 right-0 flex h-[100dvh] w-[min(380px,94vw)] flex-col overflow-hidden border-l border-slate-200 bg-white shadow-[-4px_0_32px_rgba(0,0,0,0.15)] dark:border-slate-700 dark:bg-slate-900";
 
+const SIDEBAR_INSET = "min(380px, 94vw)";
+let sidebarOpenCount = 0;
+
+function setSidebarInset(active: boolean) {
+  if (active) {
+    sidebarOpenCount += 1;
+  } else {
+    sidebarOpenCount = Math.max(0, sidebarOpenCount - 1);
+  }
+
+  if (sidebarOpenCount > 0) {
+    document.documentElement.style.setProperty("--editor-sidebar-inset", SIDEBAR_INSET);
+  } else {
+    document.documentElement.style.removeProperty("--editor-sidebar-inset");
+  }
+}
+
 export default function Sidebar({
   children,
   open,
@@ -35,12 +52,12 @@ export default function Sidebar({
       if (event.key === "Escape") onClose();
     };
 
+    setSidebarInset(true);
     document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
+      setSidebarInset(false);
     };
   }, [open, onClose]);
 
@@ -49,8 +66,8 @@ export default function Sidebar({
   return createPortal(
     <>
       <div
-        className="fixed inset-0 animate-in fade-in-0 duration-200 bg-black/45 backdrop-blur-[2px]"
-        style={{ zIndex: Z_INDEX.sidebarBackdrop }}
+        className="fixed top-0 right-0 h-[100dvh] animate-in fade-in-0 duration-200 bg-black/15"
+        style={{ zIndex: Z_INDEX.sidebarBackdrop, width: SIDEBAR_INSET }}
         onClick={onClose}
         aria-hidden="true"
       />

@@ -15,6 +15,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [editorText, setEditorText] = useState("");
   const [addNewSection, setAddNewSection] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
+  const [insertIndex, setInsertIndex] = useState(0);
 
   return (
     <StyledComponentsRegistry>
@@ -80,6 +81,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             setAddNewSection,
             isPreview,
             setIsPreview,
+            insertIndex,
+            setInsertIndex,
           ]}
         >
           <AppShell>{children}</AppShell>

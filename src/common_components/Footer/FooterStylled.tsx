@@ -22,17 +22,17 @@ interface ColorType {
 }
 
 /* FIXED: footer wrapper had no padding/overflow guard → matches header padding, prevents bleed */
-export const MainDiv = styled.div`
+export const MainDiv = styled.div<{ $preview?: boolean }>`
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: clamp(8px, 2vw, 20px) 0;
+  padding: ${(props) => (props.$preview ? "0" : "clamp(8px, 2vw, 20px) 0")};
   box-sizing: border-box;
   overflow-x: hidden;
   flex-shrink: 0;
   text-align: center;
   background-color: hsl(var(--app-shell-bg, 0 0% 90%));
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, padding 0.3s ease;
 
   @media (min-width: 768px) {
     text-align: left;
@@ -44,8 +44,8 @@ export const FooterDiv = styled.footer<BackgroundColorButtonType>`
   border: ${(props) => (props.$preview ? "none" : "2px solid #e0e0e0")};
   cursor: text;
   ${(props) => surfaceFillCss(props.$backgroundColor)}
-  border-radius: clamp(6px, 1vw, 8px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: ${(props) => (props.$preview ? "0" : "clamp(6px, 1vw, 8px)")};
+  box-shadow: ${(props) => (props.$preview ? "none" : "0 2px 8px rgba(0, 0, 0, 0.1)")};
   box-sizing: border-box;
   overflow: hidden;
   min-width: 0;
