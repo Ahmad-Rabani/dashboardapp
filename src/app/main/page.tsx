@@ -23,7 +23,12 @@ import SortableComponents, {
 } from "@/common_components/ShowComponents/SortableComponents";
 import { verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { DragOverlayWrapper } from "@/common_components/ShowComponents/SortableComponentsStylled";
-import { ContentWrapper, EmptyStateWrapper, AlignedContent } from "@/styles/AppLayout";
+import {
+  AlignedContent,
+  CenteredAlignedSlot,
+  ContentWrapper,
+  EmptyStateWrapper,
+} from "@/styles/AppLayout";
 import {
   DEFAULT_IMAGE_SECTION_HEIGHT,
   DEFAULT_TEXT_SECTION_HEIGHT,
@@ -135,9 +140,11 @@ const MainComponent = () => {
                       copyText={item.innerText}
                     />
                     {!isPreview && addNewSection && insertIndex === idx && (
-                      <ContentWrapper>
-                        <NewSection currentIndex={idx} />
-                      </ContentWrapper>
+                      <CenteredAlignedSlot data-aligned-slot>
+                        <AlignedContent>
+                          <NewSection currentIndex={idx} />
+                        </AlignedContent>
+                      </CenteredAlignedSlot>
                     )}
                   </Fragment>
                 ))}

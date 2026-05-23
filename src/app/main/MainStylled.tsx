@@ -25,10 +25,15 @@ export const SortableList = styled.div`
   padding: 0;
   min-width: 0;
 
-  & > * {
+  & > *:not([data-aligned-slot]) {
     margin: 0 !important;
     padding: 0;
     display: block;
+  }
+
+  & > [data-aligned-slot] {
+    margin: 0 !important;
+    padding: 0;
   }
 `;
 

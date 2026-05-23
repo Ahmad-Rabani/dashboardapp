@@ -80,6 +80,15 @@ export const ContentWrapper = styled(AlignedContent)`
   padding-bottom: 0;
 `;
 
+/** Centers aligned content when parent strips auto margins (e.g. SortableList) */
+export const CenteredAlignedSlot = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 0;
+`;
+
 /* ADDED: fills space between header and footer for empty state centering */
 export const EmptyStateWrapper = styled.div`
   flex: 1;
