@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Z_INDEX } from "@/styles/zIndex";
+import { surfaceFillCss, textFillCss } from "@/utils/colorStyle";
 
 interface Types {
   $Aligment: string;
@@ -45,10 +46,10 @@ export const HeaderDiv = styled.div<HeaderDivType>`
   width: 100%;
   border: ${(props) => (props.$preview ? "none" : "2px solid #333")};
   cursor: text;
-  background-color: ${(props) => props.$HeaderBackgroundColor};
+  ${(props) => surfaceFillCss(props.$HeaderBackgroundColor)}
   margin: 0 auto;
   border-radius: clamp(6px, 1vw, 10px);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   overflow: hidden;
@@ -62,12 +63,12 @@ export const HeaderDiv = styled.div<HeaderDivType>`
 export const HeaderText = styled.h3<Types>`
   text-align: ${(props) => props.$Aligment};
   font-size: clamp(14px, ${(props) => props.$TextSize}px, 50px);
-  color: ${(props) => props.$textColor};
+  ${(props) => textFillCss(props.$textColor)}
   margin: 0;
   padding: clamp(12px, 3vw, 20px);
   font-family: "Segoe UI", sans-serif;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-  transition: color 0.3s ease, text-shadow 0.3s ease;
+  transition: color 0.3s ease, background 0.3s ease, text-shadow 0.3s ease;
   overflow-wrap: break-word;
   word-break: break-word;
   width: 100%;
@@ -263,7 +264,7 @@ export const TextColor = styled.button<TextColorType>`
   border-radius: 10px;
   cursor: pointer;
   border: 1px solid #ccc;
-  background-color: ${(props) => props.$TextColor};
+  ${(props) => surfaceFillCss(props.$TextColor)}
   flex-shrink: 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
@@ -316,7 +317,7 @@ export const BackgroundColor = styled.button<BackgroundColorButtonType>`
   height: clamp(28px, 6vh, 30px);
   border-radius: 10px;
   border: 1px solid #ccc;
-  background-color: ${(props) => props.$backgroundColor};
+  ${(props) => surfaceFillCss(props.$backgroundColor)}
   flex-shrink: 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
@@ -333,7 +334,7 @@ export const ButtonText = styled.button<ButtonTextType>`
   height: clamp(36px, 10vw, 50px);
   border-radius: 10px;
   border: none;
-  background-color: ${(props) => props.$allColors};
+  ${(props) => surfaceFillCss(props.$allColors)}
   flex-shrink: 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 

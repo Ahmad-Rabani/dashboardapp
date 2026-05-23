@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { PRESET_COLORS } from "@/constants/presetColors";
+import { isGradient, parseGradient } from "@/utils/colorStyle";
 
 export { PRESET_COLORS };
 
@@ -132,8 +133,29 @@ export default function ColorPicker({
     { id: "2", color: "#8b5cf6" },
   ]);
   const [activeStopId, setActiveStopId] = useState<string | null>(null);
+  const [colorTab, setColorTab] = useState(() =>
+    isGradient(value) ? "gradient" : "presets"
+  );
 
   useEffect(() => {
+    const parsedGrad = parseGradient(value);
+    if (!parsedGrad) return;
+
+    setGradientType(parsedGrad.type);
+    if (parsedGrad.type === "linear") {
+      setGradientAngle(parsedGrad.angle);
+    }
+    setStops(
+      parsedGrad.stops.map((color, index) => ({
+        id: String(index + 1),
+        color,
+      }))
+    );
+  }, [value]);
+
+  useEffect(() => {
+    if (isGradient(value)) return;
+
     const next = parseColor(value);
     setR(next.r);
     setG(next.g);
@@ -186,10 +208,16 @@ export default function ColorPicker({
     return `linear-gradient(${gradientAngle}deg, ${colorStops})`;
   }, [gradientType, gradientAngle, stops]);
 
+  useEffect(() => {
+    if (colorTab !== "gradient") return;
+    if (value === gradientCss) return;
+    onChange(gradientCss);
+  }, [colorTab, gradientCss, onChange, value]);
+
   const gridCols = isMobile ? 6 : 8;
 
   return (
-    <Tabs defaultValue="presets" className="w-full">
+    <Tabs value={colorTab} onValueChange={setColorTab} className="w-full">
       <TabsList className="grid w-full grid-cols-3 bg-muted p-1">
         <TabsTrigger value="presets" className="text-xs">
           Presets
@@ -204,7 +232,7 @@ export default function ColorPicker({
 
       <TabsContent value="presets" className="mt-3">
         <MiniPresetGrid
-          selected={value.startsWith("linear") || value.startsWith("radial") ? "" : value}
+          selected={isGradient(value) ? "" : value}
           onSelect={onChange}
           columns={gridCols}
         />
@@ -445,10 +473,7 @@ export default function ColorPicker({
               size="sm"
               variant="ghost"
               className="shrink-0 text-muted-foreground hover:text-foreground"
-              onClick={() => {
-                onChange(gradientCss);
-                copyToClipboard(gradientCss);
-              }}
+              onClick={() => copyToClipboard(gradientCss)}
             >
               <FontAwesomeIcon icon={faCopy} className="mr-1 h-3 w-3" />
               Copy

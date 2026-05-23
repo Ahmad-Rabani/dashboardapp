@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { surfaceFillCss } from "@/utils/colorStyle";
 
 interface ButtonTextType {
   $allColors: string;
@@ -18,7 +19,7 @@ export const MainDivOfImage = styled.div<BackgroundColorButtonType>`
   margin: 0;
   padding: 0;
   border: ${(props) => (props.$preview ? "none" : "1px solid orange")};
-  background-color: ${(props) => props.$backgroundColor};
+  ${(props) => surfaceFillCss(props.$backgroundColor)}
   box-sizing: border-box;
   overflow: hidden;
 
@@ -68,7 +69,7 @@ export const BackgroundColor = styled.button<BackgroundColorButtonType>`
   min-height: clamp(28px, 6vh, 30px);
   border-radius: 10px;
   border: 1px solid #ccc;
-  background-color: ${(props) => props.$backgroundColor};
+  ${(props) => surfaceFillCss(props.$backgroundColor)}
   flex-shrink: 0;
 `;
 
@@ -97,6 +98,6 @@ export const ButtonText = styled.button<ButtonTextType>`
   height: clamp(36px, 10vw, 50px);
   border-radius: 10px;
   border: none;
-  background-color: ${(props) => props.$allColors};
+  ${(props) => surfaceFillCss(props.$allColors)}
   flex-shrink: 0;
 `;

@@ -3,6 +3,7 @@
 import React from "react";
 import { faImage, faPalette } from "@fortawesome/free-solid-svg-icons";
 import ColorPicker from "@/components/Sidebar/ColorPicker";
+import ColorFillPreview from "@/components/Sidebar/ColorFillPreview";
 import SidebarSection from "./SidebarSection";
 import {
   SidebarPanelBody,
@@ -36,10 +37,7 @@ export default function ImageSidebarContent({
         <SidebarSection id="background" icon={faPalette} title="Background">
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <div
-                className="h-7 w-7 shrink-0 rounded-md border border-border"
-                style={{ backgroundColor }}
-              />
+              <ColorFillPreview value={backgroundColor} />
               <span className={cn(sidebarMutedClass, "truncate")}>
                 {backgroundColor}
               </span>

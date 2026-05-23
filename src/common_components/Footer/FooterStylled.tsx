@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { surfaceFillCss, textFillCss } from "@/utils/colorStyle";
 
 interface InputCheckBox {
   $checkbox: boolean;
@@ -42,7 +43,7 @@ export const FooterDiv = styled.footer<BackgroundColorButtonType>`
   width: 100%;
   border: ${(props) => (props.$preview ? "none" : "2px solid #e0e0e0")};
   cursor: text;
-  background-color: ${(props) => props.$backgroundColor};
+  ${(props) => surfaceFillCss(props.$backgroundColor)}
   border-radius: clamp(6px, 1vw, 8px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -192,7 +193,7 @@ export const BackgroundColor = styled.button<BackgroundColorButtonType>`
   height: clamp(28px, 6vh, 30px);
   border-radius: 8px;
   border: 1px solid #ccc;
-  background-color: ${(props) => props.$backgroundColor};
+  ${(props) => surfaceFillCss(props.$backgroundColor)}
   flex-shrink: 0;
   transition: transform 0.2s ease;
 
@@ -208,7 +209,7 @@ export const ButtonText = styled.button<ButtonTextType>`
   height: clamp(36px, 10vw, 50px);
   border-radius: 8px;
   border: none;
-  background-color: ${(props) => props.$allColors};
+  ${(props) => surfaceFillCss(props.$allColors)}
   color: #fff;
   flex-shrink: 0;
   transition: opacity 0.3s ease;
@@ -242,7 +243,7 @@ export const TextColor = styled.button<TextColorType>`
   border-radius: 8px;
   cursor: pointer;
   border: 1px solid #ccc;
-  background-color: ${(props) => props.$TextColor};
+  ${(props) => surfaceFillCss(props.$TextColor)}
   flex-shrink: 0;
   transition: transform 0.2s ease;
 
@@ -252,7 +253,7 @@ export const TextColor = styled.button<TextColorType>`
 `;
 
 export const FooterTextColor = styled.h3<ColorType>`
-  color: ${(props) => props.$color};
+  ${(props) => textFillCss(props.$color)}
   font-family: "Inter", sans-serif;
   font-size: clamp(13px, 1.5vw, 16px);
   padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
@@ -285,7 +286,7 @@ export const LinkColor = styled.button<LinkColorType>`
   border-radius: 8px;
   cursor: pointer;
   border: 1px solid #ccc;
-  background-color: ${(props) => props.$linkColor};
+  ${(props) => surfaceFillCss(props.$linkColor)}
   flex-shrink: 0;
   transition: transform 0.2s ease;
 
@@ -295,7 +296,7 @@ export const LinkColor = styled.button<LinkColorType>`
 `;
 
 export const FooterLinksColor = styled.h3<ColorType>`
-  color: ${(props) => props.$color};
+  ${(props) => textFillCss(props.$color)}
   text-decoration: underline;
   font-family: "Inter", sans-serif;
   font-size: clamp(13px, 1.5vw, 16px);

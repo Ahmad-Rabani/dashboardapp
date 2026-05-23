@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ColorPicker from "@/components/Sidebar/ColorPicker";
+import ColorFillPreview from "@/components/Sidebar/ColorFillPreview";
 import SidebarSection from "./SidebarSection";
 import {
   SidebarPanelBody,
@@ -141,20 +142,14 @@ export default function HeaderSidebarContent(props: HeaderSidebarContentProps) {
             </TabsList>
             <TabsContent value="text" className="mt-4 space-y-3">
               <div className="flex items-center gap-2">
-                <div
-                  className="h-7 w-7 shrink-0 rounded-md border border-border"
-                  style={{ backgroundColor: textColor }}
-                />
+                <ColorFillPreview value={textColor} variant="text" />
                 <span className={cn(sidebarMutedClass, "truncate")}>{textColor}</span>
               </div>
               <ColorPicker value={textColor} onChange={onTextColorChange} isMobile />
             </TabsContent>
             <TabsContent value="background" className="mt-4 space-y-3">
               <div className="flex items-center gap-2">
-                <div
-                  className="h-7 w-7 shrink-0 rounded-md border border-border"
-                  style={{ backgroundColor: backgroundColor }}
-                />
+                <ColorFillPreview value={backgroundColor} />
                 <span className={cn(sidebarMutedClass, "truncate")}>
                   {backgroundColor}
                 </span>
