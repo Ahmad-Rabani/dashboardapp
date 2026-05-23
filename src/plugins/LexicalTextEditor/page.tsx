@@ -10,7 +10,7 @@ import ExampleTheme from "@/ExampleTheme";
 import ToolbarPlugin from "@/plugins/ToolbarPlugin";
 import { MyContext } from "@/context/MyContext";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { StateTypes, EditorStateType, ChildItemType, ComponentType } from "../../../types";
+import { StateTypes, EditorStateType, ComponentType } from "../../../types";
 import { createDefaultEditorContent, extractInnerText } from "@/types/dashboard";
 
 const placeholder = "Enter some rich text...";
@@ -97,11 +97,28 @@ export default function LexicalTextEditor({
         <div style={{ height: height ? "100%" : undefined, minHeight: 0 }}>
           {isPreview ? (
             <PreviewContent $height={height}>
-              {editorState.root.children[0]?.children?.map(
-                (item: ChildItemType, index: number) => (
-                  <p key={index}>{item.text}</p>
-                )
-              )}
+              <LexicalComposer
+                initialConfig={{
+                  ...editorConfig,
+                  editorState: JSON.stringify(editorState),
+                  editable: false,
+                }}
+              >
+                <div className="editor-container editor-preview">
+                  <div className="editor-inner">
+                    <RichTextPlugin
+                      contentEditable={
+                        <ContentEditable
+                          className="editor-input editor-input-readonly"
+                          aria-readonly
+                        />
+                      }
+                      ErrorBoundary={LexicalErrorBoundary}
+                      placeholder={null}
+                    />
+                  </div>
+                </div>
+              </LexicalComposer>
             </PreviewContent>
           ) : (
             <LexicalComposer

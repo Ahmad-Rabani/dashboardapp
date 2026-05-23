@@ -108,6 +108,13 @@ export const TextEditor = styled.div<{ $height?: number }>`
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+
+    &.active {
+      background-color: #eef2ff;
+      color: #4338ca;
+    }
   }
 `;
 

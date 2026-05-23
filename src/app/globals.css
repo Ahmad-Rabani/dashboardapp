@@ -76,3 +76,41 @@
     }
   }
 }
+
+/* Lexical rich text editor formatting */
+.editor-text-bold {
+  font-weight: bold;
+}
+
+.editor-text-italic {
+  font-style: italic;
+}
+
+.editor-text-underline {
+  text-decoration: underline;
+}
+
+.editor-text-strikethrough {
+  text-decoration: line-through;
+}
+
+.editor-text-underlineStrikethrough {
+  text-decoration: underline line-through;
+}
+
+.editor-paragraph {
+  margin: 0 0 0.5em;
+}
+
+.editor-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.editor-input-readonly {
+  cursor: default;
+  caret-color: transparent;
+}
+
+.editor-preview .editor-input {
+  min-height: 0 !important;
+}
