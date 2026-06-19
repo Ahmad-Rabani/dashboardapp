@@ -24,6 +24,8 @@ interface DashboardContextValue {
   hydrated: boolean;
   setHydrated: (value: boolean) => void;
   resetLayoutSettings: () => void;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (value: boolean) => void;
 }
 
 const DashboardContext = createContext<DashboardContextValue | null>(null);
@@ -32,6 +34,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [header, setHeader] = useState<HeaderSettings>(DEFAULT_HEADER_SETTINGS);
   const [footer, setFooter] = useState<FooterSettings>(DEFAULT_FOOTER_SETTINGS);
   const [hydrated, setHydrated] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const updateHeader = useCallback((patch: Partial<HeaderSettings>) => {
     setHeader((prev) => ({ ...prev, ...patch }));
@@ -57,6 +60,8 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
       hydrated,
       setHydrated,
       resetLayoutSettings,
+      isSidebarOpen,
+      setIsSidebarOpen,
     }),
     [
       header,
@@ -65,6 +70,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
       updateFooter,
       hydrated,
       resetLayoutSettings,
+      isSidebarOpen,
     ]
   );
 

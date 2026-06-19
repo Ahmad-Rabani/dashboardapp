@@ -6,6 +6,7 @@ import Sidebar from "../sidebar/Sidebar";
 import ImageSidebarContent from "../sidebar/ImageSidebarContent";
 import { MainDivOfImage, ImageOuter, ImagePlaceholder } from "./ImageStylled";
 import { MyContext } from "@/context/MyContext";
+import { useDashboardContext } from "@/context/DashboardContext";
 import { hasDisplayableImage } from "@/utils/placeholderImage";
 
 const ImageComponent = ({
@@ -26,6 +27,7 @@ const ImageComponent = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [, , , , , , , , isPreview] = useContext(MyContext);
+  const { setIsSidebarOpen } = useDashboardContext();
 
   useEffect(() => {
     setDisplaySrc(passTheImage);
@@ -34,6 +36,10 @@ const ImageComponent = ({
   useEffect(() => {
     if (isPreview) setBackground(false);
   }, [isPreview]);
+
+  useEffect(() => {
+    setIsSidebarOpen(isBackground);
+  }, [isBackground, setIsSidebarOpen]);
 
   const hasImage = hasDisplayableImage(displaySrc);
 

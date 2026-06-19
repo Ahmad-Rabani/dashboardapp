@@ -22,7 +22,7 @@ import { AlignedContent } from "@/styles/AppLayout";
 const Footer = () => {
   const [isFooter, setFooter] = React.useState(false);
   const refFooter = useRef<HTMLInputElement>(null);
-  const { footer, updateFooter } = useDashboardContext();
+  const { footer, updateFooter, setIsSidebarOpen } = useDashboardContext();
   const {
     name,
     nameCheckbox,
@@ -42,6 +42,10 @@ const Footer = () => {
   useEffect(() => {
     if (isPreview) setFooter(false);
   }, [isPreview]);
+
+  useEffect(() => {
+    setIsSidebarOpen(isFooter);
+  }, [isFooter, setIsSidebarOpen]);
 
   useEffect(() => {
     if (!isFooter || !refFooter.current) return;

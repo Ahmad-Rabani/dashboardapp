@@ -11,7 +11,7 @@ import { AlignedContent } from "@/styles/AppLayout";
 const Header = () => {
   const [isHeader, setHeader] = React.useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
-  const { header, updateHeader } = useDashboardContext();
+  const { header, updateHeader, setIsSidebarOpen } = useDashboardContext();
   const {
     headerText,
     alignment,
@@ -26,6 +26,10 @@ const Header = () => {
   useEffect(() => {
     if (isPreview) setHeader(false);
   }, [isPreview]);
+
+  useEffect(() => {
+    setIsSidebarOpen(isHeader);
+  }, [isHeader, setIsSidebarOpen]);
 
   useEffect(() => {
     if (!isHeader || !headerRef.current) return;

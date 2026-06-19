@@ -30,7 +30,7 @@ export default function EditorFloatingActions() {
     isPreview,
     setIsPreview,
   ] = useContext(MyContext);
-  const { hydrated } = useDashboardContext();
+  const { hydrated, isSidebarOpen } = useDashboardContext();
   const { canUndo, canRedo, undo, redo } = useDashboardHistoryContext();
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
@@ -72,7 +72,7 @@ export default function EditorFloatingActions() {
       <QuickFillDialog open={quickFillOpen} onOpenChange={setQuickFillOpen} />
       <WorkspacePanel open={workspaceOpen} onOpenChange={setWorkspaceOpen} />
 
-      <FloatingToolbarDock data-no-export role="toolbar" aria-label="Page editor actions">
+      <FloatingToolbarDock data-no-export role="toolbar" aria-label="Page editor actions" style={{ display: isSidebarOpen ? "none" : "flex" }}>
         {!isPreview ? (
           <>
             <div
