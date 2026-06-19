@@ -1,9 +1,9 @@
 const EXPORT_ROOT_ID = "dashboard-export-root";
-const RENDER_SCALE = 1.25;
-const JPEG_QUALITY = 0.82;
-const MAX_IMAGE_WIDTH = 1024;
-/** A4 width at ~150 DPI — enough for crisp print without bloating file size */
-const MAX_CANVAS_WIDTH = 1240;
+const RENDER_SCALE = 2.5;
+const JPEG_QUALITY = 0.95;
+const MAX_IMAGE_WIDTH = 2048;
+/** A4 width at ~300 DPI — high quality print resolution */
+const MAX_CANVAS_WIDTH = 2480;
 
 export function getExportRootElement(): HTMLElement | null {
   return document.getElementById(EXPORT_ROOT_ID);
